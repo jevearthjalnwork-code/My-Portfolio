@@ -1,0 +1,1378 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"Company Name" Portal — "Location"</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Mulish:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0a09;--srf1:#1c1917;--srf2:#292524;--srf3:#3c3735;--srf4:#57534e;
+  --bdr:#44403c;--bdr2:#57534e;
+  --cream:#fafaf9;--warm:#e7e5e4;--muted:#a8a29e;--faint:#78716c;
+  --red:#dc2626;--red2:#991b1b;--red-glow:rgba(220,38,38,.15);
+  --gold:#f59e0b;--gold2:#d97706;--gold-lt:#fbbf24;--gold-glow:rgba(245,158,11,.12);
+  --vl:#8b5cf6;--sl:#3b82f6;--ml:#ec4899;--pl:#06b6d4;--el:#f59e0b;--stl:#10b981;--cto:#22d3ee;--spl:#f43f5e;
+  --ok:#22c55e;--warn:#fb923c;--danger:#f87171;
+  --r:10px;--rl:16px;--rxl:24px;
+  --sh:0 4px 24px rgba(0,0,0,.4);--shl:0 12px 48px rgba(0,0,0,.5);--shxl:0 24px 80px rgba(0,0,0,.6);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Mulish',sans-serif;background:var(--ink);color:var(--cream);overflow-x:hidden;cursor:default}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--srf1)}::-webkit-scrollbar-thumb{background:var(--srf4);border-radius:4px}
+::selection{background:rgba(245,158,11,.3);color:var(--cream)}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+
+/* ─────────────── NAVBAR ─────────────── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;background:rgba(12,10,9,.92);border-bottom:1px solid var(--bdr);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 40px}
+.nb-brand{display:flex;align-items:center;gap:14px}
+.nb-seal{width:36px;height:36px;border-radius:50%;background:var(--gold-glow);border:1.5px solid rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nb-seal svg{width:20px;height:20px}
+.nb-wordmark{display:flex;flex-direction:column}
+.nb-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:var(--cream);letter-spacing:.3px}
+.nb-sub{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.nb-center{display:flex;align-items:center;gap:28px}
+.nb-link{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;letter-spacing:.3px;transition:color .2s;cursor:pointer;background:none;border:none;padding:0}
+.nb-link:hover,.nb-link.on{color:var(--gold)}
+.nb-right{display:flex;align-items:center;gap:14px}
+.nb-emp{display:flex;align-items:center;gap:10px;padding:6px 14px;background:var(--srf2);border:1px solid var(--bdr);border-radius:20px;cursor:pointer;transition:all .2s}
+.nb-emp:hover{border-color:var(--gold);background:var(--srf3)}
+.nb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red2),var(--red));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff}
+.nb-name{font-size:12px;font-weight:700;color:var(--warm)}
+.nb-dept{font-size:10px;color:var(--muted)}
+.nb-notif{width:36px;height:36px;background:var(--srf2);border:1px solid var(--bdr);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .2s}
+.nb-notif:hover{border-color:var(--gold)}
+.nb-notif svg{width:17px;height:17px;stroke:var(--muted);fill:none;transition:stroke .2s}
+.nb-notif:hover svg{stroke:var(--gold)}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid var(--ink)}
+
+/* ─────────────── HERO ─────────────── */
+.hero{min-height:100vh;padding-top:64px;display:grid;grid-template-columns:400px 1fr;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(220,38,38,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 80%,rgba(245,158,11,.04) 0%,transparent 50%);pointer-events:none}
+.hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.015) 79px,rgba(255,255,255,.015) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.015) 79px,rgba(255,255,255,.015) 80px);pointer-events:none}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:60px 48px;z-index:2;position:relative}
+.hero-right{display:flex;align-items:center;justify-content:center;z-index:2;position:relative;padding:60px 40px}
+
+/* Employee ID Card */
+.id-card-wrap{perspective:1000px;width:320px;cursor:pointer}
+.id-card-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+.id-card-wrap:hover .id-card-inner{transform:rotateY(180deg)}
+.id-card-front,.id-card-back{position:relative;width:320px;border-radius:var(--rxl);padding:28px;border:1px solid var(--bdr);box-shadow:var(--shl);}
+.id-card-back{position:absolute;top:0;left:0;backface-visibility:hidden;transform:rotateY(180deg)}
+.id-card-front{backface-visibility:hidden;background:linear-gradient(135deg,var(--srf2) 0%,var(--srf3) 100%)}
+.id-card-back{background:linear-gradient(135deg,var(--srf1) 0%,var(--srf2) 100%)}
+.card-band{height:42px;background:linear-gradient(90deg,var(--red2),var(--red));margin:-28px -28px 20px;border-radius:var(--rxl) var(--rxl) 0 0;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.card-band-title{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:1px;text-transform:uppercase}
+.card-band-year{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.5)}
+.card-photo{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--red2),var(--red));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;border:3px solid rgba(255,255,255,.15);margin-bottom:14px}
+.card-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--cream);margin-bottom:3px}
+.card-pos{font-size:11px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px}
+.card-rows{display:flex;flex-direction:column;gap:8px}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cr-lbl{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.7px;font-weight:600}
+.cr-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--warm);font-weight:600}
+.card-chip{width:36px;height:26px;background:linear-gradient(135deg,var(--gold2),var(--gold));border-radius:5px;position:absolute;bottom:28px;right:28px}
+.id-hint{font-size:10px;color:var(--faint);text-align:center;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:5px}
+.id-hint svg{width:11px;height:11px;stroke:currentColor;fill:none}
+
+/* Back of card — credit summary */
+.back-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:800;color:var(--gold);margin-bottom:14px;text-align:center}
+.back-credit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bcg-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px}
+.bcg-label{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:700;margin-bottom:4px}
+.bcg-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--cream)}
+.bcg-unit{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* Hero Right — Radial Chart */
+.radial-wrap{position:relative;width:440px;height:440px}
+.radial-svg{width:100%;height:100%;overflow:visible}
+.radial-center-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.rct-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.rct-total{font-family:'JetBrains Mono',monospace;font-size:46px;font-weight:700;color:var(--cream);line-height:1}
+.rct-unit{font-size:12px;color:var(--faint);margin-top:4px}
+.arc-tooltip{position:absolute;background:var(--srf3);border:1px solid var(--bdr2);border-radius:var(--r);padding:12px 14px;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;z-index:10;min-width:160px}
+.at-type{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:4px}
+.at-bal{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--cream);margin-bottom:3px}
+.at-meta{font-size:11px;color:var(--muted)}
+
+.hero-below{padding:0 48px 32px;z-index:2;position:relative}
+.hero-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.hero-heading{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:16px}
+.hero-heading span{color:var(--gold);font-style:italic}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:320px;margin-bottom:24px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn-gold{padding:13px 28px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn-gold:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.3)}
+.btn-ghost{padding:13px 28px;background:transparent;color:var(--warm);border:1px solid var(--bdr2);border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Quick stats strip */
+.stats-strip{display:flex;gap:12px;margin-top:32px;padding:20px 0;border-top:1px solid var(--bdr)}
+.qs{display:flex;flex-direction:column;gap:2px;padding-right:12px;border-right:1px solid var(--bdr)}
+.qs:last-child{border-right:none}
+.qs-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--cream)}
+.qs-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600}
+
+/* ─────────────── LEAVE CARDS SECTION ─────────────── */
+.section{padding:80px 60px;position:relative}
+.sec-label{font-size:10px;text-transform:uppercase;letter-spacing:2.5px;color:var(--gold);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:30px;height:1px;background:var(--gold)}
+.sec-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--cream);margin-bottom:8px;line-height:1.2}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:40px;max-width:600px;line-height:1.7}
+
+.leave-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.lc{perspective:800px;cursor:pointer;height:230px}
+.lc-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.lc:hover .lc-inner{transform:rotateY(180deg)}
+.lc-front,.lc-back{position:absolute;inset:0;border-radius:var(--rl);padding:22px;border:1px solid var(--bdr);box-shadow:var(--sh);backface-visibility:hidden}
+.lc-front{background:var(--srf2);display:flex;flex-direction:column}
+.lc-back{background:var(--srf1);transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:space-between}
+.lc-type-dot{width:10px;height:10px;border-radius:50%;margin-bottom:12px;flex-shrink:0}
+.lc-type-name{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.lc-balance{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--cream);line-height:1;margin-bottom:3px}
+.lc-unit{font-size:10px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:auto}
+.lc-bar-track{height:4px;background:var(--srf4);border-radius:4px;margin-top:16px;overflow:hidden}
+.lc-bar-fill{height:100%;border-radius:4px;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+.lc-bar-label{display:flex;justify-content:space-between;margin-top:5px}
+.lc-bar-label span{font-size:10px;color:var(--faint)}
+/* back side */
+.lcb-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;margin-bottom:12px}
+.lcb-rule{font-size:12px;color:var(--warm);line-height:1.6;margin-bottom:12px;flex:1}
+.lcb-btn{width:100%;padding:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--gold);font-family:'Mulish',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.lcb-btn:hover{background:var(--gold);color:var(--ink)}
+
+/* ─────────────── CREDIT CALCULATOR ─────────────── */
+.calc-section{background:var(--srf1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:80px 60px}
+.calc-layout{display:grid;grid-template-columns:1fr 480px;gap:60px;align-items:start}
+.calc-left{}
+.calc-right{background:var(--srf2);border:1px solid var(--bdr);border-radius:var(--rxl);padding:32px;position:sticky;top:84px}
+
+/* Credit chip selector */
+.chip-selector{margin-bottom:32px}
+.chip-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:14px}
+.chip-row{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:flex;flex-direction:column;align-items:center;justify-content:center;width:90px;height:90px;border-radius:50%;border:2px solid var(--bdr2);background:var(--srf2);cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.chip::before{content:'';position:absolute;inset:0;background:var(--gold);border-radius:50%;transform:scale(0);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.chip:hover::before,.chip.on::before{transform:scale(1)}
+.chip-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--cream);z-index:1;transition:color .2s;line-height:1}
+.chip-hrs{font-size:10px;color:var(--muted);z-index:1;transition:color .2s;font-weight:600;margin-top:3px}
+.chip:hover .chip-val,.chip.on .chip-val{color:var(--ink)}
+.chip:hover .chip-hrs,.chip.on .chip-hrs{color:rgba(12,10,9,.7)}
+.chip.on{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,158,11,.2),0 8px 24px rgba(245,158,11,.2)}
+
+/* Time calculator */
+.time-calc{background:var(--ink);border:1px solid var(--bdr);border-radius:var(--rl);padding:24px;margin-bottom:28px}
+.tc-head{font-size:13px;font-weight:700;color:var(--warm);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tc-head svg{width:15px;height:15px;stroke:var(--gold);fill:none}
+.tc-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.tc-field{}
+.tc-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:700;margin-bottom:6px}
+.tc-inp{width:100%;padding:10px 12px;background:var(--srf2);border:1px solid var(--bdr);border-radius:8px;color:var(--cream);font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;outline:none;transition:all .2s}
+.tc-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.tc-result{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.tcr-label{font-size:12px;color:var(--muted);font-weight:600}
+.tcr-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold)}
+
+/* Leave type selector pills */
+.leave-type-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.lt-pill{padding:7px 16px;border-radius:20px;border:1.5px solid var(--bdr);background:transparent;color:var(--muted);font-family:'Mulish',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.lt-pill:hover{border-color:var(--bdr2);color:var(--warm)}
+.lt-pill.on{color:var(--ink);font-weight:800}
+
+/* Calc right panel */
+.crp-head{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--cream);margin-bottom:4px}
+.crp-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.crp-display{background:var(--ink);border:1px solid var(--bdr);border-radius:var(--rl);padding:24px;margin-bottom:20px;text-align:center}
+.crp-credit-val{font-family:'JetBrains Mono',monospace;font-size:56px;font-weight:700;color:var(--cream);line-height:1;transition:all .4s}
+.crp-credit-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-top:6px}
+.crp-coins{display:flex;justify-content:center;gap:8px;margin:16px 0;flex-wrap:wrap;min-height:44px}
+.coin{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--ink);animation:coinIn .3s cubic-bezier(.4,0,.2,1) both;box-shadow:0 3px 12px rgba(245,158,11,.4)}
+@keyframes coinIn{from{opacity:0;transform:translateY(-12px) scale(.7)}to{opacity:1;transform:translateY(0) scale(1)}}
+.crp-breakdown{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+.crp-breakdown b{color:var(--warm);font-weight:700}
+.crp-after{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.cra-label{font-size:12px;color:var(--muted)}
+.cra-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--ok)}
+.btn-apply-calc{width:100%;padding:14px;background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;border:none;border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn-apply-calc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(220,38,38,.3)}
+
+/* ─────────────── CALENDAR SECTION ─────────────── */
+.cal-section{padding:80px 60px}
+.cal-layout{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start}
+.cal-wrap{background:var(--srf1);border:1px solid var(--bdr);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--bdr);background:var(--srf2)}
+.cal-nav{display:flex;align-items:center;gap:12px}
+.cal-nav-btn{width:34px;height:34px;background:var(--srf3);border:1px solid var(--bdr);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.cal-nav-btn:hover{border-color:var(--gold);background:var(--gold-glow)}
+.cal-nav-btn svg{width:16px;height:16px;stroke:var(--muted);fill:none}
+.cal-month{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--cream)}
+.cal-year{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--muted);margin-left:6px}
+.cal-legend{display:flex;gap:14px}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.cl-dot{width:8px;height:8px;border-radius:50%}
+.cal-grid-head{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--bdr)}
+.cal-day-head{padding:10px 0;text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:8px}
+.cal-day{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .18s;margin:2px;user-select:none}
+.cal-day:hover:not(.empty):not(.weekend):not(.holiday){background:var(--srf3);transform:scale(1.08)}
+.cal-day-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--warm);z-index:1;line-height:1}
+.cal-day.empty{cursor:default;opacity:0}
+.cal-day.weekend .cal-day-num{color:var(--faint)}
+.cal-day.today .cal-day-num{color:var(--gold);font-weight:700}
+.cal-day.today::after{content:'';position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.cal-day.selected{background:var(--red2)!important;transform:scale(1.08)}
+.cal-day.selected .cal-day-num{color:#fff!important;font-weight:700}
+.cal-day.in-range{background:rgba(220,38,38,.15)}
+.cal-day.in-range .cal-day-num{color:var(--warm)}
+.cal-day.approved-leave{background:rgba(139,92,246,.15)}
+.cal-day.approved-leave .cal-day-num{color:var(--vl)}
+.cal-day.holiday{cursor:default}
+.cal-day.holiday .cal-day-num{color:var(--warn)}
+.cal-day-event{position:absolute;bottom:3px;display:flex;gap:2px}
+.cal-day-dot{width:4px;height:4px;border-radius:50%}
+.cal-day-cost{position:absolute;top:3px;right:3px;font-size:8px;font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:0;transition:opacity .15s;font-weight:600}
+.cal-day:hover .cal-day-cost{opacity:1}
+
+/* Calendar right panel */
+.cal-panel{background:var(--srf1);border:1px solid var(--bdr);border-radius:var(--rxl);padding:28px;position:sticky;top:84px}
+.cp-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--cream);margin-bottom:4px}
+.cp-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.cp-selection{background:var(--ink);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-bottom:16px;min-height:80px}
+.cp-sel-empty{font-size:13px;color:var(--faint);text-align:center;padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.cp-sel-empty svg{width:24px;height:24px;stroke:currentColor;fill:none;opacity:.4}
+.cp-sel-dates{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cream);font-weight:600;margin-bottom:6px}
+.cp-sel-days{font-size:12px;color:var(--muted)}
+.cp-sel-cost{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold);margin-top:8px}
+.cp-sel-after{font-size:11px;color:var(--muted);margin-top:2px}
+.cp-type-sel{margin-bottom:16px}
+.cp-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:700;margin-bottom:8px}
+.cp-form{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.cp-input{width:100%;padding:10px 12px;background:var(--srf2);border:1px solid var(--bdr);border-radius:8px;color:var(--cream);font-family:'Mulish',sans-serif;font-size:13px;outline:none;transition:all .2s}
+.cp-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,158,11,.12)}
+.cp-input::placeholder{color:var(--faint)}
+.btn-submit-leave{width:100%;padding:13px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.2px;margin-bottom:8px}
+.btn-submit-leave:hover{background:var(--gold-lt);transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.25)}
+.btn-submit-leave:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-clear-sel{width:100%;padding:10px;background:transparent;color:var(--muted);border:1px solid var(--bdr);border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-clear-sel:hover{color:var(--warm);border-color:var(--bdr2)}
+
+/* ─────────────── LEAVE HISTORY ─────────────── */
+.history-section{background:var(--srf1);border-top:1px solid var(--bdr);padding:80px 60px}
+.history-table{width:100%;border-collapse:collapse;margin-top:32px}
+.ht th{text-align:left;padding:12px 16px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:700;border-bottom:1px solid var(--bdr);white-space:nowrap}
+.ht td{padding:14px 16px;font-size:13px;color:var(--warm);border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;vertical-align:middle}
+.ht tr:hover td{background:rgba(255,255,255,.02)}
+.ht-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.ht-type-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px}
+.ht-status{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.hs-approved{background:rgba(34,197,94,.12);color:#4ade80}
+.hs-pending{background:rgba(245,158,11,.12);color:#fbbf24}
+.hs-rejected{background:rgba(248,113,113,.12);color:#f87171}
+.hs-draft{background:rgba(255,255,255,.06);color:var(--muted)}
+.ht-credit{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600}
+.ht-action{display:flex;gap:6px}
+.ht-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.ht-btn-view{background:rgba(255,255,255,.06);color:var(--muted)}.ht-btn-view:hover{background:rgba(255,255,255,.12);color:var(--warm)}
+.ht-btn-cancel{background:rgba(248,113,113,.1);color:var(--danger)}.ht-btn-cancel:hover{background:rgba(248,113,113,.2)}
+
+/* ─────────────── POLICY SECTION ─────────────── */
+.policy-section{padding:80px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.policy-card{background:var(--srf1);border:1px solid var(--bdr);border-radius:var(--rxl);padding:32px}
+.pc-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--cream);margin-bottom:4px}
+.pc-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.credit-table{width:100%;border-collapse:collapse}
+.ct th{text-align:left;padding:10px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:700;border-bottom:1px solid var(--bdr)}
+.ct td{padding:12px 12px;font-size:13px;color:var(--warm);border-bottom:1px solid rgba(255,255,255,.04)}
+.ct tr:last-child td{border-bottom:none}
+.ct .mono{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--gold)}
+.accrual-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--bdr)}
+.accrual-row:last-child{border-bottom:none}
+.ar-left{}
+.ar-type{font-size:13px;font-weight:700;color:var(--warm)}
+.ar-rule{font-size:11px;color:var(--muted);margin-top:2px}
+.ar-right{text-align:right}
+.ar-rate{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gold)}
+.ar-period{font-size:10px;color:var(--faint);margin-top:1px}
+.countdown-box{background:var(--ink);border:1px solid var(--bdr);border-radius:var(--rl);padding:20px;margin-top:20px;display:flex;align-items:center;justify-content:space-between}
+.cb-label{font-size:12px;color:var(--muted);font-weight:600}
+.cb-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--gold)}
+.cb-sub{font-size:10px;color:var(--faint);margin-top:2px}
+
+/* ─────────────── APPROVAL FLOW ─────────────── */
+.approval-section{background:var(--srf1);border-top:1px solid var(--bdr);padding:60px;display:none}
+.approval-section.visible{display:block}
+.approval-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-top:32px;flex-wrap:wrap}
+.af-node{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:100px}
+.af-ico{width:56px;height:56px;border-radius:50%;border:2px solid var(--bdr);background:var(--srf2);display:flex;align-items:center;justify-content:center;transition:all .5s}
+.af-ico svg{width:24px;height:24px;stroke:var(--faint);fill:none;transition:stroke .5s}
+.af-ico.done{border-color:var(--ok);background:rgba(34,197,94,.1)}
+.af-ico.done svg{stroke:var(--ok)}
+.af-ico.active{border-color:var(--gold);background:rgba(245,158,11,.1);animation:nodePulse 1.5s ease infinite}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.3)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+.af-ico.pending{border-color:var(--bdr);background:var(--srf2)}
+.af-label{font-size:11px;font-weight:700;color:var(--warm);text-align:center}
+.af-sub{font-size:10px;color:var(--faint);text-align:center}
+.af-line{flex:1;height:2px;background:var(--bdr);min-width:40px;transition:background .5s}
+.af-line.done{background:var(--ok)}
+.af-line.active{background:linear-gradient(90deg,var(--ok),var(--gold))}
+
+/* ─────────────── FOOTER ─────────────── */
+footer{background:var(--ink);border-top:1px solid var(--bdr);padding:40px 60px;display:flex;align-items:center;justify-content:space-between}
+.footer-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:800;color:var(--cream)}
+.footer-sub{font-size:11px;color:var(--faint);margin-top:3px}
+.footer-copy{font-size:11px;color:var(--faint);text-align:right}
+
+/* ─────────────── TOAST ─────────────── */
+.toast-zone{position:fixed;top:80px;right:28px;z-index:600;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--srf3);border:1px solid var(--bdr2);border-radius:var(--rl);padding:14px 18px;box-shadow:var(--shl);min-width:280px;max-width:360px;display:flex;align-items:flex-start;gap:12px;pointer-events:all;animation:toastSlide .3s ease;border-left:3px solid transparent}
+@keyframes toastSlide{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.toast svg{width:16px;height:16px;stroke:currentColor;fill:none;flex-shrink:0;margin-top:1px}
+.toast-body{}
+.toast-title{font-size:13px;font-weight:700;color:var(--cream);margin-bottom:2px}
+.toast-msg{font-size:12px;color:var(--muted)}
+.t-ok{border-left-color:var(--ok);}.t-ok svg{stroke:var(--ok)}
+.t-warn{border-left-color:var(--gold)}.t-warn svg{stroke:var(--gold)}
+.t-info{border-left-color:var(--sl)}.t-info svg{stroke:var(--sl)}
+.t-err{border-left-color:var(--danger)}.t-err svg{stroke:var(--danger)}
+
+/* ─────────────── MODAL ─────────────── */
+.modal-ov{position:fixed;inset:0;background:rgba(12,10,9,.85);z-index:700;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(8px)}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--srf2);border:1px solid var(--bdr2);border-radius:var(--rxl);padding:36px;width:520px;max-width:95vw;box-shadow:var(--shxl);transform:translateY(24px);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.modal-ov.open .modal-box{transform:translateY(0)}
+.modal-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--cream);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.modal-close{position:absolute;top:20px;right:20px;width:32px;height:32px;background:var(--srf3);border:none;border-radius:8px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:var(--srf4);color:var(--cream)}
+.modal-close svg{width:15px;height:15px;stroke:currentColor;fill:none}
+.modal-box{position:relative}
+.modal-field{margin-bottom:16px}
+.modal-label{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:700;margin-bottom:6px;display:block}
+.modal-input,.modal-select,.modal-textarea{width:100%;padding:11px 14px;background:var(--srf3);border:1px solid var(--bdr);border-radius:10px;color:var(--cream);font-family:'Mulish',sans-serif;font-size:14px;outline:none;transition:all .2s}
+.modal-input:focus,.modal-select:focus,.modal-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,158,11,.12)}
+.modal-input::placeholder,.modal-textarea::placeholder{color:var(--faint)}
+.modal-textarea{min-height:90px;resize:vertical}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-btns{display:flex;gap:10px;margin-top:24px}
+.modal-btn-submit{flex:1;padding:13px;background:var(--gold);color:var(--ink);border:none;border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s}
+.modal-btn-submit:hover{background:var(--gold-lt)}
+.modal-btn-cancel{padding:13px 20px;background:transparent;color:var(--muted);border:1px solid var(--bdr);border-radius:var(--r);font-family:'Mulish',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.modal-btn-cancel:hover{color:var(--warm);border-color:var(--bdr2)}
+
+/* ─────────────── ANIMATIONS ─────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes drawArc{to{stroke-dashoffset:0}}
+@keyframes countUp{from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ████ NAVBAR ████ -->
+<nav class="navbar">
+  <div class="nb-brand">
+    <div class="nb-seal">
+      <svg viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="20" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <polygon points="24,11 26,18 33,18 27.5,22.5 29.5,29.5 24,25 18.5,29.5 20.5,22.5 15,18 22,18" fill="#f59e0b"/>
+        <path d="M14 36 Q24 41 34 36" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="nb-wordmark">
+      <div class="nb-title">"Company Name" Portal</div>
+      <div class="nb-sub">"Location"</div>
+    </div>
+  </div>
+  <div class="nb-center">
+    <button class="nb-link on" onclick="scrollTo(0,0)">Dashboard</button>
+    <button class="nb-link" onclick="document.getElementById('leave-section').scrollIntoView({behavior:'smooth'})">Leave Credits</button>
+    <button class="nb-link" onclick="document.getElementById('calc-section').scrollIntoView({behavior:'smooth'})">Calculator</button>
+    <button class="nb-link" onclick="document.getElementById('cal-section').scrollIntoView({behavior:'smooth'})">Calendar</button>
+    <button class="nb-link" onclick="document.getElementById('history-section').scrollIntoView({behavior:'smooth'})">History</button>
+    <button class="nb-link" onclick="document.getElementById('policy-section').scrollIntoView({behavior:'smooth'})">Policy</button>
+  </div>
+  <div class="nb-right">
+    <div class="nb-notif" title="Notifications">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </div>
+    <div class="nb-emp" id="empToggle">
+      <div class="nb-av" id="nbAv">MS</div>
+      <div>
+        <div class="nb-name" id="nbName">Maria S. Reyes</div>
+        <div class="nb-dept" id="nbDept">"Company Name" Treasurer's Office</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ████ HERO ████ -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+
+  <!-- LEFT — ID Card + Text -->
+  <div style="display:flex;flex-direction:column;justify-content:center;padding:0 0 0 60px;z-index:2;position:relative;padding-top:80px">
+    <!-- ID Card -->
+    <div class="id-card-wrap" style="margin-bottom:32px">
+      <div class="id-card-inner">
+        <!-- Front -->
+        <div class="id-card-front">
+          <div class="card-band">
+            <span class="card-band-title">"Company Name" of "Location"</span>
+            <span class="card-band-year">HR-2025</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px">
+            <div class="card-photo" id="cardPhoto">MS</div>
+            <div>
+              <div class="card-name" id="cardName">Maria S. Reyes</div>
+              <div class="card-pos" id="cardPos">Administrative Officer II</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <span style="padding:3px 8px;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);border-radius:6px;font-size:10px;color:#f87171;font-weight:700">Permanent</span>
+                <span style="padding:3px 8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:6px;font-size:10px;color:var(--gold);font-weight:700">SG-15</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-rows">
+            <div class="card-row"><span class="cr-lbl">Employee ID</span><span class="cr-val">MBY-EMP-2847</span></div>
+            <div class="card-row"><span class="cr-lbl">Department</span><span class="cr-val" id="cardDept">"Company Name" Treasurer's Office</span></div>
+            <div class="card-row"><span class="cr-lbl">Date Hired</span><span class="cr-val">Mar 15, 2018</span></div>
+            <div class="card-row"><span class="cr-lbl">VL Balance</span><span class="cr-val" style="color:var(--vl)" id="cardVL">15.5 days</span></div>
+          </div>
+          <div class="card-chip"></div>
+        </div>
+        <!-- Back -->
+        <div class="id-card-back">
+          <div>
+            <div class="back-title">Leave Credit Summary</div>
+            <div class="back-credit-grid">
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--vl)">Vacation</div><div class="bcg-val" id="bc-vl">15.5</div><div class="bcg-unit">days remaining</div></div>
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--sl)">Sick</div><div class="bcg-val" id="bc-sl">8.75</div><div class="bcg-unit">days remaining</div></div>
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--el)">Emergency</div><div class="bcg-val" id="bc-el">3.0</div><div class="bcg-unit">days remaining</div></div>
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--cto)">CTO</div><div class="bcg-val" id="bc-cto">4.5</div><div class="bcg-unit">days remaining</div></div>
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--stl)">Study</div><div class="bcg-val" id="bc-stl">6.0</div><div class="bcg-unit">days remaining</div></div>
+              <div class="bcg-item"><div class="bcg-label" style="color:var(--ml)">Maternity</div><div class="bcg-val" id="bc-ml">105</div><div class="bcg-unit">days (lifetime)</div></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06)">
+            <div style="font-size:10px;color:var(--faint);text-align:center">Next Accrual · <span style="color:var(--gold);font-family:'JetBrains Mono',monospace" id="nextAccrualCard">12 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="id-hint"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm0-9a1 1 0 000 2h.01a1 1 0 000-2H12zm-1-4a1 1 0 012 0v3a1 1 0 01-2 0V7z"/></svg>Hover card to flip & see full credits</div>
+
+    <!-- Heading -->
+    <div style="margin-top:28px">
+      <div class="hero-label">Human Resources · Self-Service Portal</div>
+      <h1 class="hero-heading">Your <span>Leave Credits,</span><br>Reimagined.</h1>
+      <p class="hero-sub">Manage your vacation, sick, maternity, and special leave — including partial-day credits down to <strong style="color:var(--warm)">¼ credit</strong> for late arrivals and early departures.</p>
+      <div class="hero-cta">
+        <button class="btn-gold" onclick="document.getElementById('calc-section').scrollIntoView({behavior:'smooth'})">Calculate Leave Cost</button>
+        <button class="btn-ghost" onclick="document.getElementById('cal-section').scrollIntoView({behavior:'smooth'})">File Leave →</button>
+      </div>
+      <div class="stats-strip">
+        <div class="qs"><div class="qs-val" id="totalCredits">24.25</div><div class="qs-lbl">Total Credits</div></div>
+        <div class="qs"><div class="qs-val" style="color:var(--ok)">12</div><div class="qs-lbl">Days Taken</div></div>
+        <div class="qs"><div class="qs-val" style="color:var(--gold)" id="nextAccrualDays">12</div><div class="qs-lbl">Days to Accrual</div></div>
+        <div class="qs"><div class="qs-val" style="color:var(--warn)">1</div><div class="qs-lbl">Pending</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — Radial Chart -->
+  <div class="hero-right">
+    <div class="radial-wrap" id="radialWrap">
+      <svg class="radial-svg" id="radialSvg" viewBox="0 0 440 440"></svg>
+      <div class="radial-center-text">
+        <div class="rct-label">Total Leave</div>
+        <div class="rct-total" id="rctTotal">24.25</div>
+        <div class="rct-unit">credits available</div>
+      </div>
+      <div class="arc-tooltip" id="arcTooltip">
+        <div class="at-type" id="atType">Vacation Leave</div>
+        <div class="at-bal" id="atBal">15.5</div>
+        <div class="at-meta" id="atMeta">days remaining</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ LEAVE CARDS ████ -->
+<section class="section" id="leave-section">
+  <div class="sec-label">Leave Management</div>
+  <h2 class="sec-title">Your Leave Entitlements</h2>
+  <p class="sec-sub">Click any card to see the leave policy details and rules. Hover to flip for quick-apply options. Credits are denominated in <strong style="color:var(--warm)">days</strong> (1 day = 8 hours).</p>
+  <div class="leave-grid" id="leaveGrid"></div>
+</section>
+
+<!-- ████ CALCULATOR ████ -->
+<section class="calc-section" id="calc-section">
+  <div class="calc-layout">
+    <div class="calc-left">
+      <div class="sec-label">Credit Calculator</div>
+      <h2 class="sec-title">How much will<br>this leave cost?</h2>
+      <p class="sec-sub" style="max-width:420px">Use partial-day credits for late arrivals, early departures, or half-days. Select a chip denomination or enter your exact times below.</p>
+
+      <!-- Chip selector -->
+      <div class="chip-selector">
+        <div class="chip-label">Select Leave Denomination</div>
+        <div class="chip-row" id="chipRow">
+          <div class="chip" data-val="0.25" data-hrs="2" onclick="selectChip(this)">
+            <span class="chip-val">¼</span><span class="chip-hrs">2 hrs</span>
+          </div>
+          <div class="chip" data-val="0.50" data-hrs="4" onclick="selectChip(this)">
+            <span class="chip-val">½</span><span class="chip-hrs">4 hrs</span>
+          </div>
+          <div class="chip" data-val="0.75" data-hrs="6" onclick="selectChip(this)">
+            <span class="chip-val">¾</span><span class="chip-hrs">6 hrs</span>
+          </div>
+          <div class="chip on" data-val="1.00" data-hrs="8" onclick="selectChip(this)">
+            <span class="chip-val">1</span><span class="chip-hrs">Full Day</span>
+          </div>
+          <div class="chip" data-val="2.00" data-hrs="16" onclick="selectChip(this)">
+            <span class="chip-val">2</span><span class="chip-hrs">2 Days</span>
+          </div>
+          <div class="chip" data-val="5.00" data-hrs="40" onclick="selectChip(this)">
+            <span class="chip-val">5</span><span class="chip-hrs">1 Week</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time calculator -->
+      <div class="time-calc">
+        <div class="tc-head"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Calculate from Exact Time</div>
+        <div class="tc-row">
+          <div class="tc-field">
+            <div class="tc-lbl">Arrival Time (if late)</div>
+            <input type="time" class="tc-inp" id="tcArrival" value="09:00" onchange="calcFromTime()">
+          </div>
+          <div class="tc-field">
+            <div class="tc-lbl">Departure Time (if early)</div>
+            <input type="time" class="tc-inp" id="tcDeparture" value="17:00" onchange="calcFromTime()">
+          </div>
+        </div>
+        <div class="tc-result">
+          <span class="tcr-label">Credit Cost from Time</span>
+          <span class="tcr-val" id="tcResult">0.00 credits</span>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--faint);line-height:1.7">
+          Official hours: <span style="color:var(--muted)">8:00 AM – 5:00 PM (Mon–Fri)</span>
+          · Lunch: <span style="color:var(--muted)">12:00 – 1:00 PM (1 hr)</span>
+          · Max work = 8 hours
+        </div>
+      </div>
+
+      <!-- Leave type pills -->
+      <div class="chip-label">Select Leave Type to Charge</div>
+      <div class="leave-type-pills" id="ltPills"></div>
+    </div>
+
+    <!-- RIGHT panel -->
+    <div class="calc-right">
+      <div class="crp-head">Leave Summary</div>
+      <div class="crp-sub">Real-time credit calculation & balance preview</div>
+      <div class="crp-display">
+        <div class="crp-credit-label">Credits to be Used</div>
+        <div class="crp-credit-val" id="crpVal">1.00</div>
+        <div class="crp-credit-label" style="margin-top:4px;font-size:10px" id="crpHrs">= 8 hours</div>
+      </div>
+      <div class="crp-coins" id="crpCoins"></div>
+      <div class="crp-breakdown" id="crpBreakdown">
+        <b>1 credit</b> = 8 hours (Full Day)<br>
+        <b>Leave Type:</b> <span id="crpType">Vacation Leave</span><br>
+        <b>Current Balance:</b> <span id="crpCurBal">15.5 days</span>
+      </div>
+      <div class="crp-after">
+        <span class="cra-label">Balance After Deduction</span>
+        <span class="cra-val" id="crpAfter">14.50</span>
+      </div>
+      <button class="btn-apply-calc" onclick="applyToCalendar()">Apply to Calendar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ████ CALENDAR ████ -->
+<section class="cal-section" id="cal-section">
+  <div class="sec-label">Leave Calendar</div>
+  <h2 class="sec-title" style="margin-bottom:8px">File Your Leave</h2>
+  <p class="sec-sub">Click a date to select it. Click and drag to select a range. Hover dates to preview credit cost.</p>
+  <div class="cal-layout">
+    <div>
+      <div class="cal-wrap" id="calWrap"></div>
+    </div>
+    <div class="cal-panel" id="calPanel">
+      <div class="cp-title">Leave Application</div>
+      <div class="cp-sub">Select dates on the calendar, then fill in the details</div>
+      <div class="cp-lbl">Selected Period</div>
+      <div class="cp-selection" id="cpSelection">
+        <div class="cp-sel-empty">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          No dates selected.<br>Click a date to begin.
+        </div>
+      </div>
+      <div class="cp-lbl" style="margin-top:16px">Leave Type</div>
+      <div class="leave-type-pills" id="calTypePills" style="margin-bottom:16px"></div>
+      <div class="cp-lbl">Partial Day Credit</div>
+      <div style="display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap" id="calChips">
+        <div class="chip" style="width:72px;height:72px" data-val="0.25" onclick="setCalChip(this)"><span class="chip-val" style="font-size:16px">¼</span><span class="chip-hrs">2hrs</span></div>
+        <div class="chip" style="width:72px;height:72px" data-val="0.50" onclick="setCalChip(this)"><span class="chip-val" style="font-size:16px">½</span><span class="chip-hrs">4hrs</span></div>
+        <div class="chip" style="width:72px;height:72px" data-val="0.75" onclick="setCalChip(this)"><span class="chip-val" style="font-size:16px">¾</span><span class="chip-hrs">6hrs</span></div>
+        <div class="chip on" style="width:72px;height:72px" data-val="1.00" onclick="setCalChip(this)"><span class="chip-val" style="font-size:16px">1</span><span class="chip-hrs">Full</span></div>
+      </div>
+      <div class="cp-lbl">Reason for Leave</div>
+      <div class="cp-form">
+        <textarea class="cp-input" id="leaveReason" rows="3" placeholder="State reason for leave application…"></textarea>
+        <input type="text" class="cp-input" id="leaveContact" placeholder="Emergency contact (optional)">
+      </div>
+      <button class="btn-submit-leave" id="btnSubmitLeave" onclick="submitLeave()" disabled>Submit Leave Application</button>
+      <button class="btn-clear-sel" onclick="clearCalSelection()">Clear Selection</button>
+    </div>
+  </div>
+</section>
+
+<!-- ████ APPROVAL FLOW ████ -->
+<section class="approval-section" id="approvalSection">
+  <div style="padding:0 60px">
+    <div class="sec-label">Application Status</div>
+    <h2 class="sec-title" style="margin-bottom:32px">Approval Progress</h2>
+    <div class="approval-flow" id="approvalFlow">
+      <div class="af-node"><div class="af-ico done" id="afl-0"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><div class="af-label">Submitted</div><div class="af-sub" id="afls-0">—</div></div>
+      <div class="af-line" id="afline-0"></div>
+      <div class="af-node"><div class="af-ico" id="afl-1"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="af-label">Supervisor</div><div class="af-sub" id="afls-1">Pending</div></div>
+      <div class="af-line" id="afline-1"></div>
+      <div class="af-node"><div class="af-ico" id="afl-2"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="af-label">HR Office</div><div class="af-sub" id="afls-2">Pending</div></div>
+      <div class="af-line" id="afline-2"></div>
+      <div class="af-node"><div class="af-ico" id="afl-3"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="af-label">Approved</div><div class="af-sub" id="afls-3">—</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ HISTORY ████ -->
+<section class="history-section" id="history-section">
+  <div class="sec-label">Leave Records</div>
+  <h2 class="sec-title">Leave History</h2>
+  <p class="sec-sub">Your complete leave application record for this calendar year.</p>
+  <table class="history-table ht" id="historyTable">
+    <thead>
+      <tr>
+        <th>Ref No.</th>
+        <th>Leave Type</th>
+        <th>Period</th>
+        <th>Duration</th>
+        <th>Credits Used</th>
+        <th>Status</th>
+        <th>Filed On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="historyBody"></tbody>
+  </table>
+</section>
+
+<!-- ████ POLICY ████ -->
+<section class="policy-section" id="policy-section">
+  <div>
+    <div class="sec-label">Credit System</div>
+    <h2 class="sec-title">Partial Day Rules</h2>
+    <p class="sec-sub" style="margin-bottom:24px">Credits are deducted in <strong style="color:var(--warn)">0.25 increments</strong> per 2-hour block for late arrivals and early departures.</p>
+    <div class="policy-card" style="margin-bottom:20px">
+      <div class="pc-title">Credit Denominations</div>
+      <div class="pc-sub">How partial-day leaves translate to credit deductions</div>
+      <table class="credit-table ct">
+        <thead><tr><th>Denomination</th><th>Hours</th><th>Scenario</th><th>Deduction</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">0.25</span></td><td>2 hrs</td><td>Late in or Early Out (up to 2 hrs)</td><td style="color:var(--warn)">¼ credit</td></tr>
+          <tr><td><span class="mono">0.50</span></td><td>4 hrs</td><td>Half Day AM or PM</td><td style="color:var(--warn)">½ credit</td></tr>
+          <tr><td><span class="mono">0.75</span></td><td>6 hrs</td><td>Undertime 6 hours worked</td><td style="color:var(--warn)">¾ credit</td></tr>
+          <tr><td><span class="mono">1.00</span></td><td>8 hrs</td><td>Full Day Absence</td><td style="color:var(--danger)">1 credit</td></tr>
+          <tr><td><span class="mono">0.00</span></td><td>≤ 1 hr</td><td>Tardiness under 1 hour (first offense)</td><td style="color:var(--ok)">No charge</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="policy-card">
+      <div class="pc-title">Filing Deadlines</div>
+      <div class="pc-sub">CSC guidelines for leave application filing</div>
+      <table class="credit-table ct">
+        <thead><tr><th>Leave Type</th><th>File Before</th></tr></thead>
+        <tbody>
+          <tr><td>Vacation Leave</td><td>5 working days in advance</td></tr>
+          <tr><td>Sick Leave (planned)</td><td>Day of return or next day</td></tr>
+          <tr><td>Emergency Leave</td><td>Within 3 days of the event</td></tr>
+          <tr><td>Maternity Leave</td><td>2 months before expected date</td></tr>
+          <tr><td>Study Leave</td><td>2 weeks in advance</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Accrual Schedule</div>
+    <h2 class="sec-title">Credit Earning<br>Policy</h2>
+    <p class="sec-sub" style="margin-bottom:24px">Based on CSC MC No. 41, s. 1998 and RA 9480 (as applicable to Malaybalay City employees).</p>
+    <div class="policy-card">
+      <div class="pc-title">Monthly Accrual Rates</div>
+      <div class="pc-sub">Regular and permanent employees (pro-rated for part-time)</div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Vacation Leave (VL)</div><div class="ar-rule">1.25 days / month · Max 30 days carry-over</div></div><div class="ar-right"><div class="ar-rate">1.25</div><div class="ar-period">per month</div></div></div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Sick Leave (SL)</div><div class="ar-rule">1.25 days / month · No cap on accumulation</div></div><div class="ar-right"><div class="ar-rate">1.25</div><div class="ar-period">per month</div></div></div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Maternity Leave</div><div class="ar-rule">RA 11210 — 105 days · Lifetime benefit</div></div><div class="ar-right"><div class="ar-rate">105</div><div class="ar-period">days (lifetime)</div></div></div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Paternity Leave</div><div class="ar-rule">RA 8187 — 7 days · Per delivery, max 4</div></div><div class="ar-right"><div class="ar-rate">7</div><div class="ar-period">per delivery</div></div></div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Emergency Leave</div><div class="ar-rule">5 days per year (calamity/family)</div></div><div class="ar-right"><div class="ar-rate">5</div><div class="ar-period">per year</div></div></div>
+      <div class="accrual-row"><div class="ar-left"><div class="ar-type">Study Leave</div><div class="ar-rule">6 days per year (bar/board exams)</div></div><div class="ar-right"><div class="ar-rate">6</div><div class="ar-period">per year</div></div></div>
+
+      <div class="countdown-box">
+        <div><div class="cb-label">Next Credit Accrual</div><div class="cb-sub" style="font-size:10px;color:var(--faint)">VL + SL: +2.5 credits</div></div>
+        <div style="text-align:right">
+          <div class="cb-val" id="accrualCountdown">12</div>
+          <div class="cb-sub">days remaining</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████ FOOTER ████ -->
+<footer>
+  <div>
+    <div class="footer-brand">"Company Name" Portal — "Location"</div>
+    <div class="footer-sub">Human Resources Management Information System · Bukidnon, Philippines</div>
+  </div>
+  <div class="footer-copy">
+    <div>HR Division · IT Department</div>
+    <div style="margin-top:3px">For assistance: hr@malaybalay.gov.ph · Local 108</div>
+  </div>
+</footer>
+
+<!-- TOAST ZONE -->
+<div class="toast-zone" id="toastZone"></div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modalOv" onclick="if(event.target===this)closeMo()">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeMo()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-title" id="moTitle">—</div>
+    <div class="modal-sub" id="moSub">—</div>
+    <div id="moBody"></div>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeMo()">Close</button>
+      <button class="modal-btn-submit" id="moBtn" onclick="closeMo()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   MALAYBALAY CITY GOVERNMENT — HR SELF-SERVICE PORTAL
+   Human Resources Division · CityHR v1.0
+   ══════════════════════════════════════════════════════════ */
+
+/* ── EMPLOYEE DATA ── */
+const EMPLOYEE = {
+  id:'MBY-EMP-2847', name:'Maria Santos Reyes', initials:'MS',
+  dept:""Company Name" Treasurer's Office", pos:'Administrative Officer II', sg:15,
+  hired:'2018-03-15', status:'Permanent'
+};
+
+const CREDITS = {
+  vl:  {label:'Vacation Leave',  short:'VL',  balance:15.5,  max:30,   color:'#8b5cf6', accrual:1.25,  unit:'days', rule:'Earned monthly. Max 30-day carry-over. Can be monetized upon retirement.'},
+  sl:  {label:'Sick Leave',     short:'SL',  balance:8.75,  max:15,   color:'#3b82f6', accrual:1.25,  unit:'days', rule:'Earned monthly. Unlimited accumulation. For personal illness or medical procedures.'},
+  ml:  {label:'Maternity Leave',short:'ML',  balance:105,   max:105,  color:'#ec4899', accrual:0,     unit:'days', rule:'RA 11210 – 105 days paid. One-time lifetime benefit. 60-day extension without pay.'},
+  pl:  {label:'Paternity Leave', short:'PL', balance:7,     max:7,    color:'#06b6d4', accrual:0,     unit:'days', rule:'RA 8187 – 7 days per delivery. Maximum of 4 deliveries. Must be married.'},
+  el:  {label:'Emergency Leave', short:'EL', balance:3,     max:5,    color:'#f59e0b', accrual:0,     unit:'days', rule:'5 days per year for calamity, death of immediate family, or other emergencies.'},
+  stl: {label:'Study Leave',     short:'StL',balance:6,     max:6,    color:'#10b981', accrual:0,     unit:'days', rule:'6 days for board/bar exam reviews. Must be approved 2 weeks in advance.'},
+  cto: {label:'Compensatory Time',short:'CTO',balance:4.5,  max:10,   color:'#22d3ee', accrual:0,     unit:'days', rule:'Earned for overtime or work on rest days. Valid for 1 year from earning date.'},
+  spl: {label:'Solo Parent Leave',short:'SPL',balance:0,    max:7,    color:'#f43f5e', accrual:0,     unit:'days', rule:'RA 8972 – 7 days if with Solo Parent ID. Must present valid Solo Parent ID.'},
+};
+
+let selectedLeaveType = 'vl';
+let selectedCalType   = 'vl';
+let selectedChipVal   = 1.0;
+let calChipVal        = 1.0;
+let selectedDates     = [];
+let isMouseDown       = false;
+let calYear, calMonth;
+
+/* Leave history (demo data) */
+let leaveHistory = [
+  {ref:'LR-2025-0041',type:'vl',label:'Vacation Leave',from:'2025-04-10',to:'2025-04-11',days:2,credits:2.0,status:'approved',filed:'2025-04-03'},
+  {ref:'LR-2025-0036',type:'sl',label:'Sick Leave',from:'2025-03-20',to:'2025-03-20',days:1,credits:1.0,status:'approved',filed:'2025-03-21'},
+  {ref:'LR-2025-0029',type:'el',label:'Emergency Leave',from:'2025-03-05',to:'2025-03-06',days:2,credits:2.0,status:'approved',filed:'2025-03-05'},
+  {ref:'LR-2025-0021',type:'vl',label:'Vacation Leave',from:'2025-02-13',to:'2025-02-14',days:2,credits:2.0,status:'approved',filed:'2025-02-06'},
+  {ref:'LR-2025-0014',type:'sl',label:'Sick Leave',from:'2025-01-27',to:'2025-01-27',days:1,credits:0.25,status:'approved',filed:'2025-01-28',note:'Partial — 2-hour early out'},
+  {ref:'LR-2025-0008',type:'vl',label:'Vacation Leave',from:'2025-01-15',to:'2025-01-17',days:3,credits:3.0,status:'approved',filed:'2025-01-08'},
+  {ref:'LR-2025-0061',type:'vl',label:'Vacation Leave',from:'2025-06-18',to:'2025-06-20',days:3,credits:3.0,status:'pending',filed:'2025-06-03'},
+];
+
+/* Holidays */
+const HOLIDAYS_2025 = {
+  '2025-01-01':'New Year','2025-04-09':'Araw ng Kagitingan','2025-04-17':'Maundy Thursday',
+  '2025-04-18':'Good Friday','2025-05-01':'Labor Day','2025-06-12':'Independence Day',
+  '2025-07-04':'Eid al-Adha','2025-08-25':'Ninoy Aquino Day','2025-08-26':'National Heroes Day',
+  '2025-11-01':'All Saints Day','2025-11-30':'Bonifacio Day','2025-12-08':'Immaculate Conception',
+  '2025-12-25':'Christmas Day','2025-12-30':'Rizal Day','2025-12-31':'New Year Eve Holiday'
+};
+
+/* ══ INIT ══ */
+window.onload = function(){
+  const now = new Date();
+  calYear  = now.getFullYear();
+  calMonth = now.getMonth();
+  buildRadialChart();
+  buildLeaveCards();
+  buildLeaveTypePills();
+  buildCalendarTypePills();
+  renderCalendar();
+  renderHistory();
+  calcFromTime();
+  updateCalcPanel();
+  setupRevealObserver();
+  startAccrualCountdown();
+};
+
+/* ══ RADIAL CHART ══ */
+function buildRadialChart(){
+  const svg = document.getElementById('radialSvg');
+  const cx=220, cy=220;
+  const types = Object.entries(CREDITS).filter(([,v])=>v.balance>0);
+  const total = types.reduce((s,[,v])=>s+v.balance,0);
+  
+  const radii   = [170,145,120,95,72,52,34,18];
+  const strokes = [28,  22,  18, 14, 12, 10,  8,  6];
+  
+  let html = '';
+  // Background circles
+  types.forEach(([,v],i)=>{
+    const r=radii[i]||18; const sw=strokes[i]||6;
+    const circ=2*Math.PI*r;
+    html+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${v.color}" stroke-width="${sw}" opacity=".08"/>`;
+  });
+  
+  // Filled arcs
+  types.forEach(([key,v],i)=>{
+    const r=radii[i]||18; const sw=strokes[i]||6;
+    const circ=2*Math.PI*r;
+    const pct=Math.min(v.balance/v.max,1);
+    const dash=pct*circ; const gap=circ-dash;
+    html+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${v.color}" stroke-width="${sw}" 
+      stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${circ*0.25}" 
+      stroke-linecap="round" opacity=".9" style="cursor:pointer;transition:opacity .2s,stroke-width .2s"
+      data-key="${key}" data-label="${v.label}" data-bal="${v.balance}" data-unit="${v.unit}" data-max="${v.max}"
+      onmouseenter="showArcTooltip(event,this)" onmouseleave="hideArcTooltip()"
+      onclick="scrollToLeaveType('${key}')"/>`;
+  });
+  
+  svg.innerHTML = html;
+
+  // Animate total counter
+  const el=document.getElementById('rctTotal');
+  let start=0; const target=Object.values(CREDITS).reduce((s,v)=>s+v.balance,0);
+  const step=()=>{start=Math.min(start+target/30,target);el.textContent=start.toFixed(start<10?2:1);if(start<target)requestAnimationFrame(step);};
+  setTimeout(step,400);
+}
+
+function showArcTooltip(e,el){
+  const tt=document.getElementById('arcTooltip');
+  const wrap=document.getElementById('radialWrap');
+  const wr=wrap.getBoundingClientRect();
+  document.getElementById('atType').textContent=el.dataset.label;
+  document.getElementById('atType').style.color=window.getComputedStyle(el).stroke;
+  document.getElementById('atBal').textContent=el.dataset.bal;
+  document.getElementById('atMeta').textContent=el.dataset.unit+' remaining (max '+el.dataset.max+')';
+  let left=e.clientX-wr.left+16; let top=e.clientY-wr.top-40;
+  if(left+180>wr.width)left=e.clientX-wr.left-185;
+  tt.style.left=left+'px'; tt.style.top=top+'px'; tt.style.opacity='1';
+}
+function hideArcTooltip(){ document.getElementById('arcTooltip').style.opacity='0'; }
+function scrollToLeaveType(key){
+  document.getElementById('leave-section').scrollIntoView({behavior:'smooth'});
+}
+
+/* ══ LEAVE CARDS ══ */
+function buildLeaveCards(){
+  const el=document.getElementById('leaveGrid');
+  el.innerHTML=Object.entries(CREDITS).map(([key,v])=>{
+    const pct=v.max>0?Math.round(v.balance/v.max*100):0;
+    return `<div class="lc" onclick="showLeaveModal('${key}')">
+      <div class="lc-inner">
+        <div class="lc-front">
+          <div class="lc-type-dot" style="background:${v.color}"></div>
+          <div class="lc-type-name">${v.label}</div>
+          <div class="lc-balance" style="color:${v.color}">${v.balance}</div>
+          <div class="lc-unit">${v.unit}</div>
+          <div class="lc-bar-track"><div class="lc-bar-fill" style="width:0%;background:${v.color}" data-pct="${pct}"></div></div>
+          <div class="lc-bar-label"><span>0</span><span>${v.max} max</span></div>
+        </div>
+        <div class="lc-back">
+          <div>
+            <div class="lcb-title" style="color:${v.color}">${v.label} (${v.short})</div>
+            <div class="lcb-rule">${v.rule}</div>
+          </div>
+          <button class="lcb-btn" onclick="event.stopPropagation();setLeaveTypeAndScroll('${key}')">Apply ${v.short} Leave →</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  // Animate bars after a small delay
+  setTimeout(()=>{
+    document.querySelectorAll('.lc-bar-fill').forEach(bar=>{
+      bar.style.width=bar.dataset.pct+'%';
+    });
+  },300);
+}
+
+function setLeaveTypeAndScroll(key){
+  selectedCalType=key;
+  document.getElementById('cal-section').scrollIntoView({behavior:'smooth'});
+  buildCalendarTypePills();
+  updateCalPanel();
+}
+
+/* ══ LEAVE TYPE PILLS ══ */
+function buildLeaveTypePills(){
+  const el=document.getElementById('ltPills');
+  el.innerHTML=Object.entries(CREDITS).map(([k,v])=>`
+    <button class="lt-pill${k===selectedLeaveType?' on':''}" 
+      style="${k===selectedLeaveType?'background:'+v.color+';border-color:'+v.color:''}"
+      onclick="selectLeaveType('${k}',this)">${v.short}</button>`).join('');
+}
+
+function buildCalendarTypePills(){
+  const el=document.getElementById('calTypePills');
+  el.innerHTML=Object.entries(CREDITS).map(([k,v])=>`
+    <button class="lt-pill${k===selectedCalType?' on':''}"
+      style="${k===selectedCalType?'background:'+v.color+';border-color:'+v.color:''}"
+      onclick="selectCalType('${k}',this)">${v.short}</button>`).join('');
+}
+
+function selectLeaveType(key,btn){
+  selectedLeaveType=key;
+  document.querySelectorAll('#ltPills .lt-pill').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.borderColor='';});
+  btn.classList.add('on');
+  btn.style.background=CREDITS[key].color;
+  btn.style.borderColor=CREDITS[key].color;
+  updateCalcPanel();
+}
+
+function selectCalType(key,btn){
+  selectedCalType=key;
+  document.querySelectorAll('#calTypePills .lt-pill').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.borderColor='';});
+  btn.classList.add('on');
+  btn.style.background=CREDITS[key].color;
+  btn.style.borderColor=CREDITS[key].color;
+  updateCalPanel();
+}
+
+/* ══ CHIP SELECTOR ══ */
+function selectChip(el){
+  document.querySelectorAll('#chipRow .chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  selectedChipVal=parseFloat(el.dataset.val);
+  updateCalcPanel();
+}
+
+function setCalChip(el){
+  document.querySelectorAll('#calChips .chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  calChipVal=parseFloat(el.dataset.val);
+  updateCalPanel();
+}
+
+/* ══ CALC PANEL ══ */
+function updateCalcPanel(){
+  const v=CREDITS[selectedLeaveType];
+  const val=selectedChipVal;
+  document.getElementById('crpVal').textContent=val.toFixed(2);
+  document.getElementById('crpHrs').textContent='= '+(val*8)+' hours';
+  document.getElementById('crpType').textContent=v.label;
+  document.getElementById('crpCurBal').textContent=v.balance+' days';
+  const after=Math.max(0,v.balance-val);
+  document.getElementById('crpAfter').textContent=after.toFixed(2);
+  // Coins
+  const coinsEl=document.getElementById('crpCoins');
+  const numCoins=Math.round(val/0.25);
+  coinsEl.innerHTML=Array(Math.min(numCoins,20)).fill(0).map((_,i)=>`<div class="coin" style="animation-delay:${i*.05}s">¼</div>`).join('');
+  // Breakdown
+  document.getElementById('crpBreakdown').innerHTML=`<b>${val} credit${val!==1?'s':''}</b> = ${val*8} hours<br><b>Leave Type:</b> ${v.label}<br><b>Current Balance:</b> ${v.balance} days`;
+}
+
+function calcFromTime(){
+  const arr=document.getElementById('tcArrival').value;
+  const dep=document.getElementById('tcDeparture').value;
+  if(!arr||!dep){document.getElementById('tcResult').textContent='—';return;}
+  
+  const toMins=t=>{ const [h,m]=t.split(':').map(Number); return h*60+m; };
+  const arrMins=toMins(arr); const depMins=toMins(dep);
+  const officialStart=8*60; // 8:00 AM
+  const officialEnd=17*60;  // 5:00 PM
+  const lunchStart=12*60;   // 12:00 PM
+  const lunchEnd=13*60;     // 1:00 PM
+  
+  let lateMin=Math.max(0,arrMins-officialStart);
+  let earlyMin=Math.max(0,officialEnd-depMins);
+  
+  // If late arrival overlaps lunch, subtract lunch
+  if(arrMins>lunchStart && arrMins<lunchEnd) lateMin=Math.max(0,arrMins-lunchEnd+lateMin);
+  
+  const totalUndertime=lateMin+earlyMin;
+  let credits=0;
+  if(totalUndertime<=30)credits=0; // grace
+  else if(totalUndertime<=120)credits=0.25;
+  else if(totalUndertime<=240)credits=0.5;
+  else if(totalUndertime<=360)credits=0.75;
+  else credits=1.0;
+  
+  document.getElementById('tcResult').textContent=credits.toFixed(2)+' credits ('+(totalUndertime)+' min undertime)';
+  
+  // Sync chip
+  if(credits>0){
+    document.querySelectorAll('#chipRow .chip').forEach(c=>{
+      c.classList.toggle('on',parseFloat(c.dataset.val)===credits);
+    });
+    selectedChipVal=credits;
+    updateCalcPanel();
+  }
+}
+
+function applyToCalendar(){
+  document.getElementById('cal-section').scrollIntoView({behavior:'smooth'});
+  toast('Ready','Select dates on the calendar below, then submit your application.','info');
+}
+
+/* ══ CALENDAR ══ */
+function renderCalendar(){
+  const wrap=document.getElementById('calWrap');
+  const now=new Date();
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  
+  const todayStr=now.toISOString().slice(0,10);
+  
+  let html=`<div class="cal-header">
+    <div class="cal-nav">
+      <div class="cal-nav-btn" onclick="changeMonth(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <div><span class="cal-month">${months[calMonth]}</span><span class="cal-year">${calYear}</span></div>
+      <div class="cal-nav-btn" onclick="changeMonth(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+    <div class="cal-legend">
+      ${Object.entries(CREDITS).slice(0,3).map(([k,v])=>`<div class="cl-item"><div class="cl-dot" style="background:${v.color}"></div>${v.short}</div>`).join('')}
+      <div class="cl-item"><div class="cl-dot" style="background:#f59e0b"></div>Holiday</div>
+    </div>
+  </div>
+  <div class="cal-grid-head">${days.map(d=>`<div class="cal-day-head">${d}</div>`).join('')}</div>
+  <div class="cal-grid">`;
+  
+  for(let i=0;i<firstDay;i++) html+=`<div class="cal-day empty"></div>`;
+  
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dow=new Date(calYear,calMonth,d).getDay();
+    const isWeekend=dow===0||dow===6;
+    const isToday=dateStr===todayStr;
+    const isHoliday=!!HOLIDAYS_2025[dateStr];
+    const isSelected=selectedDates.includes(dateStr);
+    const isApproved=leaveHistory.some(l=>l.status==='approved'&&dateStr>=l.from&&dateStr<=l.to);
+    const isPending=leaveHistory.some(l=>l.status==='pending'&&dateStr>=l.from&&dateStr<=l.to);
+    
+    const existType=leaveHistory.find(l=>l.status==='approved'&&dateStr>=l.from&&dateStr<=l.to);
+    const dotColor=existType?CREDITS[existType.type]?.color:'';
+    
+    let cls='cal-day';
+    if(isWeekend)cls+=' weekend';
+    if(isToday)cls+=' today';
+    if(isHoliday)cls+=' holiday';
+    if(isSelected)cls+=' selected';
+    if(isApproved&&!isSelected)cls+=' approved-leave';
+    if(isPending&&!isSelected)cls+=' in-range';
+    
+    const cost=(!isWeekend&&!isHoliday)?calChipVal.toFixed(2):'';
+    const events=[];
+    if(existType)events.push(`<div class="cal-day-dot" style="background:${dotColor}"></div>`);
+    if(isHoliday)events.push(`<div class="cal-day-dot" style="background:var(--warn)"></div>`);
+    
+    html+=`<div class="${cls}" data-date="${dateStr}"
+      onmousedown="if(event.button===0)startDrag('${dateStr}')"
+      onmouseenter="onDragEnter('${dateStr}')"
+      onmouseup="endDrag()"
+      onclick="toggleDate('${dateStr}')">
+      <span class="cal-day-num">${d}</span>
+      ${cost&&!isWeekend&&!isHoliday?`<span class="cal-day-cost">-${cost}</span>`:''}
+      ${events.length?`<div class="cal-day-event">${events.join('')}</div>`:''}
+    </div>`;
+  }
+  html+='</div>';
+  wrap.innerHTML=html;
+  
+  // Prevent text selection on drag
+  wrap.addEventListener('dragstart',e=>e.preventDefault());
+  document.addEventListener('mouseup',endDrag);
+}
+
+let isDragging=false;
+function startDrag(d){ isDragging=false; }
+function onDragEnter(d){
+  if(!isMouseDown) return;
+  isDragging=true;
+  const el=document.querySelector(`[data-date="${d}"]`);
+  if(el&&!el.classList.contains('weekend')&&!el.classList.contains('holiday'))
+    el.classList.add('in-range');
+}
+function endDrag(){ isMouseDown=false; isDragging=false; }
+
+document.addEventListener('mousedown',()=>isMouseDown=true);
+document.addEventListener('mouseup',()=>{ isMouseDown=false; });
+
+function toggleDate(d){
+  const el=document.querySelector(`[data-date="${d}"]`);
+  if(!el||el.classList.contains('weekend')||el.classList.contains('holiday')) return;
+  const idx=selectedDates.indexOf(d);
+  if(idx>=0){ selectedDates.splice(idx,1); el.classList.remove('selected'); }
+  else { selectedDates.push(d); el.classList.add('selected'); }
+  selectedDates.sort();
+  updateCalPanel();
+}
+
+function clearCalSelection(){
+  selectedDates=[];
+  renderCalendar();
+  updateCalPanel();
+}
+
+function changeMonth(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+
+function updateCalPanel(){
+  const sel=document.getElementById('cpSelection');
+  const btn=document.getElementById('btnSubmitLeave');
+  if(!selectedDates.length){
+    sel.innerHTML=`<div class="cp-sel-empty"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>No dates selected.<br>Click a date to begin.</div>`;
+    btn.disabled=true;
+    return;
+  }
+  const from=selectedDates[0]; const to=selectedDates[selectedDates.length-1];
+  const totalCost=(selectedDates.length*calChipVal);
+  const v=CREDITS[selectedCalType];
+  const after=Math.max(0,v.balance-totalCost);
+  const fromD=new Date(from).toLocaleDateString('en-PH',{month:'short',day:'numeric'});
+  const toD=selectedDates.length>1?new Date(to).toLocaleDateString('en-PH',{month:'short',day:'numeric'}):'';
+  sel.innerHTML=`
+    <div class="cp-sel-dates">${fromD}${toD?' → '+toD:''}</div>
+    <div class="cp-sel-days">${selectedDates.length} working day${selectedDates.length>1?'s':''} · ${v.label}</div>
+    <div class="cp-sel-cost">−${totalCost.toFixed(2)} credits</div>
+    <div class="cp-sel-after">Balance after: <strong style="color:var(--ok)">${after.toFixed(2)} days</strong></div>`;
+  btn.disabled=false;
+}
+
+/* ══ SUBMIT LEAVE ══ */
+function submitLeave(){
+  if(!selectedDates.length){toast('Error','No dates selected.','err');return;}
+  const reason=document.getElementById('leaveReason').value.trim();
+  if(!reason){toast('Required','Please provide a reason for leave.','err');return;}
+  const v=CREDITS[selectedCalType];
+  const totalCost=selectedDates.length*calChipVal;
+  if(totalCost>v.balance){toast('Insufficient Credits',`You need ${totalCost} credits but only have ${v.balance}.`,'err');return;}
+
+  // Deduct credits
+  CREDITS[selectedCalType].balance=parseFloat((v.balance-totalCost).toFixed(2));
+  
+  // Add to history
+  const ref='LR-'+Date.now().toString().slice(-6);
+  leaveHistory.unshift({
+    ref, type:selectedCalType, label:v.label,
+    from:selectedDates[0], to:selectedDates[selectedDates.length-1],
+    days:selectedDates.length, credits:totalCost,
+    status:'pending', filed:new Date().toISOString().slice(0,10)
+  });
+  
+  toast('Leave Filed!',`${totalCost} credit(s) deducted from ${v.label}. Awaiting supervisor approval.`,'ok');
+  
+  // Reset
+  clearCalSelection();
+  document.getElementById('leaveReason').value='';
+  renderHistory();
+  buildLeaveCards();
+  buildRadialChart();
+  updateCardFront();
+  
+  // Show approval flow
+  document.getElementById('approvalSection').classList.add('visible');
+  document.getElementById('approvalSection').scrollIntoView({behavior:'smooth'});
+  animateApprovalFlow();
+}
+
+/* ══ APPROVAL FLOW ANIMATION ══ */
+function animateApprovalFlow(){
+  const nodes=['afl-0','afl-1','afl-2','afl-3'];
+  const lines=['afline-0','afline-1','afline-2'];
+  const subs=['afls-0','afls-1','afls-2','afls-3'];
+  const now=new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+  
+  nodes.forEach(n=>document.getElementById(n).className='af-ico pending');
+  lines.forEach(l=>document.getElementById(l).className='af-line');
+  
+  document.getElementById('afl-0').className='af-ico done';
+  document.getElementById('afls-0').textContent=now;
+  
+  setTimeout(()=>{
+    document.getElementById('afline-0').className='af-line active';
+    document.getElementById('afl-1').className='af-ico active';
+    document.getElementById('afls-1').textContent='Reviewing…';
+  },800);
+  setTimeout(()=>{
+    document.getElementById('afline-0').className='af-line done';
+    document.getElementById('afl-1').className='af-ico done';
+    document.getElementById('afls-1').textContent='Endorsed';
+    document.getElementById('afline-1').className='af-line active';
+    document.getElementById('afl-2').className='af-ico active';
+    document.getElementById('afls-2').textContent='Processing…';
+  },2200);
+}
+
+/* ══ HISTORY TABLE ══ */
+function renderHistory(){
+  const tbody=document.getElementById('historyBody');
+  tbody.innerHTML=leaveHistory.map(l=>{
+    const v=CREDITS[l.type];
+    const statCls=l.status==='approved'?'hs-approved':l.status==='pending'?'hs-pending':l.status==='rejected'?'hs-rejected':'hs-draft';
+    const from=new Date(l.from).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'2-digit'});
+    const to=l.from!==l.to?new Date(l.to).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'2-digit'}):null;
+    const filed=new Date(l.filed).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'2-digit'});
+    return `<tr>
+      <td class="ht-id">${l.ref}</td>
+      <td><span class="ht-type-dot" style="background:${v?.color||'#888'}"></span>${l.label}</td>
+      <td>${from}${to?' – '+to:''}</td>
+      <td>${l.days} day${l.days!==1?'s':''}</td>
+      <td class="ht-credit" style="color:${v?.color||'#888'}">${l.credits.toFixed(2)}</td>
+      <td><span class="ht-status ${statCls}">${l.status}</span></td>
+      <td>${filed}</td>
+      <td><div class="ht-action">
+        <button class="ht-btn ht-btn-view" onclick="viewLeaveDetail('${l.ref}')">View</button>
+        ${l.status==='pending'?`<button class="ht-btn ht-btn-cancel" onclick="cancelLeave('${l.ref}')">Cancel</button>`:''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function viewLeaveDetail(ref){
+  const l=leaveHistory.find(x=>x.ref===ref);
+  if(!l)return;
+  const v=CREDITS[l.type];
+  document.getElementById('moTitle').textContent=l.label;
+  document.getElementById('moSub').textContent=l.ref+' · Filed '+new Date(l.filed).toLocaleDateString('en-PH',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('moBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      ${[['Leave Type',l.label],['Period',new Date(l.from).toLocaleDateString('en-PH',{month:'short',day:'numeric'})+(l.from!==l.to?' – '+new Date(l.to).toLocaleDateString('en-PH',{month:'short',day:'numeric'}):'' )],['Duration',l.days+' day'+( l.days!==1?'s':'')],['Credits Deducted',l.credits.toFixed(2)+' credits'],['Status',l.status.toUpperCase()],['Filed On',new Date(l.filed).toLocaleDateString('en-PH',{month:'long',day:'numeric',year:'numeric'})]].map(([lbl,val])=>`
+      <div style="background:var(--srf3);border-radius:8px;padding:12px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:700;margin-bottom:4px">${lbl}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--cream)">${val}</div>
+      </div>`).join('')}
+    </div>`;
+  document.getElementById('modalOv').classList.add('open');
+}
+
+function cancelLeave(ref){
+  const l=leaveHistory.find(x=>x.ref===ref);
+  if(!l||l.status!=='pending')return;
+  CREDITS[l.type].balance=parseFloat((CREDITS[l.type].balance+l.credits).toFixed(2));
+  l.status='cancelled';
+  renderHistory();
+  buildLeaveCards();
+  buildRadialChart();
+  updateCardFront();
+  toast('Cancelled',`Leave application ${ref} cancelled. Credits restored.`,'info');
+}
+
+/* ══ LEAVE MODAL ══ */
+function showLeaveModal(key){
+  const v=CREDITS[key];
+  document.getElementById('moTitle').textContent=v.label;
+  document.getElementById('moSub').textContent=`${v.short} — Balance: ${v.balance} ${v.unit}`;
+  document.getElementById('moBody').innerHTML=`
+    <div style="display:flex;gap:16px;margin-bottom:18px;align-items:center">
+      <div style="width:56px;height:56px;border-radius:50%;background:${v.color}22;border:2px solid ${v.color}55;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:${v.color}">${v.balance}</span>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--cream)">${v.balance} ${v.unit} remaining</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Max: ${v.max} · ${v.accrual?v.accrual+'/month accrual':'No accrual'}</div>
+        <div style="margin-top:8px;height:5px;background:var(--srf4);border-radius:4px;width:200px"><div style="height:100%;border-radius:4px;background:${v.color};width:${v.max?Math.round(v.balance/v.max*100):0}%"></div></div>
+      </div>
+    </div>
+    <div style="background:var(--srf3);border-radius:10px;padding:16px;margin-bottom:14px;font-size:13px;color:var(--warm);line-height:1.7">${v.rule}</div>`;
+  document.getElementById('moBtn').textContent=`Apply ${v.short} Leave`;
+  document.getElementById('moBtn').onclick=()=>{closeMo();setLeaveTypeAndScroll(key);};
+  document.getElementById('modalOv').classList.add('open');
+}
+
+function closeMo(){
+  document.getElementById('modalOv').classList.remove('open');
+  document.getElementById('moBtn').onclick=closeMo;
+}
+
+/* ══ UPDATE CARD ══ */
+function updateCardFront(){
+  document.getElementById('cardVL').textContent=CREDITS.vl.balance+' days';
+  document.getElementById('bc-vl').textContent=CREDITS.vl.balance;
+  document.getElementById('bc-sl').textContent=CREDITS.sl.balance;
+  document.getElementById('bc-el').textContent=CREDITS.el.balance;
+  document.getElementById('bc-cto').textContent=CREDITS.cto.balance;
+  document.getElementById('bc-stl').textContent=CREDITS.stl.balance;
+  const total=Object.values(CREDITS).reduce((s,v)=>s+v.balance,0);
+  document.getElementById('totalCredits').textContent=total.toFixed(2);
+  document.getElementById('rctTotal').textContent=total.toFixed(2);
+}
+
+/* ══ ACCRUAL COUNTDOWN ══ */
+function startAccrualCountdown(){
+  const now=new Date();
+  const lastDay=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  const remaining=lastDay-now.getDate();
+  ['nextAccrualDays','accrualCountdown','nextAccrualCard'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=remaining;
+  });
+}
+
+/* ══ REVEAL OBSERVER ══ */
+function setupRevealObserver(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+/* ══ TOAST ══ */
+function toast(title,msg,type='info'){
+  const icons={ok:'<polyline points="20 6 9 17 4 12"/>',warn:'<line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>',info:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',err:'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'};
+  const zone=document.getElementById('toastZone');
+  const el=document.createElement('div');
+  el.className=`toast t-${type}`;
+  el.innerHTML=`<svg viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icons[type]||icons.info}</svg><div class="toast-body"><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
+  zone.appendChild(el);
+  setTimeout(()=>{el.style.cssText='opacity:0;transform:translateX(12px);transition:all .3s';setTimeout(()=>el.remove(),300);},4000);
+}
+
+/* ══ NAV SMOOTH ══ */
+document.querySelectorAll('.nb-link').forEach(link=>{
+  link.addEventListener('click',()=>{
+    document.querySelectorAll('.nb-link').forEach(l=>l.classList.remove('on'));
+    link.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
+ENDOFFILE
+echo "Exit: $?"
+Output
+
+Exit: 1

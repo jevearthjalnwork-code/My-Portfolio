@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#0a2e5c">
+<title>SMART-ASSESS · "Company Name" Assessor's Office — Property Inspection & Assessment Management</title>
+
+<!-- Bootstrap 5.3 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<!-- DataTables (Bootstrap 5) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/css/dataTables.bootstrap5.min.css">
+<!-- Leaflet + heatmap -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================ DESIGN SYSTEM ============================ */
+:root{
+  --font-display:'Sora',sans-serif;
+  --font-body:'Public Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --navy:#0a2e5c; --navy-deep:#071f40; --navy-line:#1a3f70;
+  --brand:#1763c6; --brand-600:#1257ad; --brand-100:#e8f1fc; --brand-50:#f3f8fe;
+  --gold:#f4a300; --gold-600:#d98e00; --gold-soft:#fff4d8;
+
+  --bg:#eef2f8; --surface:#ffffff; --surface-2:#f6f9fd; --surface-3:#eef3fa;
+  --border:#e3e9f3; --border-strong:#d2dbeb;
+  --text:#0f1f38; --text-soft:#56657f; --text-muted:#8a98b2;
+
+  --success:#0f9d6b; --success-soft:#e3f7ee;
+  --warning:#e08a00; --warning-soft:#fff2da;
+  --danger:#d8453c; --danger-soft:#fde6e4;
+  --info:#1f95cf; --info-soft:#e2f3fb;
+  --violet:#6b4ee6; --violet-soft:#ece8fc;
+
+  --shadow-sm:0 1px 2px rgba(13,33,66,.06),0 1px 3px rgba(13,33,66,.05);
+  --shadow:0 4px 14px rgba(13,33,66,.08);
+  --shadow-lg:0 18px 48px rgba(8,24,52,.16);
+  --radius:14px; --radius-sm:10px; --radius-lg:20px;
+  --sidebar-w:264px;
+}
+[data-bs-theme="dark"]{
+  --navy:#081226; --navy-deep:#050d1c; --navy-line:#15294a;
+  --brand:#3d8ff0; --brand-600:#2f7fe0; --brand-100:#15294a; --brand-50:#0f1f3a;
+  --gold:#ffb627; --gold-600:#e8a313; --gold-soft:#2a2410;
+
+  --bg:#070f1d; --surface:#0f1c31; --surface-2:#0c1728; --surface-3:#13233c;
+  --border:#1d3052; --border-strong:#274069;
+  --text:#e8eefb; --text-soft:#9bacca; --text-muted:#67799a;
+
+  --success-soft:#0c2b21; --warning-soft:#2e2410; --danger-soft:#33161a; --info-soft:#0c2738; --violet-soft:#1c1840;
+  --shadow:0 6px 22px rgba(0,0,0,.45); --shadow-lg:0 22px 60px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--font-body); color:var(--text); background:var(--bg);
+  font-size:14.5px; letter-spacing:.1px; margin:0; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(var(--border) .9px,transparent .9px);
+  background-size:26px 26px;
+}
+h1,h2,h3,h4,h5,h6,.display{font-family:var(--font-display);letter-spacing:-.4px}
+.mono{font-family:var(--font-mono)}
+a{color:var(--brand);text-decoration:none}
+::selection{background:var(--gold);color:#1a1300}
+.text-soft{color:var(--text-soft)!important}.text-mut{color:var(--text-muted)!important}
+.fw-800{font-weight:800}.fw-700{font-weight:700}.fw-600{font-weight:600}
+.tiny{font-size:11.5px}.smaller{font-size:12.5px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:20px;border:2px solid var(--bg)}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============================ LOGIN ============================ */
+#login{position:fixed;inset:0;z-index:1200;display:grid;grid-template-columns:1.05fr .95fr;background:var(--bg)}
+.login-brand{position:relative;overflow:hidden;background:
+   radial-gradient(1200px 600px at 12% -10%,rgba(244,163,0,.18),transparent 55%),
+   linear-gradient(150deg,var(--navy) 0%,var(--navy-deep) 70%);
+   color:#eaf1ff;padding:54px 56px;display:flex;flex-direction:column}
+.login-brand .contours{position:absolute;inset:0;opacity:.16;pointer-events:none}
+.login-brand .glow{position:absolute;right:-120px;bottom:-120px;width:380px;height:380px;border-radius:50%;
+   background:radial-gradient(circle,rgba(23,99,198,.55),transparent 65%);filter:blur(8px)}
+.seal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+   background:radial-gradient(circle at 50% 35%,#fff,#dfe9ff);box-shadow:0 0 0 4px rgba(244,163,0,.55),0 0 0 8px rgba(255,255,255,.12)}
+.brandmark{display:flex;align-items:center;gap:14px}
+.brandmark h1{font-size:21px;margin:0;color:#fff;line-height:1.05}
+.brandmark .sub{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#9fc2ff}
+.login-hero{margin:auto 0}
+.login-hero .kicker{display:inline-flex;gap:8px;align-items:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+   color:#ffd98a;border:1px solid rgba(255,217,138,.3);padding:6px 12px;border-radius:30px;margin-bottom:22px}
+.login-hero h2{font-size:40px;line-height:1.05;color:#fff;margin:0 0 16px;font-weight:800}
+.login-hero p{color:#b9cdef;max-width:430px;font-size:15px}
+.feat{display:flex;gap:12px;align-items:flex-start;margin-top:16px;color:#cdddf6;font-size:13.5px}
+.feat i{color:var(--gold);font-size:18px;margin-top:1px}
+.login-foot{color:#7f9bc7;font-size:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:18px}
+.login-panel{display:flex;align-items:center;justify-content:center;padding:32px}
+.login-card{width:100%;max-width:408px}
+.login-card h3{font-size:24px;margin:0 0 4px}
+.proto-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gold-soft);color:var(--gold-600);
+   font-weight:700;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;padding:5px 11px;border-radius:30px;border:1px solid var(--gold)}
+.otp-grid{display:flex;gap:10px}
+.otp-grid input{width:100%;height:58px;text-align:center;font-family:var(--font-mono);font-size:24px;font-weight:700}
+.cred-hint{background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--radius-sm);padding:12px 14px;font-size:12.5px}
+@media(max-width:900px){#login{grid-template-columns:1fr}.login-brand{display:none}}
+
+/* ============================ SHELL ============================ */
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);flex:0 0 var(--sidebar-w);position:fixed;inset:0 auto 0 0;z-index:1050;
+   background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);color:#c8d6ef;
+   display:flex;flex-direction:column;border-right:1px solid var(--navy-line)}
+.sidebar-head{padding:18px 18px 14px;border-bottom:1px solid var(--navy-line);display:flex;align-items:center;gap:12px}
+.sidebar-head .seal{width:42px;height:42px}
+.sidebar-head .nm{font-family:var(--font-display);font-weight:800;color:#fff;font-size:15px;line-height:1}
+.sidebar-head .nm small{display:block;font-weight:500;color:#88a6d6;font-size:10px;letter-spacing:1.6px;margin-top:3px}
+.nav-scroll{flex:1;overflow-y:auto;padding:12px 12px 24px}
+.nav-scroll::-webkit-scrollbar-thumb{background:#21477e}
+.nav-group{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#6e8ab8;margin:16px 12px 7px;font-weight:700}
+.side-link{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;color:#bccbe6;cursor:pointer;
+   font-size:13.5px;font-weight:500;margin-bottom:2px;position:relative;transition:.16s;border:1px solid transparent}
+.side-link i{font-size:17px;width:20px;text-align:center;color:#8fa9d4}
+.side-link:hover{background:rgba(255,255,255,.06);color:#fff}
+.side-link.active{background:linear-gradient(90deg,rgba(23,99,198,.35),rgba(23,99,198,.08));color:#fff;border-color:rgba(95,165,255,.35)}
+.side-link.active i{color:var(--gold)}
+.side-link.active::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
+.side-link .badge{margin-left:auto}
+.sidebar-foot{padding:12px;border-top:1px solid var(--navy-line);font-size:11px;color:#7c98c6}
+
+.content{flex:1;margin-left:var(--sidebar-w);min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:1000;background:color-mix(in srgb,var(--surface) 88%,transparent);
+   backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:10px 22px;display:flex;align-items:center;gap:14px}
+.topbar .pg-title{font-family:var(--font-display);font-weight:700;font-size:18px;line-height:1.05}
+.topbar .pg-sub{font-size:11.5px;color:var(--text-muted)}
+.topbar-search{position:relative;max-width:330px;flex:1}
+.topbar-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+.topbar-search input{padding-left:38px;border-radius:30px;background:var(--surface-2);border-color:var(--border)}
+.icon-btn{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;border:1px solid var(--border);
+   background:var(--surface);color:var(--text-soft);cursor:pointer;position:relative;transition:.15s}
+.icon-btn:hover{color:var(--brand);border-color:var(--brand);background:var(--brand-50)}
+.icon-btn .dot{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;border-radius:9px;background:var(--danger);
+   color:#fff;font-size:9.5px;font-weight:700;display:grid;place-items:center;padding:0 4px;border:2px solid var(--surface)}
+.role-chip{display:flex;align-items:center;gap:10px;padding:5px 6px 5px 12px;border-radius:30px;border:1px solid var(--border);
+   background:var(--surface);cursor:pointer}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;font-size:13px;
+   background:linear-gradient(135deg,var(--brand),var(--navy))}
+.main-area{padding:22px;max-width:1500px;width:100%;margin:0 auto}
+.view{display:none;animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.hamburger{display:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(5,15,30,.5);z-index:1040}
+@media(max-width:991px){
+  .sidebar{transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow-lg)}
+  body.nav-open .sidebar{transform:none}
+  body.nav-open .backdrop{display:block}
+  .content{margin-left:0}
+  .hamburger{display:grid}
+  .topbar-search{display:none}
+  .main-area{padding:16px}
+}
+
+/* ============================ COMPONENTS ============================ */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.panel-pad{padding:18px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--border)}
+.panel-head h6{margin:0;font-size:14.5px;font-weight:700;font-family:var(--font-display);display:flex;align-items:center;gap:9px}
+.panel-head .bi{color:var(--brand)}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.section-head h4{margin:0;font-size:21px;font-weight:700}
+.section-head p{margin:2px 0 0;color:var(--text-soft);font-size:13px}
+
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);transition:.18s}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand)}
+.stat.s-gold::after{background:var(--gold)}.stat.s-green::after{background:var(--success)}
+.stat.s-amber::after{background:var(--warning)}.stat.s-red::after{background:var(--danger)}.stat.s-violet::after{background:var(--violet)}
+.stat .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:var(--brand-100);color:var(--brand)}
+.stat.s-gold .ico{background:var(--gold-soft);color:var(--gold-600)}.stat.s-green .ico{background:var(--success-soft);color:var(--success)}
+.stat.s-amber .ico{background:var(--warning-soft);color:var(--warning)}.stat.s-red .ico{background:var(--danger-soft);color:var(--danger)}.stat.s-violet .ico{background:var(--violet-soft);color:var(--violet)}
+.stat .num{font-family:var(--font-display);font-size:30px;font-weight:800;line-height:1;margin-top:14px}
+.stat .lbl{color:var(--text-soft);font-size:12.5px;margin-top:5px}
+.trend{font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:3px;margin-top:8px}
+.trend.up{color:var(--success)}.trend.down{color:var(--danger)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:30px;line-height:1.4;white-space:nowrap}
+.pill .bi{font-size:11px}
+.pill-green{background:var(--success-soft);color:var(--success)}
+.pill-amber{background:var(--warning-soft);color:var(--warning)}
+.pill-blue{background:var(--brand-100);color:var(--brand)}
+.pill-red{background:var(--danger-soft);color:var(--danger)}
+.pill-gray{background:var(--surface-3);color:var(--text-soft)}
+.pill-violet{background:var(--violet-soft);color:var(--violet)}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+
+.btn{font-weight:600;border-radius:10px;font-size:13.5px}
+.btn-brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn-brand:hover{background:var(--brand-600);border-color:var(--brand-600);color:#fff}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:#241900;font-weight:700}
+.btn-gold:hover{background:var(--gold-600);border-color:var(--gold-600);color:#241900}
+.btn-soft{background:var(--brand-50);border:1px solid var(--border);color:var(--brand)}
+.btn-soft:hover{background:var(--brand-100);color:var(--brand-600)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-soft)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+.form-control,.form-select{border-radius:10px;border-color:var(--border-strong);background:var(--surface);color:var(--text)}
+.form-control:focus,.form-select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-100)}
+.form-label{font-weight:600;font-size:12.5px;color:var(--text-soft);margin-bottom:5px}
+
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:9px;background:var(--surface-2);
+   border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text-soft);cursor:pointer}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.kv:last-child{border-bottom:0}.kv .k{color:var(--text-muted);font-size:12.5px}.kv .v{font-weight:600;text-align:right}
+
+/* tables */
+table.dataTable{border-collapse:separate!important}
+.table>:not(caption)>*>*{padding:11px 14px}
+table.dataTable thead th{font-family:var(--font-display);font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--text-muted);
+   border-bottom:1px solid var(--border)!important;font-weight:700;background:var(--surface-2)}
+table.dataTable tbody td{border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px}
+table.dataTable tbody tr:hover{background:var(--brand-50)}
+.dataTables_wrapper .dataTables_filter input,.dataTables_wrapper .dataTables_length select{border:1px solid var(--border-strong);border-radius:8px;padding:5px 10px;background:var(--surface);color:var(--text)}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{background:var(--brand)!important;border-color:var(--brand)!important;color:#fff!important;border-radius:8px}
+.dataTables_wrapper .dataTables_paginate .paginate_button{border-radius:8px!important}
+.dataTables_info,.dataTables_length,.dataTables_filter{color:var(--text-soft);font-size:12.5px}
+
+/* maps */
+.map-wrap{height:420px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.map-sm{height:280px}
+.leaflet-container{font-family:var(--font-body);background:var(--surface-2)}
+.map-legend{position:absolute;z-index:500;right:12px;bottom:12px;background:var(--surface);border:1px solid var(--border);
+   border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);font-size:11.5px}
+.map-legend .row-l{display:flex;align-items:center;gap:8px;margin-top:5px}
+.lg-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+/* phone mock */
+.phone{width:330px;max-width:100%;border-radius:42px;background:#0a1424;padding:13px;box-shadow:var(--shadow-lg);position:relative;border:1px solid #1d2c45}
+.phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#0a1424;border-radius:0 0 16px 16px;z-index:5}
+.phone-screen{background:var(--bg);border-radius:32px;overflow:hidden;height:640px;display:flex;flex-direction:column}
+.phone-status{background:var(--navy);color:#fff;padding:26px 18px 12px;display:flex;align-items:center;justify-content:space-between}
+.phone-body{flex:1;overflow-y:auto;padding:14px}
+.phone-tab{display:flex;background:var(--surface);border-top:1px solid var(--border)}
+.phone-tab a{flex:1;text-align:center;padding:9px 0 11px;color:var(--text-muted);font-size:10.5px;font-weight:600}
+.phone-tab a.on{color:var(--brand)}.phone-tab a i{display:block;font-size:19px;margin-bottom:2px}
+.m-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:11px}
+
+/* photos */
+.photo{aspect-ratio:4/3;border-radius:12px;overflow:hidden;position:relative;border:1px solid var(--border)}
+.photo .stamp{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;
+   padding:8px 9px;font-size:9.5px;font-family:var(--font-mono);line-height:1.35}
+.photo .geo{position:absolute;top:7px;left:7px;background:rgba(15,157,107,.92);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px}
+.ba-wrap{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);user-select:none;aspect-ratio:16/10}
+.ba-after{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;cursor:ew-resize;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.ba-handle .grip{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--navy);box-shadow:var(--shadow)}
+.ba-tag{position:absolute;top:8px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;color:#fff}
+
+/* timeline */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:4px;bottom:4px;width:2px;background:var(--border)}
+.tl-item{position:relative;padding-bottom:16px}
+.tl-item::before{content:"";position:absolute;left:-22px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--brand)}
+.tl-item.ok::before{border-color:var(--success)}.tl-item.warn::before{border-color:var(--warning)}.tl-item.gold::before{border-color:var(--gold)}
+.tl-item .t{font-size:11px;color:var(--text-muted);font-family:var(--font-mono)}
+
+/* checklist */
+.check-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:11px;margin-bottom:9px;background:var(--surface)}
+.check-row .seg{margin-left:auto;display:flex;gap:6px}
+.seg-btn{border:1px solid var(--border);background:var(--surface-2);border-radius:8px;padding:4px 11px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-soft)}
+.seg-btn.pass.on{background:var(--success);color:#fff;border-color:var(--success)}
+.seg-btn.fail.on{background:var(--danger);color:#fff;border-color:var(--danger)}
+.seg-btn.na.on{background:var(--text-muted);color:#fff;border-color:var(--text-muted)}
+
+#sigpad{width:100%;height:150px;border:2px dashed var(--border-strong);border-radius:12px;background:var(--surface-2);touch-action:none;cursor:crosshair}
+
+.qr-box{display:grid;place-items:center;background:#fff;padding:16px;border-radius:14px;border:1px solid var(--border)}
+.scan-frame{position:relative;aspect-ratio:1;max-width:280px;margin:auto;border-radius:16px;background:#0a1424;overflow:hidden}
+.scan-frame .laser{position:absolute;left:8%;right:8%;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 14px var(--gold);animation:scan 2.4s linear infinite}
+@keyframes scan{0%{top:12%}50%{top:86%}100%{top:12%}}
+.scan-frame .corner{position:absolute;width:30px;height:30px;border:3px solid var(--gold)}
+.c-tl{top:12px;left:12px;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+.c-tr{top:12px;right:12px;border-left:0;border-bottom:0;border-radius:0 6px 0 0}
+.c-bl{bottom:12px;left:12px;border-right:0;border-top:0;border-radius:0 0 0 6px}
+.c-br{bottom:12px;right:12px;border-left:0;border-top:0;border-radius:0 0 6px 0}
+
+.prog{height:8px;border-radius:20px;background:var(--surface-3);overflow:hidden}
+.prog > i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,var(--brand),var(--gold))}
+.dot-pulse{width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 rgba(15,157,107,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,157,107,.55)}70%{box-shadow:0 0 0 9px rgba(15,157,107,0)}100%{box-shadow:0 0 0 0 rgba(15,157,107,0)}}
+
+.toast-wrap{position:fixed;right:18px;bottom:18px;z-index:1300;display:flex;flex-direction:column;gap:10px}
+.toast-x{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--success);border-radius:12px;
+   padding:12px 16px;box-shadow:var(--shadow-lg);min-width:260px;max-width:340px;animation:slidein .3s}
+@keyframes slidein{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+
+.feature-mini{display:flex;gap:13px;align-items:flex-start;padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.feature-mini .ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:18px;background:var(--brand-100);color:var(--brand);flex:0 0 auto}
+.gridcards{display:grid;gap:16px}
+.modal-content{border-radius:var(--radius-lg);border:1px solid var(--border)}
+.modal-header,.modal-footer{border-color:var(--border)}
+.nav-pills .nav-link{border-radius:9px;font-weight:600;font-size:13px;color:var(--text-soft)}
+.nav-pills .nav-link.active{background:var(--brand);color:#fff}
+.dropdown-menu{border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-lg);font-size:13.5px}
+.dropdown-item:active{background:var(--brand)}
+.list-tick li{margin-bottom:7px}
+hr{border-color:var(--border);opacity:1}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.role-only{display:none}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <div class="login-brand">
+    <svg class="contours" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#9fc2ff" stroke-width="1">
+        <path d="M-50 120 C150 60 350 200 650 110"/><path d="M-50 180 C150 120 350 260 650 170"/>
+        <path d="M-50 250 C160 190 360 330 650 240"/><path d="M-50 330 C170 270 370 410 650 320"/>
+        <path d="M-50 420 C180 360 380 500 650 410"/><path d="M-50 520 C190 460 390 600 650 510"/>
+        <path d="M-50 620 C200 560 400 700 650 610"/><path d="M-50 720 C210 660 410 800 650 710"/>
+        <ellipse cx="430" cy="470" rx="120" ry="80"/><ellipse cx="430" cy="470" rx="78" ry="50"/><ellipse cx="430" cy="470" rx="38" ry="24"/>
+      </g>
+    </svg>
+    <span class="glow"></span>
+    <div class="brandmark">
+      <div class="seal">
+        <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="#0a2e5c" stroke-width="2"/><path d="M20 7 L23 16 L32 16 L25 22 L27 31 L20 25 L13 31 L15 22 L8 16 L17 16 Z" fill="#f4a300"/><circle cx="20" cy="20" r="3.4" fill="#0a2e5c"/></svg>
+      </div>
+      <div>
+        <h1>SMART-ASSESS</h1>
+        <div class="sub"> Assessor's Office · "Company Name"</div>
+      </div>
+    </div>
+
+    <div class="login-hero">
+      <span class="kicker"><i class="bi bi-geo-alt-fill"></i> "Company Name"-Enabled Field Operations</span>
+      <h2>Property Inspection, Validation &amp; Assessment Management</h2>
+      <p>One platform to digitize the full assessor workflow — assignment, field inspection, geotagged documentation, tax mapping, reassessment, and executive monitoring.</p>
+      <div class="feat"><i class="bi bi-pin-map-fill"></i><div><strong>"Company Name"-validated inspections</strong> with geotagged photos and offline-first mobile capture.</div></div>
+      <div class="feat"><i class="bi bi-diagram-3-fill"></i><div><strong>Tax mapping &amp; boundaries</strong> on an interactive  map with heatmap analysis.</div></div>
+      <div class="feat"><i class="bi bi-shield-lock-fill"></i><div><strong>Secure by design</strong> — JWT, role-based access, MFA, and a full audit trail.</div></div>
+    </div>
+    <div class="login-foot">Republic of the Philippines · "Company Name" · Powered by SMART-ASSESS v1.0</div>
+  </div>
+
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="proto-tag"><i class="bi bi-easel2"></i> Interactive Prototype</span>
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="bi bi-moon-stars" id="loginThemeIco"></i></button>
+      </div>
+
+      <!-- Step 1: credentials -->
+      <div id="loginStep1">
+        <h3>Welcome back</h3>
+        <p class="text-soft mb-4">Sign in to the assessor management console.</p>
+        <div class="mb-3">
+          <label class="form-label">Sign in as (role)</label>
+          <select id="loginRole" class="form-select">
+            <option value="admin">System Administrator</option>
+            <option value="assessor">Assessor II — Records &amp; Validation</option>
+            <option value="inspector">Field Inspector — Tax Mapper</option>
+            <option value="executive"> Assessor (Executive)</option>
+            <option value="citizen">Citizen / Taxpayer</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <div class="input-group"><span class="input-group-text bg-transparent"><i class="bi bi-person"></i></span>
+          <input type="text" class="form-control" id="loginUser" value="m.santos" autocomplete="username"></div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label d-flex justify-content-between">Password <a href="#" onclick="forgotModal();return false" class="tiny">Forgot password?</a></label>
+          <div class="input-group"><span class="input-group-text bg-transparent"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control" id="loginPass" value="••••••••" autocomplete="current-password">
+          <span class="input-group-text bg-transparent" style="cursor:pointer" onclick="togglePw(this)"><i class="bi bi-eye"></i></span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check"><input class="form-check-input" type="checkbox" id="rmb" checked><label class="form-check-label tiny" for="rmb">Keep me signed in</label></div>
+        </div>
+        <button class="btn btn-brand w-100 py-2 mb-3" onclick="goMfa()"><i class="bi bi-box-arrow-in-right me-1"></i> Sign in securely</button>
+        <div class="cred-hint"><i class="bi bi-info-circle me-1 text-primary"></i> <strong>Demo mode:</strong> any credentials work. This prototype runs entirely in your browser — no database is connected yet.</div>
+      </div>
+
+      <!-- Step 2: MFA -->
+      <div id="loginStep2" style="display:none">
+        <button class="btn btn-link p-0 mb-3 text-soft" onclick="backToCreds()"><i class="bi bi-arrow-left me-1"></i> Back</button>
+        <h3>Two-factor verification</h3>
+        <p class="text-soft mb-4">We sent a 6-digit code to your registered mobile <span class="mono">+63 9•• ••• ••42</span>.</p>
+        <div class="otp-grid mb-3" id="otp">
+          <input class="form-control" maxlength="1" inputmode="numeric"><input class="form-control" maxlength="1" inputmode="numeric">
+          <input class="form-control" maxlength="1" inputmode="numeric"><input class="form-control" maxlength="1" inputmode="numeric">
+          <input class="form-control" maxlength="1" inputmode="numeric"><input class="form-control" maxlength="1" inputmode="numeric">
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3 tiny text-soft">
+          <span><i class="bi bi-shield-check text-success me-1"></i> Code expires in <span class="mono" id="otpTimer">04:59</span></span>
+          <a href="#" onclick="fillOtp();return false">Use demo code</a>
+        </div>
+        <button class="btn btn-brand w-100 py-2" onclick="enterApp()"><i class="bi bi-check2-circle me-1"></i> Verify &amp; continue</button>
+        <p class="text-center tiny text-soft mt-3 mb-0">Didn't get a code? <a href="#" onclick="return false">Resend</a> · <a href="#" onclick="return false">Use authenticator app</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div class="app-shell d-none" id="app">
+  <div class="backdrop" onclick="document.body.classList.remove('nav-open')"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="seal"><svg width="28" height="28" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="#0a2e5c" stroke-width="2"/><path d="M20 7 L23 16 L32 16 L25 22 L27 31 L20 25 L13 31 L15 22 L8 16 L17 16 Z" fill="#f4a300"/><circle cx="20" cy="20" r="3.4" fill="#0a2e5c"/></svg></div>
+      <div class="nm">SMART-ASSESS<small>ASSESSOR CONSOLE</small></div>
+    </div>
+    <div class="nav-scroll" id="navScroll">
+      <div class="nav-group">Overview</div>
+      <div class="side-link active" data-view="dashboard" data-roles="admin,assessor,inspector,executive,citizen"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></div>
+
+      <div class="nav-group" data-grp="property">Property Records</div>
+      <div class="side-link" data-view="property" data-roles="admin,assessor,executive"><i class="bi bi-houses-fill"></i><span>Property Management</span></div>
+      <div class="side-link" data-view="gis" data-roles="admin,assessor,executive,inspector"><i class="bi bi-map-fill"></i><span>GIS Tax Mapping</span></div>
+      <div class="side-link" data-view="qr" data-roles="admin,assessor,inspector,citizen"><i class="bi bi-qr-code-scan"></i><span>QR Verification</span></div>
+      <div class="side-link" data-view="docs" data-roles="admin,assessor"><i class="bi bi-folder-fill"></i><span>Documents</span></div>
+
+      <div class="nav-group" data-grp="field">Field Operations</div>
+      <div class="side-link" data-view="inspection" data-roles="admin,inspector,assessor"><i class="bi bi-clipboard2-check-fill"></i><span>Field Inspection</span></div>
+      <div class="side-link" data-view="mobile" data-roles="admin,inspector"><i class="bi bi-phone-fill"></i><span>Mobile App Preview</span></div>
+      <div class="side-link" data-view="offline" data-roles="admin,inspector"><i class="bi bi-cloud-arrow-up-fill"></i><span>Offline Sync</span><span class="badge rounded-pill text-bg-warning ms-auto">3</span></div>
+      <div class="side-link" data-view="photos" data-roles="admin,assessor,inspector"><i class="bi bi-images"></i><span>Photo Management</span></div>
+
+      <div class="nav-group" data-grp="assess">Assessment</div>
+      <div class="side-link" data-view="validation" data-roles="admin,assessor,executive"><i class="bi bi-patch-check-fill"></i><span>Validation &amp; Approval</span><span class="badge rounded-pill text-bg-danger ms-auto">5</span></div>
+      <div class="side-link" data-view="monitoring" data-roles="admin,executive"><i class="bi bi-broadcast-pin"></i><span>Management Monitoring</span></div>
+
+      <div class="nav-group" data-grp="public">Public Service</div>
+      <div class="side-link" data-view="citizen" data-roles="admin,citizen"><i class="bi bi-people-fill"></i><span>Citizen Portal</span></div>
+      <div class="side-link" data-view="notifications" data-roles="admin,assessor,inspector,executive,citizen"><i class="bi bi-bell-fill"></i><span>Notifications</span></div>
+
+      <div class="nav-group" data-grp="system">System</div>
+      <div class="side-link" data-view="reports" data-roles="admin,assessor,executive"><i class="bi bi-file-earmark-bar-graph-fill"></i><span>Reports</span></div>
+      <div class="side-link" data-view="roles" data-roles="admin"><i class="bi bi-person-badge-fill"></i><span>Roles &amp; Permissions</span></div>
+      <div class="side-link" data-view="audit" data-roles="admin"><i class="bi bi-list-columns-reverse"></i><span>Audit Trail</span></div>
+    </div>
+    <div class="sidebar-foot d-flex align-items-center gap-2">
+      <span class="dot-pulse"></span> API · IIS connected <span class="ms-auto mono">v1.0.0</span>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="content">
+    <header class="topbar">
+      <button class="icon-btn hamburger" onclick="document.body.classList.toggle('nav-open')"><i class="bi bi-list"></i></button>
+      <div class="me-2">
+        <div class="pg-title" id="pgTitle">Dashboard</div>
+        <div class="pg-sub" id="pgSub">Operational overview · "Company Name" Assessor's Office</div>
+      </div>
+      <div class="topbar-search ms-auto">
+        <i class="bi bi-search"></i>
+        <input class="form-control" placeholder="Search PIN, TD No., owner, address…" onkeydown="if(event.key==='Enter')globalSearch(this.value)">
+      </div>
+      <button class="icon-btn d-lg-none ms-auto" onclick="navTo('qr')"><i class="bi bi-qr-code-scan"></i></button>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark mode"><i class="bi bi-moon-stars" id="themeIco"></i></button>
+      <button class="icon-btn" onclick="navTo('notifications')" title="Notifications"><i class="bi bi-bell"></i><span class="dot">7</span></button>
+      <div class="dropdown">
+        <div class="role-chip" data-bs-toggle="dropdown">
+          <div class="text-end d-none d-md-block" style="line-height:1.1">
+            <div class="fw-700 smaller" id="meName">Maria Santos</div>
+            <div class="tiny text-mut" id="meRole">System Administrator</div>
+          </div>
+          <div class="avatar" id="meAv">MS</div>
+          <i class="bi bi-chevron-down tiny text-mut"></i>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="dropdown-header">Switch role (RBAC demo)</li>
+          <li><a class="dropdown-item" onclick="setRole('admin')"><i class="bi bi-shield-lock me-2 text-primary"></i>System Administrator</a></li>
+          <li><a class="dropdown-item" onclick="setRole('assessor')"><i class="bi bi-clipboard-data me-2 text-primary"></i>Assessor II</a></li>
+          <li><a class="dropdown-item" onclick="setRole('inspector')"><i class="bi bi-pin-map me-2 text-primary"></i>Field Inspector</a></li>
+          <li><a class="dropdown-item" onclick="setRole('executive')"><i class="bi bi-bar-chart me-2 text-primary"></i> Assessor (Exec)</a></li>
+          <li><a class="dropdown-item" onclick="setRole('citizen')"><i class="bi bi-person me-2 text-primary"></i>Citizen / Taxpayer</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" onclick="navTo('audit')"><i class="bi bi-clock-history me-2"></i>My activity</a></li>
+          <li><a class="dropdown-item text-danger" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>Sign out</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="main-area">
+<!-- ===================== DASHBOARD ===================== -->
+<section class="view active" id="view-dashboard">
+  <div class="section-head">
+    <div>
+      <h4>Operational Dashboard</h4>
+      <p>Snapshot for <strong>FY 2026 · 2nd Quarter</strong> — "Company Name" Assessor's Office, City of San Isidro</p>
+    </div>
+    <div class="d-flex gap-2">
+      <select class="form-select form-select-sm" style="width:auto"><option>All Barangays</option><option>Poblacion</option><option>San Antonio</option><option>Santo Niño</option><option>Mabuhay</option></select>
+      <button class="btn btn-soft btn-sm" onclick="navTo('reports')"><i class="bi bi-download me-1"></i>Export</button>
+      <button class="btn btn-brand btn-sm" onclick="navTo('inspection')"><i class="bi bi-plus-lg me-1"></i>New Assignment</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-1">
+    <div class="col-6 col-xl-3"><div class="stat"><div class="d-flex justify-content-between"><span class="ico"><i class="bi bi-houses"></i></span><span class="trend up"><i class="bi bi-arrow-up-short"></i>2.4%</span></div><div class="num">48,932</div><div class="lbl">Total Properties (RPU)</div></div></div>
+    <div class="col-6 col-xl-3"><div class="stat s-amber"><div class="d-flex justify-content-between"><span class="ico"><i class="bi bi-hourglass-split"></i></span><span class="trend down"><i class="bi bi-arrow-down-short"></i>6.1%</span></div><div class="num">1,274</div><div class="lbl">Pending Inspections</div></div></div>
+    <div class="col-6 col-xl-3"><div class="stat s-green"><div class="d-flex justify-content-between"><span class="ico"><i class="bi bi-check2-circle"></i></span><span class="trend up"><i class="bi bi-arrow-up-short"></i>11.8%</span></div><div class="num">3,651</div><div class="lbl">Completed This Quarter</div></div></div>
+    <div class="col-6 col-xl-3"><div class="stat s-gold"><div class="d-flex justify-content-between"><span class="ico"><i class="bi bi-cash-coin"></i></span><span class="trend up"><i class="bi bi-arrow-up-short"></i>₱182M</span></div><div class="num">₱4.21B</div><div class="lbl">Total Assessed Value</div></div></div>
+  </div>
+
+  <div class="row g-3 mt-0">
+    <div class="col-12 col-xl-8">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-graph-up-arrow"></i>Inspections — Assigned vs Completed</h6>
+          <div class="d-flex gap-1"><span class="chip on">6 Months</span><span class="chip">YTD</span></div></div>
+        <div class="panel-pad"><div style="height:300px"><canvas id="chInsp"></canvas></div></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="panel h-100">
+        <div class="panel-head"><h6><i class="bi bi-pie-chart"></i>Land Classification</h6></div>
+        <div class="panel-pad"><div style="height:230px"><canvas id="chClass"></canvas></div>
+          <div class="row text-center mt-3 g-2 tiny">
+            <div class="col"><div class="fw-800" style="font-size:16px">61%</div><span class="text-mut">Residential</span></div>
+            <div class="col"><div class="fw-800" style="font-size:16px">22%</div><span class="text-mut">Commercial</span></div>
+            <div class="col"><div class="fw-800" style="font-size:16px">17%</div><span class="text-mut">Agri/Other</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-0">
+    <div class="col-12 col-xl-7">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-geo-alt"></i>Overview — Inspection Coverage</h6>
+          <span class="pill pill-blue"><i class="bi bi-broadcast"></i>6 inspectors active</span></div>
+        <div class="panel-pad"><div class="map-wrap map-sm" id="mapDash" style="position:relative"></div></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-5">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-trophy"></i>Top Assessor Productivity</h6><span class="tiny text-mut">This week</span></div>
+        <div class="panel-pad"><div style="height:200px"><canvas id="chProd"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-activity"></i>Daily Accomplishments</h6></div>
+        <div class="panel-pad">
+          <div class="tl">
+            <div class="tl-item ok"><div class="t">08:42 · Today</div><div class="fw-600">Eng. R. Bautista completed inspection — <span class="mono">PIN 027-15-001-05-021</span></div><div class="smaller text-soft">Residential · Brgy. Poblacion · 6 geotagged photos</div></div>
+            <div class="tl-item gold"><div class="t">09:15 · Today</div><div class="fw-600">Reassessment recommended — <span class="mono">TD 2026-15-0008842</span></div><div class="smaller text-soft">Market value ↑ ₱1.2M after improvement found</div></div>
+            <div class="tl-item"><div class="t">10:03 · Today</div><div class="fw-600">New citizen inspection request received</div><div class="smaller text-soft">Brgy. San Antonio · subdivision of lot</div></div>
+            <div class="tl-item warn"><div class="t">10:51 · Today</div><div class="fw-600">GPS mismatch flagged for review</div><div class="smaller text-soft">Captured location 38 m from cadastral point</div></div>
+          </div>
+          <button class="btn btn-ghost btn-sm w-100 mt-1" onclick="navTo('monitoring')">View live monitoring <i class="bi bi-arrow-right ms-1"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-0 mb-2">
+    <div class="col-12"><div class="panel panel-pad">
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <span class="fw-700 me-2"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Quick actions:</span>
+        <button class="btn btn-soft btn-sm" onclick="navTo('property')"><i class="bi bi-search me-1"></i>Find Property</button>
+        <button class="btn btn-soft btn-sm" onclick="navTo('inspection')"><i class="bi bi-clipboard2-plus me-1"></i>Schedule Inspection</button>
+        <button class="btn btn-soft btn-sm" onclick="navTo('qr')"><i class="bi bi-qr-code me-1"></i>Verify QR</button>
+        <button class="btn btn-soft btn-sm" onclick="navTo('validation')"><i class="bi bi-patch-check me-1"></i>Review Queue (5)</button>
+        <button class="btn btn-soft btn-sm" onclick="navTo('gis')"><i class="bi bi-map me-1"></i>Open Tax Map</button>
+        <button class="btn btn-soft btn-sm" onclick="navTo('reports')"><i class="bi bi-file-earmark-pdf me-1"></i>Generate Report</button>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ===================== PROPERTY MANAGEMENT ===================== -->
+<section class="view" id="view-property">
+  <div class="section-head">
+    <div><h4>Property Management</h4><p>Real Property Units (RPU), tax declarations, ownership &amp; classification records</p></div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-ghost btn-sm" onclick="toast('Exporting 48,932 records to Excel…','success')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button>
+      <button class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#regModal"><i class="bi bi-plus-lg me-1"></i>Register Property</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">RESIDENTIAL</div><div class="fw-800" style="font-size:22px">29,848</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">COMMERCIAL</div><div class="fw-800" style="font-size:22px">10,765</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">AGRICULTURAL</div><div class="fw-800" style="font-size:22px">6,012</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">INDUSTRIAL / SPECIAL</div><div class="fw-800" style="font-size:22px">2,307</div></div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head flex-wrap">
+      <h6><i class="bi bi-houses-fill"></i>Property Register</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <select class="form-select form-select-sm" style="width:auto" id="fClass" onchange="filterProps()"><option value="">All Classes</option><option>Residential</option><option>Commercial</option><option>Agricultural</option><option>Industrial</option></select>
+        <select class="form-select form-select-sm" style="width:auto" id="fBgy" onchange="filterProps()"><option value="">All Barangays</option><option>Poblacion</option><option>San Antonio</option><option>Santo Niño</option><option>Mabuhay</option><option>Bagong Silang</option></select>
+        <select class="form-select form-select-sm" style="width:auto" id="fStat" onchange="filterProps()"><option value="">Any Status</option><option>Inspected</option><option>Pending</option><option>For Reassessment</option></select>
+      </div>
+    </div>
+    <div class="panel-pad">
+      <div class="table-responsive">
+        <table class="table align-middle" id="propTable" style="width:100%">
+          <thead><tr><th>PIN</th><th>Owner</th><th>Class</th><th>Barangay</th><th>Area (m²)</th><th>Assessed Value</th><th>Status</th><th></th></tr></thead>
+          <tbody id="propBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Property detail modal -->
+<div class="modal fade" id="propModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+  <div class="modal-header">
+    <div><h5 class="modal-title mb-0" id="pmTitle">Property Record</h5><div class="tiny text-mut mono" id="pmPin">—</div></div>
+    <button class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
+    <ul class="nav nav-pills gap-2 mb-3" role="tablist">
+      <li><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-overview">Overview</button></li>
+      <li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-owner">Owner</button></li>
+      <li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-land">Land &amp; Building</button></li>
+      <li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-td">Tax Declaration</button></li>
+      <li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-qr">QR &amp; History</button></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="tab-overview"><div class="row g-3">
+        <div class="col-md-7"><div class="panel panel-pad" id="pmOverview"></div></div>
+        <div class="col-md-5"><div class="map-wrap map-sm" id="pmMap"></div><div class="tiny text-mut text-center mt-2"><i class="bi bi-geo-alt-fill text-danger"></i> Cadastral location (OpenStreetMap)</div></div>
+      </div></div>
+      <div class="tab-pane fade" id="tab-owner"><div class="panel panel-pad" id="pmOwner"></div></div>
+      <div class="tab-pane fade" id="tab-land"><div class="panel panel-pad" id="pmLand"></div></div>
+      <div class="tab-pane fade" id="tab-td"><div class="panel panel-pad" id="pmTd"></div></div>
+      <div class="tab-pane fade" id="tab-qr"><div class="row g-3">
+        <div class="col-md-5 text-center"><div class="qr-box mx-auto" style="max-width:200px"><div id="pmQr"></div></div><div class="mono tiny mt-2" id="pmQrTxt"></div><button class="btn btn-soft btn-sm mt-2" onclick="toast('QR sticker queued for printing','success')"><i class="bi bi-printer me-1"></i>Print sticker</button></div>
+        <div class="col-md-7"><h6 class="fw-700">Inspection History</h6><div class="tl mt-2" id="pmHist"></div></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost btn-sm" data-bs-dismiss="modal">Close</button>
+    <button class="btn btn-soft btn-sm" onclick="navTo('gis')"><i class="bi bi-map me-1"></i>View on Tax Map</button>
+    <button class="btn btn-gold btn-sm" onclick="navTo('inspection');bsHide('propModal')"><i class="bi bi-clipboard2-check me-1"></i>Assign Inspection</button>
+  </div>
+</div></div></div>
+
+<!-- Register modal -->
+<div class="modal fade" id="regModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+  <div class="modal-header"><h5 class="modal-title">Register New Property (RPU)</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body"><div class="row g-3">
+    <div class="col-md-6"><label class="form-label">Property Index Number (PIN)</label><input class="form-control mono" placeholder="027-15-001-XX-XXX"></div>
+    <div class="col-md-6"><label class="form-label">Tax Declaration No.</label><input class="form-control mono" placeholder="2026-15-XXXXXXX"></div>
+    <div class="col-md-6"><label class="form-label">Registered Owner</label><input class="form-control" placeholder="Surname, First Name M.I."></div>
+    <div class="col-md-6"><label class="form-label">Barangay</label><select class="form-select"><option>Poblacion</option><option>San Antonio</option><option>Santo Niño</option><option>Mabuhay</option><option>Bagong Silang</option></select></div>
+    <div class="col-md-4"><label class="form-label">Classification</label><select class="form-select"><option>Residential</option><option>Commercial</option><option>Agricultural</option><option>Industrial</option></select></div>
+    <div class="col-md-4"><label class="form-label">Land Area (m²)</label><input class="form-control" type="number" placeholder="0"></div>
+    <div class="col-md-4"><label class="form-label">Market Value (₱)</label><input class="form-control" type="number" placeholder="0"></div>
+    <div class="col-12"><label class="form-label">Property Address</label><input class="form-control" placeholder="House/Lot/Blk, Street, Subdivision"></div>
+  </div></div>
+  <div class="modal-footer"><button class="btn btn-ghost btn-sm" data-bs-dismiss="modal">Cancel</button><button class="btn btn-brand btn-sm" onclick="bsHide('regModal');toast('Property registered & QR code generated','success')"><i class="bi bi-save me-1"></i>Register &amp; generate QR</button></div>
+</div></div></div>
+
+<!-- ===================== GIS TAX MAPPING ===================== -->
+<section class="view" id="view-gis">
+  <div class="section-head">
+    <div><h4>GIS Property &amp; Tax Mapping</h4><p>Interactive cadastral map · property boundaries · barangay layers · inspection coverage · heatmap analysis</p></div>
+    <div class="d-flex gap-2">
+      <div class="topbar-search" style="max-width:260px"><i class="bi bi-search"></i><input class="form-control form-control-sm" placeholder="Locate PIN / parcel…"></div>
+      <button class="btn btn-soft btn-sm" onclick="toast('Switched to satellite base layer','success')"><i class="bi bi-globe-americas me-1"></i>Satellite</button>
+    </div>
+  </div>
+
+  <div class="panel mb-3 panel-pad">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <span class="fw-700 me-1 smaller">Layers:</span>
+      <span class="chip on" id="lyrParcel" onclick="toggleLayer('parcel',this)"><i class="bi bi-bounding-box"></i>Property Boundaries</span>
+      <span class="chip on" id="lyrBgy" onclick="toggleLayer('bgy',this)"><i class="bi bi-pentagon"></i>Barangay Layer</span>
+      <span class="chip" id="lyrGrid" onclick="toggleLayer('grid',this)"><i class="bi bi-grid-3x3"></i>Tax Mapping Grid</span>
+      <span class="chip on" id="lyrInsp" onclick="toggleLayer('insp',this)"><i class="bi bi-pin-map"></i>Inspection Layer</span>
+      <span class="chip" id="lyrHeat" onclick="toggleLayer('heat',this)"><i class="bi bi-fire"></i>Heatmap Analysis</span>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-xl-8">
+      <div class="panel"><div class="panel-pad" style="padding:0;border-radius:var(--radius);overflow:hidden">
+        <div class="map-wrap" id="mapGis" style="position:relative;height:560px;border:0;border-radius:0">
+          <div class="map-legend">
+            <div class="fw-700 tiny mb-1">LEGEND</div>
+            <div class="row-l"><span class="lg-dot" style="background:#0f9d6b"></span>Inspected</div>
+            <div class="row-l"><span class="lg-dot" style="background:#e08a00"></span>Pending</div>
+            <div class="row-l"><span class="lg-dot" style="background:#d8453c"></span>For reassessment</div>
+            <div class="row-l"><span class="lg-dot" style="background:#1763c6;opacity:.4"></span>Barangay boundary</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-info-circle"></i>Selected Parcel</h6></div>
+        <div class="panel-pad" id="gisParcel">
+          <p class="text-soft smaller mb-0"><i class="bi bi-hand-index-thumb me-1"></i>Click a parcel marker on the map to view its assessment details here.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-bar-chart-line"></i>Coverage by Barangay</h6></div>
+        <div class="panel-pad">
+          <div class="mb-2"><div class="d-flex justify-content-between smaller mb-1"><span>Poblacion</span><span class="fw-700">94%</span></div><div class="prog"><i style="width:94%"></i></div></div>
+          <div class="mb-2"><div class="d-flex justify-content-between smaller mb-1"><span>San Antonio</span><span class="fw-700">88%</span></div><div class="prog"><i style="width:88%"></i></div></div>
+          <div class="mb-2"><div class="d-flex justify-content-between smaller mb-1"><span>Santo Niño</span><span class="fw-700">76%</span></div><div class="prog"><i style="width:76%"></i></div></div>
+          <div class="mb-2"><div class="d-flex justify-content-between smaller mb-1"><span>Mabuhay</span><span class="fw-700">63%</span></div><div class="prog"><i style="width:63%"></i></div></div>
+          <div class="mb-0"><div class="d-flex justify-content-between smaller mb-1"><span>Bagong Silang</span><span class="fw-700">51%</span></div><div class="prog"><i style="width:51%"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FIELD INSPECTION ===================== -->
+<section class="view" id="view-inspection">
+  <div class="section-head">
+    <div><h4>Field Inspection &amp; Validation</h4><p>Assigned properties · scheduling · GPS-validated checklist · geotagging · digital signature</p></div>
+    <div class="d-flex gap-2">
+      <span class="pill pill-green"><span class="dot-pulse"></span>GPS lock acquired</span>
+      <button class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#schedModal"><i class="bi bi-calendar-plus me-1"></i>Schedule</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-1">
+    <div class="col-4"><div class="stat s-amber"><div class="num" style="font-size:24px">7</div><div class="lbl">Assigned today</div></div></div>
+    <div class="col-4"><div class="stat s-green"><div class="num" style="font-size:24px">3</div><div class="lbl">Completed</div></div></div>
+    <div class="col-4"><div class="stat"><div class="num" style="font-size:24px">2.4<span style="font-size:13px">km</span></div><div class="lbl">Route distance left</div></div></div>
+  </div>
+
+  <div class="row g-3 mt-0">
+    <!-- assigned list -->
+    <div class="col-12 col-xl-4">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-list-task"></i>My Assignments</h6><span class="tiny text-mut">Route: Brgy. Poblacion</span></div>
+        <div class="panel-pad" style="max-height:560px;overflow-y:auto" id="assignList"></div>
+      </div>
+    </div>
+
+    <!-- active inspection workspace -->
+    <div class="col-12 col-xl-8">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-clipboard2-pulse"></i>Active Inspection — <span class="mono" id="actPin">027-15-001-05-021</span></h6>
+          <span class="pill pill-amber" id="actStatus"><span class="pill-dot"></span>In progress</span></div>
+        <div class="panel-pad">
+          <div class="row g-3">
+            <!-- GPS validation -->
+            <div class="col-md-6"><div class="panel panel-pad" style="background:var(--surface-2)">
+              <div class="d-flex justify-content-between align-items-center mb-2"><span class="fw-700 smaller"><i class="bi bi-crosshair text-danger me-1"></i>GPS Validation</span><span class="pill pill-green" id="gpsPill"><i class="bi bi-check2"></i>Within tolerance</span></div>
+              <div class="kv"><span class="k">Captured</span><span class="v mono tiny">14.0712°N, 121.1503°E</span></div>
+              <div class="kv"><span class="k">Cadastral point</span><span class="v mono tiny">14.0713°N, 121.1505°E</span></div>
+              <div class="kv"><span class="k">Deviation</span><span class="v" id="gpsDev">7.2 m</span></div>
+              <div class="kv"><span class="k">Accuracy</span><span class="v">±4 m</span></div>
+              <button class="btn btn-soft btn-sm w-100 mt-2" onclick="revalidate()"><i class="bi bi-arrow-repeat me-1"></i>Re-capture location</button>
+            </div></div>
+            <!-- meta -->
+            <div class="col-md-6"><div class="panel panel-pad" style="background:var(--surface-2)">
+              <div class="fw-700 smaller mb-2"><i class="bi bi-card-list me-1 text-primary"></i>Inspection Details</div>
+              <div class="kv"><span class="k">Owner</span><span class="v">Dela Cruz, Juan P.</span></div>
+              <div class="kv"><span class="k">Class</span><span class="v">Residential</span></div>
+              <div class="kv"><span class="k">Type</span><span class="v">General Revision</span></div>
+              <div class="kv"><span class="k">Inspector</span><span class="v">Eng. R. Bautista</span></div>
+              <div class="kv"><span class="k">Date</span><span class="v mono tiny">2026-06-07 08:30</span></div>
+            </div></div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="fw-700 mb-2"><i class="bi bi-ui-checks me-1 text-primary"></i>Inspection Checklist</div>
+          <div id="checklist"></div>
+
+          <div class="divider"></div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-700"><i class="bi bi-camera-fill me-1 text-primary"></i>Geotagged Photos</span>
+            <button class="btn btn-gold btn-sm" onclick="addPhoto()"><i class="bi bi-camera me-1"></i>Capture photo</button>
+          </div>
+          <div class="row g-2" id="inspPhotos"></div>
+
+          <div class="divider"></div>
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label">Remarks &amp; Findings</label>
+              <textarea class="form-control" rows="4" placeholder="Describe improvements, discrepancies, structural condition…">Additional 2-storey concrete extension found at rear (≈42 m²) not reflected in current Tax Declaration. Recommend reassessment.</textarea>
+              <div class="mt-2 d-flex gap-2 flex-wrap">
+                <span class="chip on"><i class="bi bi-exclamation-triangle"></i>Undeclared improvement</span>
+                <span class="chip">Reclassification</span>
+                <span class="chip">Ownership change</span>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Owner / Inspector Signature</label>
+              <canvas id="sigpad"></canvas>
+              <div class="d-flex justify-content-between mt-1"><span class="tiny text-mut">Sign above with finger / mouse</span><button class="btn btn-link btn-sm p-0 tiny" onclick="clearSig()">Clear</button></div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-ghost btn-sm" onclick="toast('Draft saved to device','success')"><i class="bi bi-save me-1"></i>Save draft</button>
+            <button class="btn btn-soft btn-sm" onclick="toast('Queued for offline sync','success')"><i class="bi bi-cloud-arrow-up me-1"></i>Queue offline</button>
+            <button class="btn btn-brand btn-sm ms-auto" onclick="submitInsp()"><i class="bi bi-check2-circle me-1"></i>Submit inspection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Schedule modal -->
+<div class="modal fade" id="schedModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+  <div class="modal-header"><h5 class="modal-title">Schedule Inspection</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body"><div class="row g-3">
+    <div class="col-12"><label class="form-label">Property (PIN)</label><input class="form-control mono" value="027-15-001-05-044"></div>
+    <div class="col-6"><label class="form-label">Date</label><input class="form-control" type="date" value="2026-06-10"></div>
+    <div class="col-6"><label class="form-label">Time</label><input class="form-control" type="time" value="09:00"></div>
+    <div class="col-12"><label class="form-label">Assign to inspector</label><select class="form-select"><option>Eng. R. Bautista</option><option>J. Dela Cruz</option><option>A. Reyes</option></select></div>
+    <div class="col-12"><label class="form-label">Inspection type</label><select class="form-select"><option>General Revision</option><option>New Assessment</option><option>Reassessment / Re-inspection</option><option>Citizen Request</option></select></div>
+  </div></div>
+  <div class="modal-footer"><button class="btn btn-ghost btn-sm" data-bs-dismiss="modal">Cancel</button><button class="btn btn-brand btn-sm" onclick="bsHide('schedModal');toast('Inspection scheduled & inspector notified via SMS','success')">Schedule &amp; notify</button></div>
+</div></div></div>
+
+<!-- ===================== MOBILE APP PREVIEW ===================== -->
+<section class="view" id="view-mobile">
+  <div class="section-head">
+    <div><h4>Mobile Inspector App</h4><p>Flutter / Progressive Web App (PWA) — field screens, mobile-first, offline-capable</p></div>
+    <span class="pill pill-blue"><i class="bi bi-phone"></i>Installable PWA · Android &amp; iOS</span>
+  </div>
+
+  <div class="row g-4 align-items-start">
+    <div class="col-12 col-lg-8">
+      <div class="d-flex gap-4 flex-wrap justify-content-center">
+        <!-- Phone 1: My Tasks -->
+        <div class="phone"><div class="phone-screen">
+          <div class="phone-status"><div><div class="tiny" style="opacity:.7">Good morning</div><div class="fw-700">Eng. Bautista</div></div><div class="text-end tiny"><span class="dot-pulse"></span> GPS · 9:41</div></div>
+          <div class="phone-body">
+            <div class="m-card" style="background:linear-gradient(135deg,var(--brand),var(--navy));color:#fff;border:0">
+              <div class="tiny" style="opacity:.8">TODAY'S ROUTE · BRGY. POBLACION</div>
+              <div class="d-flex justify-content-between align-items-end mt-1"><div><div class="fw-800" style="font-size:26px">7</div><div class="tiny">assignments</div></div><div class="text-end"><div class="fw-800" style="font-size:26px">3</div><div class="tiny">done</div></div></div>
+            </div>
+            <div class="fw-700 smaller mb-2">Assigned properties</div>
+            <div class="m-card"><div class="d-flex justify-content-between"><span class="pill pill-amber tiny"><span class="pill-dot"></span>Pending</span><span class="tiny text-mut">120 m</span></div><div class="fw-600 mt-1 mono tiny">027-15-001-05-021</div><div class="tiny text-soft">Dela Cruz, Juan · Residential</div></div>
+            <div class="m-card"><div class="d-flex justify-content-between"><span class="pill pill-amber tiny"><span class="pill-dot"></span>Pending</span><span class="tiny text-mut">340 m</span></div><div class="fw-600 mt-1 mono tiny">027-15-001-05-044</div><div class="tiny text-soft">Reyes, Anna · Commercial</div></div>
+            <div class="m-card" style="opacity:.6"><div class="d-flex justify-content-between"><span class="pill pill-green tiny"><i class="bi bi-check2"></i>Done</span><span class="tiny text-mut">synced</span></div><div class="fw-600 mt-1 mono tiny">027-15-001-04-118</div><div class="tiny text-soft">Santos, Pedro · Residential</div></div>
+          </div>
+          <div class="phone-tab"><a class="on"><i class="bi bi-list-task"></i>Tasks</a><a><i class="bi bi-map"></i>Map</a><a><i class="bi bi-cloud-arrow-up"></i>Sync</a><a><i class="bi bi-person"></i>Me</a></div>
+        </div></div>
+
+        <!-- Phone 2: Inspection -->
+        <div class="phone d-none d-md-block"><div class="phone-screen">
+          <div class="phone-status"><div class="d-flex align-items-center gap-2"><i class="bi bi-chevron-left"></i><div class="fw-700 tiny">Inspection</div></div><span class="pill pill-amber tiny" style="background:#fff3;color:#fff">Step 2/4</span></div>
+          <div class="phone-body">
+            <div class="m-card"><div class="tiny text-mut">PROPERTY</div><div class="fw-700 mono tiny">027-15-001-05-021</div>
+              <div class="d-flex align-items-center gap-2 mt-2 tiny text-success"><i class="bi bi-crosshair"></i>GPS verified · 7 m deviation</div></div>
+            <div class="fw-700 smaller mb-2">Checklist</div>
+            <div class="m-card d-flex justify-content-between align-items-center py-2"><span class="tiny">Structure matches TD</span><i class="bi bi-check-circle-fill text-success"></i></div>
+            <div class="m-card d-flex justify-content-between align-items-center py-2"><span class="tiny">Roof / wall material</span><i class="bi bi-check-circle-fill text-success"></i></div>
+            <div class="m-card d-flex justify-content-between align-items-center py-2" style="border-color:var(--danger)"><span class="tiny">New improvement?</span><span class="pill pill-red tiny">Found</span></div>
+            <div class="fw-700 smaller mb-2 mt-1">Geotagged photos</div>
+            <div class="d-flex gap-2"><div style="flex:1;aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#7fa3c9,#3a567a);position:relative"><span class="tiny" style="position:absolute;bottom:3px;left:4px;color:#fff;font-size:8px">📍 geo</span></div><div style="flex:1;aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#9bbf8f,#5e7d52)"></div><div style="flex:1;aspect-ratio:1;border-radius:10px;border:2px dashed var(--border);display:grid;place-items:center;color:var(--text-mut)"><i class="bi bi-plus"></i></div></div>
+            <button class="btn btn-brand btn-sm w-100 mt-3">Next: Signature</button>
+          </div>
+          <div class="phone-tab"><a><i class="bi bi-list-task"></i>Tasks</a><a class="on"><i class="bi bi-clipboard-check"></i>Inspect</a><a><i class="bi bi-cloud-arrow-up"></i>Sync</a><a><i class="bi bi-person"></i>Me</a></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="panel panel-pad">
+        <h6 class="fw-700 mb-3">Mobile capabilities</h6>
+        <div class="d-grid gap-2">
+          <div class="feature-mini"><span class="ico"><i class="bi bi-wifi-off"></i></span><div><div class="fw-600 smaller">Offline-first</div><div class="tiny text-soft">Capture inspections with no signal; auto-sync on reconnect.</div></div></div>
+          <div class="feature-mini"><span class="ico"><i class="bi bi-crosshair"></i></span><div><div class="fw-600 smaller">GPS validation</div><div class="tiny text-soft">Verifies inspector is physically at the parcel.</div></div></div>
+          <div class="feature-mini"><span class="ico"><i class="bi bi-camera"></i></span><div><div class="fw-600 smaller">Geotagged camera</div><div class="tiny text-soft">Stamps coordinates, time, PIN on every photo.</div></div></div>
+          <div class="feature-mini"><span class="ico"><i class="bi bi-qr-code-scan"></i></span><div><div class="fw-600 smaller">QR scanning</div><div class="tiny text-soft">Pull up property records instantly on-site.</div></div></div>
+          <div class="feature-mini"><span class="ico"><i class="bi bi-vector-pen"></i></span><div><div class="fw-600 smaller">Digital signature</div><div class="tiny text-soft">On-screen sign-off by owner &amp; inspector.</div></div></div>
+        </div>
+        <button class="btn btn-soft w-100 mt-3" onclick="navTo('inspection')"><i class="bi bi-display me-1"></i>Open full inspection workspace</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== OFFLINE SYNC ===================== -->
+<section class="view" id="view-offline">
+  <div class="section-head">
+    <div><h4>Offline Inspection &amp; Synchronization</h4><p>Local device storage · offline forms &amp; photos · automatic two-way sync</p></div>
+    <button class="btn btn-ghost btn-sm" id="connToggle" onclick="toggleConn()"><i class="bi bi-wifi me-1"></i>Connection: Online</button>
+  </div>
+
+  <div class="row g-3 mb-1">
+    <div class="col-6 col-md-3"><div class="stat s-amber"><div class="num" style="font-size:24px" id="qCount">3</div><div class="lbl">Items queued</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat s-green"><div class="num" style="font-size:24px">142</div><div class="lbl">Synced today</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat"><div class="num" style="font-size:24px">86<span style="font-size:13px">MB</span></div><div class="lbl">Local storage used</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat s-violet"><div class="num" style="font-size:24px">0</div><div class="lbl">Sync conflicts</div></div></div>
+  </div>
+
+  <div class="row g-3 mt-0">
+    <div class="col-12 col-xl-8">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-cloud-arrow-up"></i>Synchronization Queue</h6>
+          <button class="btn btn-brand btn-sm" id="syncBtn" onclick="syncNow()"><i class="bi bi-arrow-repeat me-1"></i>Sync now</button></div>
+        <div class="panel-pad">
+          <div class="prog mb-3" style="display:none" id="syncProgWrap"><i id="syncProg" style="width:0%"></i></div>
+          <div id="syncList"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="panel panel-pad mb-3">
+        <h6 class="fw-700 mb-2">How offline mode works</h6>
+        <div class="tl mt-2">
+          <div class="tl-item"><div class="fw-600 smaller">1 · Capture offline</div><div class="tiny text-soft">Forms, photos &amp; signatures saved to encrypted local store (IndexedDB / SQLite).</div></div>
+          <div class="tl-item"><div class="fw-600 smaller">2 · Queue</div><div class="tiny text-soft">Each record tagged with device ID, GPS &amp; timestamp.</div></div>
+          <div class="tl-item ok"><div class="fw-600 smaller">3 · Auto-sync</div><div class="tiny text-soft">On reconnect, records POST to the VB.NET REST API with JWT.</div></div>
+          <div class="tl-item gold"><div class="fw-600 smaller">4 · Reconcile</div><div class="tiny text-soft">Server validates &amp; resolves conflicts (last-write + audit log).</div></div>
+        </div>
+      </div>
+      <div class="panel panel-pad">
+        <div class="d-flex justify-content-between"><span class="smaller text-soft">Local storage</span><span class="smaller fw-700">86 / 512 MB</span></div>
+        <div class="prog mt-2"><i style="width:17%"></i></div>
+        <button class="btn btn-ghost btn-sm w-100 mt-3" onclick="toast('Local cache cleared (synced items only)','success')"><i class="bi bi-trash3 me-1"></i>Clear synced cache</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QR VERIFICATION ===================== -->
+<section class="view" id="view-qr">
+  <div class="section-head">
+    <div><h4>QR Code Verification</h4><p>Generate property QR · scan on-site · validate authenticity · inspection history lookup</p></div>
+  </div>
+  <div class="row g-3">
+    <!-- scanner -->
+    <div class="col-12 col-lg-4">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-qr-code-scan"></i>Scan / Verify</h6></div>
+        <div class="panel-pad">
+          <div class="scan-frame mb-3"><span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span><span class="laser"></span>
+            <div style="position:absolute;inset:0;display:grid;place-items:center;color:#5b78a8;font-size:12px">Camera preview</div></div>
+          <button class="btn btn-brand w-100 mb-2" onclick="qrScan()"><i class="bi bi-camera me-1"></i>Simulate on-site scan</button>
+          <div class="input-group input-group-sm">
+            <input class="form-control mono" id="qrManual" placeholder="Enter PIN / TD No.">
+            <button class="btn btn-soft" onclick="qrScan(document.getElementById('qrManual').value)">Lookup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- result -->
+    <div class="col-12 col-lg-4">
+      <div class="panel h-100">
+        <div class="panel-head"><h6><i class="bi bi-patch-check"></i>Verification Result</h6></div>
+        <div class="panel-pad" id="qrResult">
+          <div class="text-center text-soft py-5"><i class="bi bi-qr-code" style="font-size:46px;opacity:.3"></i><p class="smaller mt-2 mb-0">Scan a property QR or enter an ID to validate the record.</p></div>
+        </div>
+      </div>
+    </div>
+    <!-- generator -->
+    <div class="col-12 col-lg-4">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-qr-code"></i>Generate Property QR</h6></div>
+        <div class="panel-pad text-center">
+          <div class="qr-box mx-auto mb-2" style="max-width:190px"><div id="qrGen"></div></div>
+          <div class="mono tiny text-soft mb-3" id="qrGenTxt">027-15-001-05-021</div>
+          <input class="form-control form-control-sm mono mb-2" id="qrGenInput" value="027-15-001-05-021">
+          <div class="d-flex gap-2">
+            <button class="btn btn-soft btn-sm flex-fill" onclick="genQR(document.getElementById('qrGenInput').value)"><i class="bi bi-arrow-repeat me-1"></i>Generate</button>
+            <button class="btn btn-gold btn-sm flex-fill" onclick="toast('QR sticker sent to print queue','success')"><i class="bi bi-printer me-1"></i>Print</button>
+          </div>
+          <p class="tiny text-mut mt-3 mb-0">Each Real Property Unit gets a tamper-evident QR sticker linking to its live record &amp; inspection history.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PHOTO MANAGEMENT ===================== -->
+<section class="view" id="view-photos">
+  <div class="section-head">
+    <div><h4>Photo Management</h4><p>Geotagged field photos · before/after comparison · AI change-detection ready</p></div>
+    <div class="d-flex gap-2 flex-wrap">
+      <span class="chip on">All</span><span class="chip">Residential</span><span class="chip">Commercial</span><span class="chip">Flagged changes</span>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-xl-7">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-images"></i>Geotagged Gallery</h6><span class="tiny text-mut">3,651 photos · 1,204 properties</span></div>
+        <div class="panel-pad"><div class="row g-2" id="gallery"></div></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-5">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-arrow-left-right"></i>Before / After Comparison</h6><span class="pill pill-red"><i class="bi bi-robot"></i>AI: +38% built area</span></div>
+        <div class="panel-pad">
+          <div class="ba-wrap" id="baWrap">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#9bbf8f,#6e9460)"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#7a93b5,#465f86)" class="ba-after" id="baAfter"></div>
+            <span class="ba-tag" style="left:8px;background:#0f9d6b">2023 · BEFORE</span>
+            <span class="ba-tag" style="right:8px;background:var(--brand)">2026 · AFTER</span>
+            <div class="ba-handle" id="baHandle"><div class="grip"><i class="bi bi-arrows"></i></div></div>
+          </div>
+          <div class="tiny text-soft mt-2"><i class="bi bi-info-circle me-1"></i>AI change detection compares historical aerial / field imagery and flags undeclared improvements for reassessment.</div>
+          <div class="row g-2 mt-1 text-center">
+            <div class="col"><div class="panel panel-pad py-2"><div class="fw-800 text-danger" style="font-size:18px">+42 m²</div><span class="tiny text-mut">New structure</span></div></div>
+            <div class="col"><div class="panel panel-pad py-2"><div class="fw-800" style="font-size:18px">94%</div><span class="tiny text-mut">Confidence</span></div></div>
+            <div class="col"><div class="panel panel-pad py-2"><div class="fw-800 text-warning" style="font-size:18px">₱1.2M</div><span class="tiny text-mut">Value impact</span></div></div>
+          </div>
+          <button class="btn btn-gold btn-sm w-100 mt-2" onclick="navTo('validation')"><i class="bi bi-send me-1"></i>Send to reassessment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ASSESSMENT VALIDATION ===================== -->
+<section class="view" id="view-validation">
+  <div class="section-head">
+    <div><h4>Assessment Validation &amp; Approval</h4><p>Review inspection findings · reassessment recommendations · multi-level approval workflow</p></div>
+    <div class="d-flex gap-2"><span class="pill pill-red"><i class="bi bi-inbox"></i>5 awaiting review</span></div>
+  </div>
+
+  <div class="row g-3 mb-1">
+    <div class="col-6 col-md-3"><div class="stat s-amber"><div class="num" style="font-size:24px">5</div><div class="lbl">Pending review</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat s-violet"><div class="num" style="font-size:24px">12</div><div class="lbl">For approval</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat s-green"><div class="num" style="font-size:24px">208</div><div class="lbl">Approved (Q2)</div></div></div>
+    <div class="col-6 col-md-3"><div class="stat s-gold"><div class="num" style="font-size:24px">₱64M</div><div class="lbl">Added value (Q2)</div></div></div>
+  </div>
+
+  <div class="row g-3 mt-0">
+    <div class="col-12 col-xl-8">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-list-check"></i>Review Queue</h6>
+          <select class="form-select form-select-sm" style="width:auto"><option>All recommendations</option><option>Reassessment</option><option>Reclassification</option><option>New assessment</option></select></div>
+        <div class="panel-pad" id="reviewQueue"></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-diagram-2"></i>Approval Workflow</h6></div>
+        <div class="panel-pad">
+          <div class="tl">
+            <div class="tl-item ok"><div class="fw-600 smaller">Field Inspector</div><div class="tiny text-soft">Captures &amp; submits findings · ✔ done</div></div>
+            <div class="tl-item ok"><div class="fw-600 smaller">Assessor II — Review</div><div class="tiny text-soft">Validates data &amp; recommends · ✔ done</div></div>
+            <div class="tl-item gold"><div class="fw-600 smaller">Reviewing Officer</div><div class="tiny text-soft">Endorses for approval · ⏳ current</div></div>
+            <div class="tl-item"><div class="fw-600 smaller">City Assessor</div><div class="tiny text-soft">Final approval &amp; new TD issued</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-clock-history"></i>Reassessment History</h6></div>
+        <div class="panel-pad">
+          <div class="kv"><span class="k mono tiny">027-15-001-05-021</span><span class="v text-success">+₱1.2M</span></div>
+          <div class="kv"><span class="k mono tiny">027-15-002-03-077</span><span class="v text-success">+₱640K</span></div>
+          <div class="kv"><span class="k mono tiny">027-15-001-08-210</span><span class="v text-danger">−₱180K</span></div>
+          <div class="kv"><span class="k mono tiny">027-15-004-01-009</span><span class="v text-success">+₱2.1M</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Review modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+  <div class="modal-header"><div><h5 class="modal-title mb-0">Assessment Review</h5><div class="tiny text-mut mono" id="rvPin">—</div></div><button class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body" id="reviewBody"></div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost btn-sm" data-bs-dismiss="modal">Close</button>
+    <button class="btn btn-outline-danger btn-sm" onclick="bsHide('reviewModal');toast('Returned to inspector with remarks','success')"><i class="bi bi-arrow-return-left me-1"></i>Return</button>
+    <button class="btn btn-brand btn-sm" onclick="bsHide('reviewModal');toast('Endorsed to City Assessor for approval','success')"><i class="bi bi-check2-circle me-1"></i>Approve &amp; endorse</button>
+  </div>
+</div></div></div>
+
+<!-- ===================== MANAGEMENT MONITORING ===================== -->
+<section class="view" id="view-monitoring">
+  <div class="section-head">
+    <div><h4>Management Monitoring</h4><p>Live assessor tracking · inspection status · performance &amp; productivity analytics</p></div>
+    <span class="pill pill-green"><span class="dot-pulse"></span>Live · auto-refresh 30s</span>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-xl-8">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-broadcast-pin"></i>Live Field Tracking</h6><span class="tiny text-mut">6 inspectors deployed</span></div>
+        <div class="panel-pad" style="padding:0;border-radius:0 0 var(--radius) var(--radius);overflow:hidden">
+          <div class="map-wrap" id="mapMon" style="height:380px;border:0;border-radius:0"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-graph-up"></i>Completion Rate &amp; Avg. Inspection Time</h6></div>
+        <div class="panel-pad"><div style="height:240px"><canvas id="chMon"></canvas></div></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-people"></i>Active Inspectors</h6></div>
+        <div class="panel-pad" id="inspectorList"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-speedometer2"></i>Inspection Status</h6></div>
+        <div class="panel-pad"><div style="height:180px"><canvas id="chStatus"></canvas></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REPORTS ===================== -->
+<section class="view" id="view-reports">
+  <div class="section-head">
+    <div><h4>Reporting &amp; Analytics</h4><p>Inspection · property · accomplishment · executive dashboards — export to PDF &amp; Excel</p></div>
+    <div class="d-flex gap-2">
+      <select class="form-select form-select-sm" style="width:auto"><option>FY 2026 · Q2</option><option>FY 2026 · Q1</option><option>FY 2025</option></select>
+      <button class="btn btn-brand btn-sm" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print view</button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100"><div class="d-flex gap-3"><span class="stat-ico ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--brand-100);color:var(--brand);font-size:20px"><i class="bi bi-clipboard2-data"></i></span><div><div class="fw-700">Inspection Report</div><div class="tiny text-soft">By inspector, barangay, date range &amp; status.</div></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-soft btn-sm flex-fill" onclick="genReport('Inspection','pdf')"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</button><button class="btn btn-ghost btn-sm flex-fill" onclick="genReport('Inspection','xls')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button></div></div></div>
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100"><div class="d-flex gap-3"><span class="ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold-600);font-size:20px"><i class="bi bi-houses"></i></span><div><div class="fw-700">Property Report</div><div class="tiny text-soft">RPU inventory, classification &amp; valuation.</div></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-soft btn-sm flex-fill" onclick="genReport('Property','pdf')"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</button><button class="btn btn-ghost btn-sm flex-fill" onclick="genReport('Property','xls')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button></div></div></div>
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100"><div class="d-flex gap-3"><span class="ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--success-soft);color:var(--success);font-size:20px"><i class="bi bi-trophy"></i></span><div><div class="fw-700">Accomplishment Report</div><div class="tiny text-soft">Per-assessor productivity &amp; output.</div></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-soft btn-sm flex-fill" onclick="genReport('Accomplishment','pdf')"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</button><button class="btn btn-ghost btn-sm flex-fill" onclick="genReport('Accomplishment','xls')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button></div></div></div>
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100"><div class="d-flex gap-3"><span class="ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--info-soft);color:var(--info);font-size:20px"><i class="bi bi-map"></i></span><div><div class="fw-700">GIS Report</div><div class="tiny text-soft">Coverage, density &amp; mapping completeness.</div></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-soft btn-sm flex-fill" onclick="genReport('GIS','pdf')"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</button><button class="btn btn-ghost btn-sm flex-fill" onclick="genReport('GIS','xls')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button></div></div></div>
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100"><div class="d-flex gap-3"><span class="ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--violet-soft);color:var(--violet);font-size:20px"><i class="bi bi-bar-chart"></i></span><div><div class="fw-700">Executive Dashboard</div><div class="tiny text-soft">KPI summary for management &amp; LGU council.</div></div></div><div class="d-flex gap-2 mt-3"><button class="btn btn-soft btn-sm flex-fill" onclick="genReport('Executive','pdf')"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</button><button class="btn btn-ghost btn-sm flex-fill" onclick="genReport('Executive','xls')"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button></div></div></div>
+    <div class="col-12 col-md-6 col-xl-4"><div class="panel panel-pad h-100" style="border-style:dashed"><div class="d-flex gap-3"><span class="ico" style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface-3);color:var(--text-soft);font-size:20px"><i class="bi bi-sliders"></i></span><div><div class="fw-700">Custom Report</div><div class="tiny text-soft">Build with your own filters &amp; fields.</div></div></div><button class="btn btn-ghost btn-sm w-100 mt-3" onclick="toast('Report builder opened','success')"><i class="bi bi-plus-lg me-1"></i>Build report</button></div></div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-xl-7"><div class="panel"><div class="panel-head"><h6><i class="bi bi-cash-stack"></i>Assessed Value by Classification</h6></div><div class="panel-pad"><div style="height:260px"><canvas id="chRev"></canvas></div></div></div></div>
+    <div class="col-12 col-xl-5"><div class="panel"><div class="panel-head"><h6><i class="bi bi-calendar3"></i>Monthly Accomplishment</h6></div><div class="panel-pad"><div style="height:260px"><canvas id="chMonthly"></canvas></div></div></div></div>
+  </div>
+</section>
+
+<!-- ===================== CITIZEN PORTAL ===================== -->
+<section class="view" id="view-citizen">
+  <div class="section-head">
+    <div><h4>Citizen Service Portal</h4><p>Public property verification · inspection requests · complaints &amp; feedback tracking</p></div>
+    <span class="pill pill-blue"><i class="bi bi-globe"></i>Public-facing module</span>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-7">
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-search"></i>Verify a Property</h6></div>
+        <div class="panel-pad">
+          <div class="input-group mb-2"><span class="input-group-text bg-transparent"><i class="bi bi-house"></i></span><input class="form-control mono" id="czSearch" value="027-15-001-05-021"><button class="btn btn-brand" onclick="qrScan(document.getElementById('czSearch').value)">Verify</button></div>
+          <p class="tiny text-mut mb-0">Enter a PIN or Tax Declaration number to view the public assessment summary &amp; latest inspection status. Result appears in the QR Verification panel.</p>
+        </div>
+      </div>
+
+      <div class="panel mb-3">
+        <div class="panel-head"><h6><i class="bi bi-clipboard2-plus"></i>Request an Inspection</h6></div>
+        <div class="panel-pad"><div class="row g-3">
+          <div class="col-md-6"><label class="form-label">Property PIN (if known)</label><input class="form-control mono" placeholder="027-15-..."></div>
+          <div class="col-md-6"><label class="form-label">Request type</label><select class="form-select"><option>Subdivision / consolidation</option><option>New building / improvement</option><option>Reclassification</option><option>Correction of records</option></select></div>
+          <div class="col-12"><label class="form-label">Property address</label><input class="form-control" placeholder="House/Lot, Street, Barangay"></div>
+          <div class="col-12"><label class="form-label">Details</label><textarea class="form-control" rows="2" placeholder="Briefly describe your request…"></textarea></div>
+          <div class="col-12"><button class="btn btn-gold btn-sm" onclick="toast('Inspection request #IR-2026-0418 submitted. SMS sent.','success')"><i class="bi bi-send me-1"></i>Submit request</button></div>
+        </div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-chat-left-dots"></i>File a Complaint / Feedback</h6></div>
+        <div class="panel-pad"><div class="row g-3">
+          <div class="col-md-6"><label class="form-label">Category</label><select class="form-select"><option>Assessment dispute</option><option>Inspector conduct</option><option>Delay in processing</option><option>General feedback</option></select></div>
+          <div class="col-md-6"><label class="form-label">Reference no. (optional)</label><input class="form-control mono" placeholder="IR-2026-...."></div>
+          <div class="col-12"><label class="form-label">Message</label><textarea class="form-control" rows="2"></textarea></div>
+          <div class="col-12"><button class="btn btn-soft btn-sm" onclick="toast('Complaint #CMP-2026-0091 filed. You will be notified.','success')"><i class="bi bi-send me-1"></i>Submit</button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="panel">
+        <div class="panel-head"><h6><i class="bi bi-list-ul"></i>My Requests &amp; Feedback</h6></div>
+        <div class="panel-pad">
+          <div class="m-card"><div class="d-flex justify-content-between"><span class="mono tiny">IR-2026-0392</span><span class="pill pill-green"><i class="bi bi-check2"></i>Completed</span></div><div class="fw-600 smaller mt-1">New building inspection</div><div class="tl mt-2"><div class="tl-item ok"><div class="t">May 28</div><div class="tiny">Submitted</div></div><div class="tl-item ok"><div class="t">May 30</div><div class="tiny">Scheduled · Eng. Bautista</div></div><div class="tl-item ok"><div class="t">Jun 02</div><div class="tiny">Inspected &amp; reassessed</div></div></div></div>
+          <div class="m-card"><div class="d-flex justify-content-between"><span class="mono tiny">IR-2026-0418</span><span class="pill pill-amber"><span class="pill-dot"></span>Scheduled</span></div><div class="fw-600 smaller mt-1">Subdivision of lot</div><div class="tiny text-soft mt-1"><i class="bi bi-calendar me-1"></i>Visit set Jun 10, 9:00 AM</div></div>
+          <div class="m-card"><div class="d-flex justify-content-between"><span class="mono tiny">CMP-2026-0091</span><span class="pill pill-blue"><span class="pill-dot"></span>Under review</span></div><div class="fw-600 smaller mt-1">Assessment dispute</div><div class="tiny text-soft mt-1">Assigned to Records Section</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NOTIFICATIONS ===================== -->
+<section class="view" id="view-notifications">
+  <div class="section-head">
+    <div><h4>Notifications</h4><p>SMS alerts · email · assignment notices · inspection reminders</p></div>
+    <button class="btn btn-ghost btn-sm" onclick="markAllRead()"><i class="bi bi-check2-all me-1"></i>Mark all read</button>
+  </div>
+  <ul class="nav nav-pills gap-2 mb-3"><li><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#nt-all">All</button></li><li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#nt-sms">SMS</button></li><li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#nt-email">Email</button></li><li><button class="nav-link" data-bs-toggle="pill" data-bs-target="#nt-sys">System</button></li></ul>
+  <div class="tab-content"><div class="tab-pane fade show active" id="nt-all"><div class="panel"><div class="panel-pad" id="notifList"></div></div></div>
+    <div class="tab-pane fade" id="nt-sms"><div class="panel panel-pad text-soft smaller">Filtered to SMS gateway alerts (Globe/Smart) — assignment &amp; reminder texts to inspectors and citizens.</div></div>
+    <div class="tab-pane fade" id="nt-email"><div class="panel panel-pad text-soft smaller">Filtered to email notifications — approval routing, weekly accomplishment digests.</div></div>
+    <div class="tab-pane fade" id="nt-sys"><div class="panel panel-pad text-soft smaller">System events — sync, GPS flags, security alerts.</div></div>
+  </div>
+</section>
+
+<!-- ===================== DOCUMENTS ===================== -->
+<section class="view" id="view-docs">
+  <div class="section-head">
+    <div><h4>Document Management</h4><p>Attachments · property documents · scanned plans · historical records</p></div>
+    <button class="btn btn-brand btn-sm" onclick="toast('Upload dialog opened','success')"><i class="bi bi-cloud-arrow-up me-1"></i>Upload</button>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">TOTAL FILES</div><div class="fw-800" style="font-size:22px">18,420</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">SCANNED PLANS</div><div class="fw-800" style="font-size:22px">4,118</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">TAX DECLARATIONS</div><div class="fw-800" style="font-size:22px">9,902</div></div></div>
+    <div class="col-6 col-md-3"><div class="panel panel-pad"><div class="tiny text-mut">STORAGE</div><div class="fw-800" style="font-size:22px">214 GB</div></div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><h6><i class="bi bi-folder2-open"></i>Recent Documents</h6>
+    <div class="topbar-search" style="max-width:240px"><i class="bi bi-search"></i><input class="form-control form-control-sm" placeholder="Search documents…"></div></div>
+    <div class="panel-pad"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Document</th><th>Type</th><th>Linked PIN</th><th>Size</th><th>Uploaded</th><th></th></tr></thead><tbody id="docBody"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- ===================== AUDIT TRAIL ===================== -->
+<section class="view" id="view-audit">
+  <div class="section-head">
+    <div><h4>Audit Trail</h4><p>User activities · login history · data changes · approval logs</p></div>
+    <button class="btn btn-ghost btn-sm" onclick="toast('Audit log exported (CSV)','success')"><i class="bi bi-download me-1"></i>Export log</button>
+  </div>
+  <div class="row g-3">
+    <div class="col-12 col-xl-9">
+      <div class="panel"><div class="panel-head"><h6><i class="bi bi-shield-check"></i>System Activity Log</h6></div>
+        <div class="panel-pad"><div class="table-responsive"><table class="table align-middle" id="auditTable" style="width:100%"><thead><tr><th>Timestamp</th><th>User</th><th>Role</th><th>Action</th><th>Module</th><th>IP Address</th><th>Result</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-3">
+      <div class="panel"><div class="panel-head"><h6><i class="bi bi-box-arrow-in-right"></i>Recent Logins</h6></div>
+        <div class="panel-pad">
+          <div class="kv"><span class="k">M. Santos<br><span class="tiny mono text-mut">192.168.10.4</span></span><span class="v pill pill-green">Success</span></div>
+          <div class="kv"><span class="k">R. Bautista<br><span class="tiny mono text-mut">10.0.2.51 · mobile</span></span><span class="v pill pill-green">Success</span></div>
+          <div class="kv"><span class="k">unknown<br><span class="tiny mono text-mut">203.177.x.x</span></span><span class="v pill pill-red">Blocked</span></div>
+          <div class="kv"><span class="k">A. Reyes<br><span class="tiny mono text-mut">192.168.10.22</span></span><span class="v pill pill-green">Success</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROLES & PERMISSIONS ===================== -->
+<section class="view" id="view-roles">
+  <div class="section-head">
+    <div><h4>Roles &amp; Permissions</h4><p>Role-based access control (RBAC) · permission matrix · user management</p></div>
+    <button class="btn btn-brand btn-sm" onclick="toast('Add user form opened','success')"><i class="bi bi-person-plus me-1"></i>Add user</button>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-xl-2"><div class="panel panel-pad text-center"><i class="bi bi-shield-lock text-primary" style="font-size:22px"></i><div class="fw-800" style="font-size:20px">3</div><div class="tiny text-mut">Administrators</div></div></div>
+    <div class="col-6 col-xl-2"><div class="panel panel-pad text-center"><i class="bi bi-clipboard-data text-primary" style="font-size:22px"></i><div class="fw-800" style="font-size:20px">14</div><div class="tiny text-mut">Assessors</div></div></div>
+    <div class="col-6 col-xl-2"><div class="panel panel-pad text-center"><i class="bi bi-pin-map text-primary" style="font-size:22px"></i><div class="fw-800" style="font-size:20px">22</div><div class="tiny text-mut">Field Inspectors</div></div></div>
+    <div class="col-6 col-xl-2"><div class="panel panel-pad text-center"><i class="bi bi-bar-chart text-primary" style="font-size:22px"></i><div class="fw-800" style="font-size:20px">2</div><div class="tiny text-mut">Executives</div></div></div>
+    <div class="col-12 col-xl-4"><div class="panel panel-pad h-100 d-flex align-items-center gap-3"><i class="bi bi-key text-warning" style="font-size:26px"></i><div><div class="fw-700">JWT + RBAC</div><div class="tiny text-soft">Stateless tokens, 30-min expiry, refresh rotation, per-module scopes.</div></div></div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><h6><i class="bi bi-table"></i>Permission Matrix</h6></div>
+    <div class="panel-pad"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Module</th><th class="text-center">Admin</th><th class="text-center">Assessor</th><th class="text-center">Inspector</th><th class="text-center">Executive</th><th class="text-center">Citizen</th></tr></thead><tbody id="permBody"></tbody></table></div></div>
+  </div>
+</section>
+
+      <!-- ==VIEWS== -->
+    </main>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===================== SAMPLE DATA (in-memory, no DB) ===================== */
+const CENTER=[14.0710,121.1500];
+const STAT={Inspected:'pill-green',Pending:'pill-amber','For Reassessment':'pill-red'};
+const STATCLR={Inspected:'#0f9d6b',Pending:'#e08a00','For Reassessment':'#d8453c'};
+
+const PROPS=[
+ {pin:'027-15-001-05-021',td:'2026-15-0008842',owner:'Dela Cruz, Juan P.',cls:'Residential',bgy:'Poblacion',area:240,mv:3200000,av:960000,status:'For Reassessment',lat:14.0713,lng:121.1505,photos:6,found:true,addr:'#12 Rizal St., Brgy. Poblacion'},
+ {pin:'027-15-001-05-044',td:'2026-15-0008901',owner:'Reyes, Anna M.',cls:'Commercial',bgy:'Poblacion',area:520,mv:14800000,av:7400000,status:'Pending',lat:14.0726,lng:121.1488,photos:0,found:false,addr:'Mabini cor. Luna St.'},
+ {pin:'027-15-001-04-118',td:'2025-15-0007710',owner:'Santos, Pedro L.',cls:'Residential',bgy:'Poblacion',area:180,mv:2100000,av:630000,status:'Inspected',lat:14.0698,lng:121.1512,photos:5,found:false,addr:'#7 Bonifacio St.'},
+ {pin:'027-15-002-03-077',td:'2026-15-0009120',owner:'Lim, Grace T.',cls:'Commercial',bgy:'San Antonio',area:340,mv:9600000,av:4800000,status:'For Reassessment',lat:14.0742,lng:121.1543,photos:8,found:true,addr:'Quezon Ave., San Antonio'},
+ {pin:'027-15-002-03-090',td:'2025-15-0006655',owner:'Garcia, Mario S.',cls:'Residential',bgy:'San Antonio',area:300,mv:3900000,av:1170000,status:'Inspected',lat:14.0755,lng:121.1531,photos:4,found:false,addr:'Acacia St., San Antonio'},
+ {pin:'027-15-002-05-012',td:'2026-15-0009301',owner:'Hernandez, Liza R.',cls:'Agricultural',bgy:'San Antonio',area:5400,mv:2700000,av:540000,status:'Pending',lat:14.0769,lng:121.1559,photos:0,found:false,addr:'Sitio Maligaya'},
+ {pin:'027-15-003-01-205',td:'2025-15-0005540',owner:'Tan, Robert C.',cls:'Industrial',bgy:'Santo Niño',area:2200,mv:42000000,av:21000000,status:'Inspected',lat:14.0668,lng:121.1472,photos:9,found:false,addr:'Industrial Rd., Santo Niño'},
+ {pin:'027-15-003-02-088',td:'2026-15-0009455',owner:'Villanueva, Carmen D.',cls:'Residential',bgy:'Santo Niño',area:210,mv:2450000,av:735000,status:'Pending',lat:14.0681,lng:121.1459,photos:0,found:false,addr:'Sampaguita St.'},
+ {pin:'027-15-004-01-009',td:'2026-15-0009610',owner:'Ocampo, Felipe A.',cls:'Commercial',bgy:'Mabuhay',area:610,mv:18200000,av:9100000,status:'For Reassessment',lat:14.0634,lng:121.1521,photos:7,found:true,addr:'National Highway, Mabuhay'},
+ {pin:'027-15-004-03-141',td:'2025-15-0004410',owner:'Bautista, Rosa E.',cls:'Residential',bgy:'Mabuhay',area:165,mv:1850000,av:555000,status:'Inspected',lat:14.0622,lng:121.1538,photos:5,found:false,addr:'Camia St., Mabuhay'},
+ {pin:'027-15-005-02-033',td:'2026-15-0009733',owner:'Cruz, Daniel V.',cls:'Residential',bgy:'Bagong Silang',area:198,mv:2050000,av:615000,status:'Pending',lat:14.0591,lng:121.1466,photos:0,found:false,addr:'Phase 2, Bagong Silang'},
+ {pin:'027-15-005-04-210',td:'2025-15-0003388',owner:'Mendoza, Teresa B.',cls:'Agricultural',bgy:'Bagong Silang',area:8200,mv:4100000,av:820000,status:'Inspected',lat:14.0577,lng:121.1489,photos:3,found:false,addr:'Riceland, Bagong Silang'},
+ {pin:'027-15-001-08-210',td:'2026-15-0009844',owner:'Aquino, Marites G.',cls:'Residential',bgy:'Poblacion',area:172,mv:1980000,av:594000,status:'For Reassessment',lat:14.0705,lng:121.1497,photos:4,found:true,addr:'Del Pilar St.'},
+ {pin:'027-15-002-07-055',td:'2025-15-0002277',owner:'Salonga, Victor H.',cls:'Commercial',bgy:'San Antonio',area:430,mv:11200000,av:5600000,status:'Inspected',lat:14.0738,lng:121.1567,photos:6,found:false,addr:'Market Site, San Antonio'},
+ {pin:'027-15-003-05-301',td:'2026-15-0009955',owner:'Domingo, Elena F.',cls:'Residential',bgy:'Santo Niño',area:225,mv:2680000,av:804000,status:'Pending',lat:14.0659,lng:121.1485,photos:0,found:false,addr:'Ilang-Ilang St.'},
+ {pin:'027-15-004-06-077',td:'2025-15-0001166',owner:'Pascual, Andres O.',cls:'Industrial',bgy:'Mabuhay',area:3100,mv:55000000,av:27500000,status:'Inspected',lat:14.0648,lng:121.1509,photos:8,found:false,addr:'Eco-Zone, Mabuhay'}
+];
+const ASSIGN=[
+ {pin:'027-15-001-05-021',owner:'Dela Cruz, Juan',cls:'Residential',dist:'120 m',status:'active'},
+ {pin:'027-15-001-05-044',owner:'Reyes, Anna',cls:'Commercial',dist:'340 m',status:'pending'},
+ {pin:'027-15-001-08-210',owner:'Aquino, Marites',cls:'Residential',dist:'410 m',status:'pending'},
+ {pin:'027-15-001-04-118',owner:'Santos, Pedro',cls:'Residential',dist:'synced',status:'done'},
+ {pin:'027-15-002-03-090',owner:'Garcia, Mario',cls:'Residential',dist:'synced',status:'done'},
+ {pin:'027-15-002-03-077',owner:'Lim, Grace',cls:'Commercial',dist:'1.1 km',status:'pending'},
+ {pin:'027-15-005-02-033',owner:'Cruz, Daniel',cls:'Residential',dist:'2.4 km',status:'pending'}
+];
+const CHECK=['Structure matches Tax Declaration','Roof & wall material verified','No new improvement / extension','Actual use matches classification','Boundary consistent with cadastral map','Occupancy / owner confirmed'];
+const RECS=[
+ {pin:'027-15-001-05-021',owner:'Dela Cruz, Juan P.',type:'Reassessment',by:'Eng. R. Bautista',old:3200000,nw:4400000,reason:'Undeclared 2-storey concrete extension (≈42 m²) at rear.',date:'2026-06-07'},
+ {pin:'027-15-002-03-077',owner:'Lim, Grace T.',type:'Reassessment',by:'A. Reyes',old:9600000,nw:10240000,reason:'Mezzanine added; commercial floor area increased.',date:'2026-06-06'},
+ {pin:'027-15-004-01-009',owner:'Ocampo, Felipe A.',type:'Reassessment',by:'Eng. R. Bautista',old:18200000,nw:20300000,reason:'New annex building; signage and improvements.',date:'2026-06-06'},
+ {pin:'027-15-001-08-210',owner:'Aquino, Marites G.',type:'Reclassification',by:'J. Dela Cruz',old:1980000,nw:1800000,reason:'Portion converted to actual residential (was mixed-use).',date:'2026-06-05'},
+ {pin:'027-15-006-02-014',owner:'Flores, Benigno R.',type:'New Assessment',by:'A. Reyes',old:0,nw:2750000,reason:'Newly constructed residential unit; first declaration.',date:'2026-06-05'}
+];
+const INSPECTORS=[
+ {n:'Eng. R. Bautista',a:'RB',bgy:'Poblacion',status:'On inspection',ping:'12s ago',done:9,lat:14.0713,lng:121.1505,clr:'#0f9d6b'},
+ {n:'A. Reyes',a:'AR',bgy:'San Antonio',status:'On inspection',ping:'34s ago',done:7,lat:14.0742,lng:121.1543,clr:'#0f9d6b'},
+ {n:'J. Dela Cruz',a:'JD',bgy:'Santo Niño',status:'Travelling',ping:'1m ago',done:6,lat:14.0668,lng:121.1472,clr:'#e08a00'},
+ {n:'M. Aguilar',a:'MA',bgy:'Mabuhay',status:'On inspection',ping:'8s ago',done:8,lat:14.0634,lng:121.1521,clr:'#0f9d6b'},
+ {n:'C. Navarro',a:'CN',bgy:'Bagong Silang',status:'Break',ping:'6m ago',done:4,lat:14.0591,lng:121.1466,clr:'#8a98b2'},
+ {n:'P. Gutierrez',a:'PG',bgy:'San Antonio',status:'Travelling',ping:'2m ago',done:5,lat:14.0769,lng:121.1559,clr:'#e08a00'}
+];
+let SYNCQ=[
+ {pin:'027-15-001-05-021',type:'Inspection + 6 photos',size:'4.2 MB',status:'queued'},
+ {pin:'027-15-002-03-077',type:'Reassessment form',size:'0.4 MB',status:'queued'},
+ {pin:'027-15-004-01-009',type:'Inspection + 7 photos',size:'5.1 MB',status:'queued'}
+];
+let NOTIFS=[
+ {ic:'bi-clipboard2-check',clr:'brand',t:'New inspection assigned',d:'PIN 027-15-005-02-033 · Brgy. Bagong Silang assigned to you.',time:'2m ago',un:true},
+ {ic:'bi-chat-dots',clr:'gold',t:'SMS reminder sent',d:'Reminder texted to taxpayer J. Dela Cruz for tomorrow 9:00 AM visit.',time:'18m ago',un:true},
+ {ic:'bi-exclamation-triangle',clr:'danger',t:'GPS mismatch flagged',d:'Captured location 38 m from cadastral point on PIN 027-15-003-05-301.',time:'40m ago',un:true},
+ {ic:'bi-patch-check',clr:'violet',t:'Reassessment endorsed',d:'TD 2026-15-0008842 endorsed to City Assessor for approval.',time:'1h ago',un:true},
+ {ic:'bi-cloud-check',clr:'success',t:'Sync completed',d:'14 offline records synced from device IMEI ••2841.',time:'2h ago',un:false},
+ {ic:'bi-envelope',clr:'brand',t:'Weekly digest emailed',d:'Accomplishment digest sent to the City Assessor.',time:'5h ago',un:false},
+ {ic:'bi-person-plus',clr:'gold',t:'New citizen request',d:'IR-2026-0418 · subdivision of lot · Brgy. San Antonio.',time:'6h ago',un:false}
+];
+const DOCS=[
+ {n:'Subdivision Plan - Lot 5 Blk 21.pdf',t:'Scanned Plan',pin:'027-15-001-05-021',sz:'2.4 MB',d:'2026-06-02',ic:'bi-file-earmark-pdf',clr:'#d8453c'},
+ {n:'Tax Declaration 2026-15-0008842.pdf',t:'Tax Declaration',pin:'027-15-001-05-021',sz:'180 KB',d:'2026-06-02',ic:'bi-file-earmark-text',clr:'#1763c6'},
+ {n:'Building Permit BP-2025-1142.pdf',t:'Permit',pin:'027-15-004-01-009',sz:'420 KB',d:'2026-05-30',ic:'bi-file-earmark-pdf',clr:'#d8453c'},
+ {n:'Transfer Certificate of Title.jpg',t:'Title',pin:'027-15-002-03-077',sz:'1.1 MB',d:'2026-05-28',ic:'bi-file-earmark-image',clr:'#0f9d6b'},
+ {n:'Sketch Plan - Industrial Lot.dwg',t:'Scanned Plan',pin:'027-15-003-01-205',sz:'3.8 MB',d:'2026-05-25',ic:'bi-file-earmark-ruled',clr:'#e08a00'},
+ {n:'Old TD (Historical) 1998.pdf',t:'Historical',pin:'027-15-002-03-090',sz:'640 KB',d:'2026-05-20',ic:'bi-archive',clr:'#6b4ee6'}
+];
+const AUDIT=[
+ ['2026-06-07 09:42:11','m.santos','Admin','Approved reassessment','Validation','192.168.10.4','Success'],
+ ['2026-06-07 09:31:05','r.bautista','Inspector','Submitted inspection','Field Inspection','10.0.2.51','Success'],
+ ['2026-06-07 09:15:48','a.reyes','Assessor','Recommended reassessment','Validation','192.168.10.22','Success'],
+ ['2026-06-07 08:58:33','r.bautista','Inspector','Captured 6 geotagged photos','Photo Mgmt','10.0.2.51','Success'],
+ ['2026-06-07 08:42:09','r.bautista','Inspector','Login (MFA verified)','Security','10.0.2.51','Success'],
+ ['2026-06-07 08:30:55','—','—','Failed login attempt','Security','203.177.45.12','Blocked'],
+ ['2026-06-07 08:12:40','l.mendoza','Executive','Viewed executive report','Reports','192.168.10.9','Success'],
+ ['2026-06-06 17:20:14','m.santos','Admin','Edited property record','Property Mgmt','192.168.10.4','Success'],
+ ['2026-06-06 16:05:51','j.delacruz','Inspector','Synced 11 offline records','Offline Sync','10.0.2.77','Success'],
+ ['2026-06-06 15:44:02','a.reyes','Assessor','Generated property report','Reports','192.168.10.22','Success'],
+ ['2026-06-06 14:18:30','m.santos','Admin','Created user account','Roles','192.168.10.4','Success'],
+ ['2026-06-06 11:02:19','citizen01','Citizen','Submitted inspection request','Citizen Portal','119.94.7.20','Success']
+];
+const PERMS=[
+ ['Dashboard',1,1,1,1,2],['Property Management',1,1,2,2,0],['GIS Tax Mapping',1,1,1,2,0],
+ ['Field Inspection',1,2,1,0,0],['Offline Sync',1,0,1,0,0],['Photo Management',1,1,1,2,0],
+ ['QR Verification',1,1,1,1,1],['Validation & Approval',1,1,0,1,0],['Monitoring',1,0,0,1,0],
+ ['Reports',1,1,0,1,0],['Citizen Portal',1,0,0,0,1],['Documents',1,1,2,2,0],
+ ['Notifications',1,1,1,1,1],['Roles & Permissions',1,0,0,0,0],['Audit Trail',1,2,0,2,0]
+];
+const ME={
+ admin:{n:'Maria Santos',r:'System Administrator',a:'MS'},
+ assessor:{n:'Pedro Reyes',r:'Assessor II',a:'PR'},
+ inspector:{n:'Ramon Bautista',r:'Field Inspector',a:'RB'},
+ executive:{n:'Atty. L. Mendoza',r:'City Assessor',a:'LM'},
+ citizen:{n:'Juan Dela Cruz',r:'Citizen / Taxpayer',a:'JD'}
+};
+const TITLES={dashboard:['Dashboard','Operational overview · Company Name Assessor\'s Office'],property:['Property Management','Real Property Units & tax declarations'],gis:['GIS Tax Mapping','Cadastral & inspection layers'],qr:['QR Verification','Property authentication & lookup'],docs:['Document Management','Files, plans & records'],inspection:['Field Inspection','GPS-validated field workflow'],mobile:['Mobile App Preview','Flutter / PWA inspector app'],offline:['Offline Sync','Local capture & synchronization'],photos:['Photo Management','Geotagged photo evidence'],validation:['Validation & Approval','Assessment review workflow'],monitoring:['Management Monitoring','Live field operations'],citizen:['Citizen Portal','Public assessor services'],notifications:['Notifications','Alerts & messages'],reports:['Reports','Analytics & exports'],roles:['Roles & Permissions','RBAC management'],audit:['Audit Trail','Security & activity logs']};
+
+/* ===================== HELPERS ===================== */
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function php(n){return '₱'+Number(n).toLocaleString('en-PH');}
+function phpShort(n){if(n>=1e9)return '₱'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return '₱'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return '₱'+(n/1e3).toFixed(0)+'K';return '₱'+n;}
+function bsHide(id){const m=bootstrap.Modal.getInstance(document.getElementById(id));if(m)m.hide();}
+function toast(msg,type){const c={success:'var(--success)',info:'var(--brand)',warn:'var(--warning)',danger:'var(--danger)'}[type||'success'];
+ const ic={success:'bi-check-circle-fill',info:'bi-info-circle-fill',warn:'bi-exclamation-triangle-fill',danger:'bi-x-circle-fill'}[type||'success'];
+ const el=document.createElement('div');el.className='toast-x';el.style.borderLeftColor=c;
+ el.innerHTML='<div class="d-flex gap-2 align-items-start"><i class="bi '+ic+'" style="color:'+c+';font-size:18px"></i><div class="smaller">'+msg+'</div></div>';
+ document.getElementById('toasts').appendChild(el);setTimeout(()=>{el.style.opacity=0;el.style.transform='translateX(40px)';el.style.transition='.3s';setTimeout(()=>el.remove(),300);},3400);}
+function bSVG(i){const sky=['#bcd2ef','#cfe0f3','#aec4e6','#c7d9ee'][i%4],wall=['#e8dcc4','#dfe7ee','#e9cfc0','#d8e3d6'][i%4],roof=['#9a5b43','#5b6b86','#7a4b4b','#586b58'][i%4];
+ return "<svg viewBox='0 0 200 150' width='100%' height='100%' preserveAspectRatio='xMidYMid slice'><rect width='200' height='150' fill='"+sky+"'/><rect y='106' width='200' height='44' fill='#9bbf8f'/><polygon points='44,62 100,30 156,62' fill='"+roof+"'/><rect x='52' y='60' width='96' height='62' fill='"+wall+"'/><rect x='66' y='76' width='20' height='20' fill='#9fc0e8'/><rect x='114' y='76' width='20' height='20' fill='#9fc0e8'/><rect x='90' y='92' width='20' height='30' fill='"+roof+"'/><circle cx='168' cy='34' r='12' fill='#ffe39a' opacity='.8'/></svg>";}
+
+/* ===================== THEME ===================== */
+function toggleTheme(){const h=document.documentElement,d=h.getAttribute('data-bs-theme')==='dark';
+ h.setAttribute('data-bs-theme',d?'light':'dark');
+ const ic=d?'bi bi-moon-stars':'bi bi-sun';['themeIco','loginThemeIco'].forEach(i=>{const e=document.getElementById(i);if(e)e.className=ic;});
+ if(window.rebuildCharts)rebuildCharts();}
+
+/* ===================== LOGIN FLOW ===================== */
+function togglePw(el){const i=el.previousElementSibling,is=i.type==='password';i.type=is?'text':'password';el.querySelector('i').className=is?'bi bi-eye-slash':'bi bi-eye';}
+function forgotModal(){toast('Password reset link sent to your registered LGU email.','info');}
+let otpTimer=null;
+function goMfa(){document.getElementById('loginStep1').style.display='none';document.getElementById('loginStep2').style.display='block';
+ const boxes=document.querySelectorAll('#otp input');boxes[0].focus();
+ let t=299;clearInterval(otpTimer);otpTimer=setInterval(()=>{t--;const m=String(Math.floor(t/60)).padStart(2,'0'),s=String(t%60).padStart(2,'0');const e=document.getElementById('otpTimer');if(e)e.textContent=m+':'+s;if(t<=0)clearInterval(otpTimer);},1000);}
+function backToCreds(){document.getElementById('loginStep2').style.display='none';document.getElementById('loginStep1').style.display='block';clearInterval(otpTimer);}
+function fillOtp(){document.querySelectorAll('#otp input').forEach((b,i)=>b.value=[1,2,3,4,5,6][i]);}
+function enterApp(){clearInterval(otpTimer);document.getElementById('login').style.display='none';document.getElementById('app').classList.remove('d-none');
+ const role=document.getElementById('loginRole').value;setRole(role,true);navTo(role==='citizen'?'citizen':'dashboard');
+ updateBell();toast('Signed in as '+ME[role].r+'. Welcome, '+ME[role].n.split(' ').slice(-1)[0]+'!','success');}
+function logout(){document.getElementById('app').classList.add('d-none');document.getElementById('login').style.display='grid';backToCreds();
+ document.querySelectorAll('#otp input').forEach(b=>b.value='');window.scrollTo(0,0);}
+/* ===================== NAVIGATION ===================== */
+let CURRENT='dashboard';
+function navTo(view){
+ CURRENT=view;
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+ const sec=document.getElementById('view-'+view);if(sec)sec.classList.add('active');
+ document.querySelectorAll('.side-link').forEach(l=>l.classList.toggle('active',l.dataset.view===view));
+ const t=TITLES[view]||['',''];document.getElementById('pgTitle').textContent=t[0];document.getElementById('pgSub').textContent=t[1];
+ document.body.classList.remove('nav-open');window.scrollTo({top:0,behavior:'smooth'});
+ setTimeout(()=>initView(view),60);
+}
+function initView(v){
+ if(v==='dashboard'){ensureChart('chInsp');ensureChart('chClass');ensureChart('chProd');initMap('mapDash');}
+ if(v==='property'){renderProps();}
+ if(v==='gis'){initMap('mapGis');}
+ if(v==='inspection'){renderAssign();renderChecklist();initSig();if(!document.querySelector('#inspPhotos .photo')){addPhoto(true);addPhoto(true);}}
+ if(v==='offline'){renderSync();}
+ if(v==='qr'){genQR(document.getElementById('qrGenInput').value);}
+ if(v==='photos'){renderGallery();initBA();}
+ if(v==='validation'){renderReview();}
+ if(v==='monitoring'){initMap('mapMon');renderInspectors();ensureChart('chMon');ensureChart('chStatus');}
+ if(v==='reports'){ensureChart('chRev');ensureChart('chMonthly');}
+ if(v==='notifications'){renderNotifs();}
+ if(v==='docs'){renderDocs();}
+ if(v==='audit'){renderAudit();}
+ if(v==='roles'){renderPerms();}
+}
+
+/* ===================== RBAC ===================== */
+function setRole(role,initial){
+ const m=ME[role];document.getElementById('meName').textContent=m.n;document.getElementById('meRole').textContent=m.r;document.getElementById('meAv').textContent=m.a;
+ document.querySelectorAll('.side-link[data-roles]').forEach(l=>{const ok=l.dataset.roles.split(',').includes(role);l.style.display=ok?'':'none';});
+ // hide empty groups
+ document.querySelectorAll('.nav-group[data-grp]').forEach(g=>{let n=g.nextElementSibling,vis=false;while(n&&!n.classList.contains('nav-group')){if(n.classList.contains('side-link')&&n.style.display!=='none')vis=true;n=n.nextElementSibling;}g.style.display=vis?'':'none';});
+ if(!initial){
+   const cur=document.querySelector('.side-link[data-view="'+CURRENT+'"]');
+   if(!cur||cur.style.display==='none'){navTo(role==='citizen'?'citizen':'dashboard');}
+   toast('Switched to <strong>'+m.r+'</strong> — menu &amp; permissions updated.','info');
+ }
+}
+
+/* ===================== CHARTS ===================== */
+const chartRefs={};const builtCharts=new Set();
+function ensureChart(k){if(!builtCharts.has(k)){buildChart(k);builtCharts.add(k);}}
+function rebuildCharts(){builtCharts.forEach(k=>buildChart(k));}
+function baseScale(extra){const grid=cv('--border'),tick=cv('--text-soft');return Object.assign({grid:{color:grid,drawBorder:false},ticks:{color:tick,font:{size:10}}},extra||{});}
+function buildChart(k){
+ const el=document.getElementById(k);if(!el)return;if(chartRefs[k]){chartRefs[k].destroy();}
+ const brand=cv('--brand'),gold=cv('--gold'),green=cv('--success'),amber=cv('--warning'),red=cv('--danger'),violet=cv('--violet'),info=cv('--info'),tick=cv('--text-soft');
+ Chart.defaults.font.family="'Public Sans',sans-serif";Chart.defaults.color=tick;
+ const leg={labels:{color:tick,usePointStyle:true,boxWidth:8,font:{size:11}}};
+ let cfg;
+ if(k==='chInsp'){cfg={type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[
+   {label:'Assigned',data:[820,910,870,1040,980,1120],borderColor:brand,backgroundColor:brand+'22',fill:true,tension:.4,pointRadius:3,borderWidth:2},
+   {label:'Completed',data:[610,720,690,880,910,1010],borderColor:gold,backgroundColor:gold+'22',fill:true,tension:.4,pointRadius:3,borderWidth:2}]},
+   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:leg},scales:{x:baseScale(),y:baseScale({beginAtZero:true})}}};}
+ else if(k==='chClass'){cfg={type:'doughnut',data:{labels:['Residential','Commercial','Agricultural','Industrial'],datasets:[{data:[29848,10765,6012,2307],backgroundColor:[brand,gold,green,violet],borderWidth:2,borderColor:cv('--surface')}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:leg.labels}}}};}
+ else if(k==='chProd'){cfg={type:'bar',data:{labels:['R. Bautista','M. Aguilar','A. Reyes','J. Dela Cruz','P. Gutierrez'],datasets:[{label:'Inspections',data:[9,8,7,6,5],backgroundColor:brand,borderRadius:6,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:baseScale({beginAtZero:true}),y:baseScale()}}};}
+ else if(k==='chMon'){cfg={type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat'],datasets:[
+   {label:'Completion rate %',data:[78,82,80,88,91,85],borderColor:green,backgroundColor:green+'22',tension:.4,yAxisID:'y',borderWidth:2,pointRadius:3,fill:true},
+   {label:'Avg time (min)',data:[42,38,40,34,31,36],borderColor:gold,tension:.4,yAxisID:'y1',borderWidth:2,pointRadius:3}]},
+   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:leg},scales:{x:baseScale(),y:baseScale({position:'left',min:50,max:100}),y1:baseScale({position:'right',grid:{drawOnChartArea:false},min:0,max:60})}}};}
+ else if(k==='chStatus'){cfg={type:'doughnut',data:{labels:['Inspected','Pending','For reassessment'],datasets:[{data:[3651,1274,326],backgroundColor:[green,amber,red],borderWidth:2,borderColor:cv('--surface')}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:leg.labels}}}};}
+ else if(k==='chRev'){cfg={type:'bar',data:{labels:['Residential','Commercial','Industrial','Agricultural'],datasets:[{label:'Assessed value',data:[1480000000,1920000000,640000000,170000000],backgroundColor:[brand,gold,violet,green],borderRadius:8,barThickness:38}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>phpShort(c.raw)}}},scales:{x:baseScale(),y:baseScale({beginAtZero:true,ticks:{callback:v=>phpShort(v)}})}}};}
+ else if(k==='chMonthly'){cfg={type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Inspections completed',data:[610,720,690,880,910,1010],borderColor:brand,backgroundColor:brand+'25',fill:true,tension:.4,borderWidth:2,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:baseScale(),y:baseScale({beginAtZero:true})}}};}
+ if(cfg)chartRefs[k]=new Chart(el,cfg);
+}
+/* ===================== MAPS (OpenStreetMap / Leaflet) ===================== */
+const maps={};const GISL={};
+function initMap(id){
+ if(maps[id]){setTimeout(()=>maps[id].invalidateSize(),120);return;}
+ const m=L.map(id,{zoomControl:true,scrollWheelZoom:true,attributionControl:true}).setView(CENTER,14);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(m);
+ maps[id]=m;
+ if(id==='mapDash'){inspMarkers(m).addTo(m);}
+ if(id==='mapGis'){buildGisLayers(m);}
+ if(id==='mapMon'){inspectorMarkers(m);}
+ setTimeout(()=>m.invalidateSize(),250);
+}
+function inspMarkers(m){const g=L.layerGroup();PROPS.forEach(p=>{L.circleMarker([p.lat,p.lng],{radius:7,color:'#fff',weight:1.5,fillColor:STATCLR[p.status],fillOpacity:.95})
+ .bindPopup('<b class="mono">'+p.pin+'</b><br>'+p.owner+'<br>'+p.cls+' · '+p.bgy+'<br><span style="color:'+STATCLR[p.status]+'">●</span> '+p.status).addTo(g);});return g;}
+function bgyGroups(){const c={};PROPS.forEach(p=>{(c[p.bgy]=c[p.bgy]||[]).push(p);});return c;}
+function buildGisLayers(m){
+ const parcel=L.layerGroup(),bgy=L.layerGroup(),grid=L.layerGroup(),insp=inspMarkers(m),heatPts=[];
+ PROPS.forEach((p,i)=>{const d=0.0006;
+   L.rectangle([[p.lat-d,p.lng-d],[p.lat+d,p.lng+d]],{color:STATCLR[p.status],weight:1,fillOpacity:.08}).addTo(parcel);
+   heatPts.push([p.lat,p.lng,Math.min(1,p.mv/40000000)]);
+ });
+ const c=bgyGroups();Object.keys(c).forEach(name=>{const arr=c[name];let la=0,ln=0;arr.forEach(p=>{la+=p.lat;ln+=p.lng;});la/=arr.length;ln/=arr.length;
+   const r=0.0052,pts=[];for(let k=0;k<6;k++){const ang=Math.PI/3*k;pts.push([la+r*Math.sin(ang),ln+r*Math.cos(ang)*1.4]);}
+   L.polygon(pts,{color:'#1763c6',weight:2,dashArray:'6 4',fillColor:'#1763c6',fillOpacity:.05}).bindTooltip('Brgy. '+name,{permanent:true,direction:'center',className:'bgy-lbl'}).addTo(bgy);});
+ const bb=m.getBounds().pad(0.2);for(let x=bb.getWest();x<bb.getEast();x+=0.004){L.polyline([[bb.getSouth(),x],[bb.getNorth(),x]],{color:'#8a98b2',weight:.5,opacity:.5}).addTo(grid);}
+ for(let y=bb.getSouth();y<bb.getNorth();y+=0.004){L.polyline([[y,bb.getWest()],[y,bb.getEast()]],{color:'#8a98b2',weight:.5,opacity:.5}).addTo(grid);}
+ const heat=L.heatLayer(heatPts,{radius:34,blur:24,maxZoom:16,gradient:{0.2:'#1763c6',0.5:'#f4a300',0.8:'#d8453c'}});
+ GISL.parcel=parcel;GISL.bgy=bgy;GISL.grid=grid;GISL.insp=insp;GISL.heat=heat;
+ parcel.addTo(m);bgy.addTo(m);insp.addTo(m);
+}
+function toggleLayer(key,el){const on=el.classList.toggle('on');const m=maps.mapGis,l=GISL[key];if(!m||!l)return;on?l.addTo(m):m.removeLayer(l);
+ if(key==='heat')toast(on?'Heatmap analysis enabled':'Heatmap disabled','info');}
+function inspectorMarkers(m){INSPECTORS.forEach(ins=>{L.circleMarker([ins.lat,ins.lng],{radius:9,color:'#fff',weight:2,fillColor:ins.clr,fillOpacity:1})
+ .bindPopup('<b>'+ins.n+'</b><br>'+ins.status+'<br>Brgy. '+ins.bgy+' · '+ins.done+' done<br><span class="mono">ping '+ins.ping+'</span>').addTo(m);});}
+
+/* ===================== PROPERTY TABLE & MODAL ===================== */
+let propDT=null,pmMapObj=null;
+function renderProps(){
+ if(propDT)return;
+ document.getElementById('propBody').innerHTML=PROPS.map(p=>'<tr>'+
+  '<td class="mono smaller">'+p.pin+'</td><td>'+p.owner+'</td><td>'+p.cls+'</td><td>'+p.bgy+'</td>'+
+  '<td class="mono">'+p.area.toLocaleString()+'</td><td class="fw-600">'+php(p.av)+'</td>'+
+  '<td><span class="pill '+STAT[p.status]+'"><span class="pill-dot"></span>'+p.status+'</span></td>'+
+  '<td class="text-end"><button class="btn btn-soft btn-sm" onclick="openProp(\''+p.pin+'\')"><i class="bi bi-eye"></i></button></td></tr>').join('');
+ propDT=$('#propTable').DataTable({pageLength:8,lengthMenu:[8,15,25],order:[],columnDefs:[{orderable:false,targets:7}],dom:'<"d-flex justify-content-between align-items-center flex-wrap gap-2"lf>rt<"d-flex justify-content-between align-items-center flex-wrap"ip>'});
+}
+function filterProps(){if(!propDT)return;propDT.column(2).search(document.getElementById('fClass').value).column(3).search(document.getElementById('fBgy').value).column(6).search(document.getElementById('fStat').value).draw();}
+function openProp(pin){
+ const p=PROPS.find(x=>x.pin===pin);if(!p)return;
+ document.getElementById('pmTitle').textContent=p.owner;document.getElementById('pmPin').textContent='PIN '+p.pin+'  ·  TD '+p.td;
+ const al={Residential:'20%',Commercial:'50%',Industrial:'50%',Agricultural:'20% (assessment level)'}[p.cls]||'20%';
+ document.getElementById('pmOverview').innerHTML=
+   kv('PIN',p.pin,1)+kv('Tax Declaration',p.td,1)+kv('Owner',p.owner)+kv('Classification',p.cls)+kv('Barangay',p.bgy)+
+   kv('Land Area',p.area.toLocaleString()+' m²',1)+kv('Market Value',php(p.mv))+kv('Assessment Level',al)+kv('Assessed Value',php(p.av))+
+   '<div class="kv"><span class="k">Status</span><span class="v"><span class="pill '+STAT[p.status]+'">'+p.status+'</span></span></div>'+kv('Address',p.addr);
+ document.getElementById('pmOwner').innerHTML=kv('Registered Owner',p.owner)+kv('Ownership',p.cls==='Industrial'?'Corporation':'Individual / Family')+kv('TIN',' ••• ••• '+(100+PROPS.indexOf(p)))+kv('Contact','+63 9•• ••• ••'+(10+PROPS.indexOf(p)))+kv('Mailing address',p.addr)+kv('Co-owners',PROPS.indexOf(p)%3===0?'2 declared':'None');
+ document.getElementById('pmLand').innerHTML='<div class="fw-700 mb-2"><i class="bi bi-map me-1 text-primary"></i>Land</div>'+kv('Area',p.area.toLocaleString()+' m²',1)+kv('Class',p.cls)+kv('Actual use',p.cls)+kv('Market value',php(p.mv))+
+   '<div class="divider"></div><div class="fw-700 mb-2"><i class="bi bi-building me-1 text-primary"></i>Building / Improvement</div>'+(p.cls==='Agricultural'?'<p class="smaller text-soft mb-0">No major building improvement declared.</p>':kv('Structure type',p.cls==='Commercial'?'Commercial bldg':p.cls==='Industrial'?'Warehouse / plant':'Residential house')+kv('Storeys',p.cls==='Industrial'?'1':'2')+kv('Floor area',Math.round(p.area*0.6).toLocaleString()+' m²',1)+kv('Material','Reinforced concrete')+kv('Year built',(2005+PROPS.indexOf(p)%18)));
+ document.getElementById('pmTd').innerHTML=kv('TD Number',p.td,1)+kv('Effectivity','CY 2026')+kv('Previous TD',p.td.replace('2026','2022'),1)+kv('Kind','Land'+(p.cls!=='Agricultural'?' & Building':''))+kv('Taxability','Taxable')+kv('Assessed value',php(p.av))+'<div class="divider"></div><p class="smaller text-soft mb-0"><i class="bi bi-info-circle me-1"></i>'+(p.status==='For Reassessment'?'A reassessment is pending based on the latest field inspection findings.':'Record is current as of the last general revision.')+'</p>';
+ document.getElementById('pmQrTxt').textContent=p.pin;
+ const q=document.getElementById('pmQr');q.innerHTML='';new QRCode(q,{text:'SMARTASSESS|'+p.pin+'|'+p.td,width:170,height:170,colorDark:'#0a2e5c',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+ document.getElementById('pmHist').innerHTML=histHTML(p);
+ const md=new bootstrap.Modal(document.getElementById('propModal'));md.show();
+ setTimeout(()=>buildPmMap(p),350);
+}
+function kv(k,v,mono){return '<div class="kv"><span class="k">'+k+'</span><span class="v '+(mono?'mono smaller':'')+'">'+v+'</span></div>';}
+function histHTML(p){if(p.photos===0)return '<div class="tl-item warn"><div class="t">Pending</div><div class="fw-600 smaller">No inspection on record</div><div class="tiny text-soft">Scheduled for field validation.</div></div>';
+ let h='<div class="tl-item ok"><div class="t">2026-06-07 08:42</div><div class="fw-600 smaller">Field inspection completed</div><div class="tiny text-soft">Eng. R. Bautista · '+p.photos+' geotagged photos · GPS verified</div></div>';
+ if(p.found)h+='<div class="tl-item gold"><div class="t">2026-06-07 09:15</div><div class="fw-600 smaller">Reassessment recommended</div><div class="tiny text-soft">Undeclared improvement found</div></div>';
+ h+='<div class="tl-item"><div class="t">2022-03-10</div><div class="fw-600 smaller">General revision</div><div class="tiny text-soft">Previous assessment cycle</div></div>';return h;}
+function buildPmMap(p){if(pmMapObj){pmMapObj.remove();pmMapObj=null;}const el=document.getElementById('pmMap');if(!el)return;el.innerHTML='';
+ pmMapObj=L.map('pmMap',{zoomControl:false,attributionControl:false}).setView([p.lat,p.lng],17);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(pmMapObj);
+ L.circleMarker([p.lat,p.lng],{radius:9,color:'#fff',weight:2,fillColor:STATCLR[p.status],fillOpacity:1}).addTo(pmMapObj);
+ const d=0.0006;L.rectangle([[p.lat-d,p.lng-d],[p.lat+d,p.lng+d]],{color:STATCLR[p.status],weight:2,fillOpacity:.1}).addTo(pmMapObj);
+ setTimeout(()=>pmMapObj.invalidateSize(),100);}
+
+/* ===================== QR ===================== */
+function genQR(text){const el=document.getElementById('qrGen');if(!el)return;el.innerHTML='';new QRCode(el,{text:'SMARTASSESS|'+text,width:170,height:170,colorDark:'#0a2e5c',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});document.getElementById('qrGenTxt').textContent=text;}
+function qrScan(id){if(CURRENT!=='qr'){navTo('qr');setTimeout(()=>doScan(id),140);}else doScan(id);}
+function doScan(id){
+ let p;if(id&&id.trim()){p=PROPS.find(x=>x.pin===id.trim()||x.td===id.trim());}else{p=PROPS[0];}
+ const box=document.getElementById('qrResult');
+ if(!p){box.innerHTML='<div class="text-center py-4"><div class="ico mx-auto mb-2" style="width:60px;height:60px;border-radius:50%;background:var(--danger-soft);color:var(--danger);display:grid;place-items:center;font-size:28px"><i class="bi bi-shield-exclamation"></i></div><div class="fw-700 text-danger">No matching record</div><p class="smaller text-soft">This QR / ID is not in the registry — possible tampering. Flagged for review.</p></div>';toast('QR not recognized — flagged','danger');return;}
+ box.innerHTML='<div class="text-center mb-2"><div class="ico mx-auto mb-2" style="width:56px;height:56px;border-radius:50%;background:var(--success-soft);color:var(--success);display:grid;place-items:center;font-size:26px"><i class="bi bi-patch-check-fill"></i></div><div class="fw-700 text-success">Authentic record verified</div><div class="tiny text-mut">Matched against live registry</div></div>'+
+  kv('PIN',p.pin,1)+kv('TD No.',p.td,1)+kv('Owner',p.owner)+kv('Class',p.cls)+kv('Barangay',p.bgy)+
+  '<div class="kv"><span class="k">Status</span><span class="v"><span class="pill '+STAT[p.status]+'">'+p.status+'</span></span></div>'+
+  kv('Last inspection',p.photos>0?'2026-06-07':'—')+
+  '<button class="btn btn-brand btn-sm w-100 mt-2" onclick="openProp(\''+p.pin+'\')"><i class="bi bi-folder2-open me-1"></i>Open full record</button>';
+ toast('QR verified · '+p.pin,'success');
+}
+
+/* ===================== PHOTOS ===================== */
+let galleryDone=false,baInit=false;
+function renderGallery(){if(galleryDone)return;galleryDone=true;
+ const src=PROPS.filter(p=>p.photos>0);let html='';
+ for(let i=0;i<9;i++){const p=src[i%src.length];
+  html+='<div class="col-6 col-md-4"><div class="photo">'+bSVG(i)+'<span class="geo"><i class="bi bi-geo-alt-fill"></i> GEO</span>'+
+   (p.found&&i%3===0?'<span class="pill pill-red" style="position:absolute;top:7px;right:7px;font-size:8.5px"><i class="bi bi-robot"></i>change</span>':'')+
+   '<div class="stamp">'+p.pin+'<br>'+p.lat.toFixed(4)+'°N '+p.lng.toFixed(4)+'°E · 2026-06-07 09:1'+i+'</div></div></div>';}
+ document.getElementById('gallery').innerHTML=html;}
+function initBA(){if(baInit)return;baInit=true;const w=document.getElementById('baWrap'),h=document.getElementById('baHandle'),a=document.getElementById('baAfter');let drag=false;
+ const setp=x=>{const r=w.getBoundingClientRect();let p=Math.max(0,Math.min(1,(x-r.left)/r.width));h.style.left=(p*100)+'%';a.style.clipPath='inset(0 0 0 '+(p*100)+'%)';};
+ w.addEventListener('pointerdown',e=>{drag=true;setp(e.clientX);});window.addEventListener('pointermove',e=>{if(drag)setp(e.clientX);});window.addEventListener('pointerup',()=>drag=false);}
+/* ===================== FIELD INSPECTION ===================== */
+let checklistDone=false,inspPhotoCount=0;
+function renderAssign(){const map={active:'pill-blue',pending:'pill-amber',done:'pill-green'},lbl={active:'In progress',pending:'Pending',done:'Synced'};
+ document.getElementById('assignList').innerHTML=ASSIGN.map(a=>'<div class="m-card" style="cursor:pointer'+(a.status==='active'?';border-color:var(--brand)':'')+'" onclick="loadInsp(\''+a.pin+'\',this)">'+
+  '<div class="d-flex justify-content-between"><span class="pill '+map[a.status]+'"><span class="pill-dot"></span>'+lbl[a.status]+'</span><span class="tiny text-mut">'+a.dist+'</span></div>'+
+  '<div class="fw-600 mono smaller mt-1">'+a.pin+'</div><div class="tiny text-soft">'+a.owner+' · '+a.cls+'</div></div>').join('');}
+function loadInsp(pin,el){document.getElementById('actPin').textContent=pin;document.querySelectorAll('#assignList .m-card').forEach(c=>c.style.borderColor='var(--border)');if(el)el.style.borderColor='var(--brand)';
+ document.getElementById('actStatus').className='pill pill-amber';document.getElementById('actStatus').innerHTML='<span class="pill-dot"></span>In progress';toast('Loaded inspection for '+pin,'info');}
+function renderChecklist(){if(checklistDone)return;checklistDone=true;const def=['pass','pass','fail','pass','pass','pass'],ic=['house-check','bricks','plus-square','signpost','bounding-box-circles','person-check'];
+ document.getElementById('checklist').innerHTML=CHECK.map((c,i)=>'<div class="check-row"><i class="bi bi-'+ic[i]+' text-primary"></i><div class="smaller fw-600">'+c+'</div>'+
+  '<div class="seg"><span class="seg-btn pass'+(def[i]==='pass'?' on':'')+'" onclick="segSet(this)">Pass</span><span class="seg-btn fail'+(def[i]==='fail'?' on':'')+'" onclick="segSet(this)">Fail</span><span class="seg-btn na'+(def[i]==='na'?' on':'')+'" onclick="segSet(this)">N/A</span></div></div>').join('');}
+function segSet(b){b.parentNode.querySelectorAll('.seg-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');}
+function addPhoto(silent){const pin=document.getElementById('actPin').textContent;inspPhotoCount++;const i=inspPhotoCount;
+ const div=document.createElement('div');div.className='col-4';
+ div.innerHTML='<div class="photo">'+bSVG(i+2)+'<span class="geo"><i class="bi bi-geo-alt-fill"></i> GEO</span><div class="stamp">'+pin+'<br>14.0713°N 121.1505°E<br>2026-06-07 08:'+(40+i)+'</div></div>';
+ document.getElementById('inspPhotos').appendChild(div);if(!silent)toast('Photo captured · GPS &amp; time stamped','success');}
+function initSig(){const c=document.getElementById('sigpad');if(!c||c._init)return;c._init=true;c.width=c.clientWidth||320;c.height=150;const ctx=c.getContext('2d');ctx.lineWidth=2.2;ctx.lineCap='round';ctx.strokeStyle=cv('--brand')||'#1763c6';let d=false,lx,ly;const pos=e=>{const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];};
+ c.addEventListener('pointerdown',e=>{d=true;[lx,ly]=pos(e);c.setPointerCapture(e.pointerId);});
+ c.addEventListener('pointermove',e=>{if(!d)return;const[x,y]=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();[lx,ly]=[x,y];});
+ c.addEventListener('pointerup',()=>d=false);}
+function clearSig(){const c=document.getElementById('sigpad');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
+function revalidate(){const dev=(Math.random()*9+2).toFixed(1);document.getElementById('gpsDev').textContent=dev+' m';const ok=dev<15;const pill=document.getElementById('gpsPill');pill.className='pill '+(ok?'pill-green':'pill-red');pill.innerHTML=ok?'<i class="bi bi-check2"></i>Within tolerance':'<i class="bi bi-exclamation-triangle"></i>Out of tolerance';toast('Location re-captured · deviation '+dev+' m',ok?'success':'warn');}
+function submitInsp(){const s=document.getElementById('actStatus');s.className='pill pill-green';s.innerHTML='<i class="bi bi-check2-circle"></i>Submitted';toast('Inspection submitted &amp; routed to Assessor for validation','success');}
+
+/* ===================== OFFLINE SYNC ===================== */
+let online=true;
+function renderSync(){const map={queued:'pill-amber',syncing:'pill-blue',done:'pill-green'},lbl={queued:'Queued',syncing:'Syncing…',done:'Synced'};
+ document.getElementById('syncList').innerHTML=SYNCQ.length?SYNCQ.map(s=>'<div class="check-row"><i class="bi bi-file-earmark-arrow-up text-primary"></i><div><div class="fw-600 smaller mono">'+s.pin+'</div><div class="tiny text-soft">'+s.type+' · '+s.size+'</div></div><span class="pill '+map[s.status]+' ms-auto"><span class="pill-dot"></span>'+lbl[s.status]+'</span></div>').join(''):'<div class="text-center text-soft py-4"><i class="bi bi-cloud-check" style="font-size:38px;color:var(--success)"></i><p class="smaller mt-2 mb-0">All records synced. Nothing pending.</p></div>';
+ const q=SYNCQ.filter(s=>s.status==='queued').length;document.getElementById('qCount').textContent=q;}
+function syncNow(){const queued=SYNCQ.filter(s=>s.status==='queued');if(!queued.length){toast('Nothing to sync','info');return;}
+ if(!online){toast('You are offline — connect to sync','warn');return;}
+ const btn=document.getElementById('syncBtn');btn.disabled=true;btn.innerHTML='<span class="spinner-border spinner-border-sm me-1"></span>Syncing…';
+ const wrap=document.getElementById('syncProgWrap'),bar=document.getElementById('syncProg');wrap.style.display='block';bar.style.width='0%';
+ let pct=0;const iv=setInterval(()=>{pct+=8;bar.style.width=Math.min(100,pct)+'%';if(pct>=100){clearInterval(iv);SYNCQ.forEach(s=>s.status='done');renderSync();setTimeout(()=>{wrap.style.display='none';},500);btn.disabled=false;btn.innerHTML='<i class="bi bi-arrow-repeat me-1"></i>Sync now';toast(queued.length+' records synced to server via REST API','success');}},120);}
+function toggleConn(){online=!online;const b=document.getElementById('connToggle');b.innerHTML=online?'<i class="bi bi-wifi me-1"></i>Connection: Online':'<i class="bi bi-wifi-off me-1"></i>Connection: Offline';b.style.color=online?'':'var(--danger)';toast(online?'Back online — auto-syncing queued records':'Offline mode — captures saved to device','info');if(online)setTimeout(syncNow,400);}
+
+/* ===================== VALIDATION ===================== */
+function renderReview(){const tc={Reassessment:'pill-violet',Reclassification:'pill-blue','New Assessment':'pill-green'};
+ document.getElementById('reviewQueue').innerHTML=RECS.map((r,i)=>{const delta=r.nw-r.old,up=delta>=0;
+  return '<div class="panel panel-pad mb-2" style="background:var(--surface-2)"><div class="d-flex justify-content-between align-items-start flex-wrap gap-2">'+
+   '<div><div class="d-flex align-items-center gap-2 mb-1"><span class="mono fw-700 smaller">'+r.pin+'</span><span class="pill '+tc[r.type]+'">'+r.type+'</span></div>'+
+   '<div class="smaller fw-600">'+r.owner+'</div><div class="tiny text-soft">By '+r.by+' · '+r.date+'</div>'+
+   '<div class="tiny text-soft mt-1">'+r.reason+'</div></div>'+
+   '<div class="text-end"><div class="tiny text-mut">Value change</div><div class="fw-700 '+(up?'text-success':'text-danger')+'">'+(up?'+':'−')+phpShort(Math.abs(delta))+'</div>'+
+   '<div class="tiny text-mut mono">'+phpShort(r.old)+' → '+phpShort(r.nw)+'</div>'+
+   '<div class="d-flex gap-1 mt-2"><button class="btn btn-ghost btn-sm" onclick="reviewOpen('+i+')">Review</button><button class="btn btn-brand btn-sm" onclick="toast(\'Approved &amp; endorsed\',\'success\')">Approve</button></div></div></div></div>';}).join('');}
+function reviewOpen(i){const r=RECS[i];document.getElementById('rvPin').textContent='PIN '+r.pin+' · '+r.owner;const delta=r.nw-r.old,up=delta>=0;
+ document.getElementById('reviewBody').innerHTML='<div class="row g-3"><div class="col-md-6">'+
+  '<div class="panel panel-pad">'+kv('Recommendation',r.type)+kv('Recommended by',r.by)+kv('Date',r.date,1)+
+  kv('Current value',phpShort(r.old))+kv('Proposed value',phpShort(r.nw))+
+  '<div class="kv"><span class="k">Net change</span><span class="v '+(up?'text-success':'text-danger')+'">'+(up?'+':'−')+phpShort(Math.abs(delta))+'</span></div>'+
+  '<div class="divider"></div><div class="fw-700 smaller mb-1">Finding</div><p class="smaller text-soft mb-0">'+r.reason+'</p></div></div>'+
+  '<div class="col-md-6"><div class="fw-700 smaller mb-2">Field evidence</div><div class="row g-2"><div class="col-6"><div class="photo">'+bSVG(1)+'<span class="geo">GEO</span><div class="stamp">'+r.pin+'<br>BEFORE</div></div></div>'+
+  '<div class="col-6"><div class="photo">'+bSVG(2)+'<span class="geo">GEO</span><div class="stamp">'+r.pin+'<br>AFTER</div></div></div></div>'+
+  '<div class="mt-3"><label class="form-label">Reviewing officer remarks</label><textarea class="form-control" rows="2">Findings consistent with field photos &amp; GPS. Endorsing for approval.</textarea></div></div></div>';
+ new bootstrap.Modal(document.getElementById('reviewModal')).show();}
+
+/* ===================== MONITORING LIST ===================== */
+function renderInspectors(){const sc={'On inspection':'pill-green','Travelling':'pill-amber','Break':'pill-gray'};
+ document.getElementById('inspectorList').innerHTML=INSPECTORS.map(ins=>'<div class="d-flex align-items-center gap-2 py-2" style="border-bottom:1px dashed var(--border)">'+
+  '<div class="avatar" style="background:'+ins.clr+'">'+ins.a+'</div><div class="flex-fill"><div class="fw-600 smaller">'+ins.n+'</div><div class="tiny text-mut">Brgy. '+ins.bgy+' · '+ins.done+' done</div></div>'+
+  '<div class="text-end"><span class="pill '+sc[ins.status]+'">'+ins.status+'</span><div class="tiny text-mut mono mt-1">'+ins.ping+'</div></div></div>').join('');}
+
+/* ===================== NOTIFICATIONS / DOCS / AUDIT / PERMS ===================== */
+function renderNotifs(){const clr={brand:'var(--brand-100)',gold:'var(--gold-soft)',danger:'var(--danger-soft)',violet:'var(--violet-soft)',success:'var(--success-soft)'},ic={brand:'var(--brand)',gold:'var(--gold-600)',danger:'var(--danger)',violet:'var(--violet)',success:'var(--success)'};
+ document.getElementById('notifList').innerHTML=NOTIFS.map((n,i)=>'<div class="d-flex gap-3 py-2 px-1" style="border-bottom:1px dashed var(--border);cursor:pointer" onclick="readNotif('+i+')">'+
+  '<span class="ico" style="width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:17px;background:'+clr[n.clr]+';color:'+ic[n.clr]+'"><i class="bi '+n.ic+'"></i></span>'+
+  '<div class="flex-fill"><div class="d-flex justify-content-between"><span class="fw-600 smaller">'+n.t+'</span><span class="tiny text-mut">'+n.time+'</span></div><div class="tiny text-soft">'+n.d+'</div></div>'+
+  (n.un?'<span class="pill-dot" style="background:var(--brand);align-self:center"></span>':'')+'</div>').join('');}
+function readNotif(i){NOTIFS[i].un=false;renderNotifs();updateBell();}
+function markAllRead(){NOTIFS.forEach(n=>n.un=false);renderNotifs();updateBell();toast('All notifications marked read','success');}
+function updateBell(){const u=NOTIFS.filter(n=>n.un).length;document.querySelectorAll('.topbar .icon-btn .dot').forEach(d=>{d.textContent=u;d.style.display=u?'grid':'none';});}
+function renderDocs(){document.getElementById('docBody').innerHTML=DOCS.map(d=>'<tr><td><i class="bi '+d.ic+' me-2" style="color:'+d.clr+';font-size:18px"></i>'+d.n+'</td><td><span class="pill pill-gray">'+d.t+'</span></td><td class="mono smaller">'+d.pin+'</td><td class="mono smaller">'+d.sz+'</td><td class="smaller text-soft">'+d.d+'</td><td class="text-end"><button class="btn btn-ghost btn-sm" onclick="toast(\'Opening '+d.n+'\',\'info\')"><i class="bi bi-eye"></i></button> <button class="btn btn-ghost btn-sm" onclick="toast(\'Downloading…\',\'success\')"><i class="bi bi-download"></i></button></td></tr>').join('');}
+let auditDT=null;
+function renderAudit(){if(auditDT)return;document.getElementById('auditBody').innerHTML=AUDIT.map(a=>'<tr><td class="mono smaller">'+a[0]+'</td><td>'+a[1]+'</td><td><span class="pill pill-gray">'+a[2]+'</span></td><td>'+a[3]+'</td><td class="smaller">'+a[4]+'</td><td class="mono smaller">'+a[5]+'</td><td><span class="pill '+(a[6]==='Success'?'pill-green':'pill-red')+'">'+a[6]+'</span></td></tr>').join('');
+ auditDT=$('#auditTable').DataTable({pageLength:10,order:[[0,'desc']],dom:'<"d-flex justify-content-between align-items-center flex-wrap gap-2"lf>rt<"d-flex justify-content-between align-items-center flex-wrap"ip>'});}
+function permCell(v){return v===1?'<i class="bi bi-check-circle-fill text-success"></i>':v===2?'<i class="bi bi-eye-fill" style="color:var(--brand)" title="View only"></i>':'<i class="bi bi-dash text-mut"></i>';}
+function renderPerms(){document.getElementById('permBody').innerHTML=PERMS.map(p=>'<tr><td class="fw-600 smaller">'+p[0]+'</td><td class="text-center">'+permCell(p[1])+'</td><td class="text-center">'+permCell(p[2])+'</td><td class="text-center">'+permCell(p[3])+'</td><td class="text-center">'+permCell(p[4])+'</td><td class="text-center">'+permCell(p[5])+'</td></tr>').join('');}
+
+/* ===================== MISC ===================== */
+function genReport(name,fmt){toast('Generating '+name+' Report ('+fmt.toUpperCase()+')…','info');setTimeout(()=>toast(name+' Report ready — '+(fmt==='pdf'?'PDF downloaded':'Excel exported'),'success'),900);}
+function globalSearch(q){if(!q)return;const p=PROPS.find(x=>x.pin.includes(q)||x.td.includes(q)||x.owner.toLowerCase().includes(q.toLowerCase()));if(p){navTo('property');setTimeout(()=>openProp(p.pin),200);toast('Found: '+p.pin,'success');}else{toast('No record matches “'+q+'”','warn');}}
+
+/* ===================== STARTUP ===================== */
+window.addEventListener('DOMContentLoaded',()=>{
+ const s=document.createElement('style');
+ s.textContent='.bgy-lbl{background:transparent;border:0;box-shadow:none;color:#0a2e5c;font-weight:700;font-size:11px;text-shadow:0 1px 4px #fff}[data-bs-theme=dark] .bgy-lbl{color:#dce7f7;text-shadow:0 1px 4px #000}[data-bs-theme=dark] .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.96) contrast(.9)}.leaflet-popup-content-wrapper{border-radius:12px}';
+ document.head.appendChild(s);
+ document.querySelectorAll('.side-link').forEach(l=>l.addEventListener('click',()=>{if(l.dataset.view)navTo(l.dataset.view);}));
+ const boxes=document.querySelectorAll('#otp input');boxes.forEach((b,i)=>{b.addEventListener('input',()=>{if(b.value&&i<5)boxes[i+1].focus();});b.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!b.value&&i>0)boxes[i-1].focus();if(e.key==='Enter')enterApp();});});
+});
+</script>
+<!-- ==SCRIPTS-DONE== -->
+</body>
+</html>
