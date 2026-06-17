@@ -389,102 +389,211 @@
 
     /* Tab panels */
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-panel.active { display: block; animation: fadeUp 0.5s ease both; }
 
-    /* Video grids */
+    /* ═══ VIDEO GRID — premium agency cards ═══ */
     .vgrid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-      background: #0a1510;
+      gap: 1.6rem;
+      padding: 0 5rem;
     }
     .vcard {
       position: relative;
       overflow: hidden;
       cursor: pointer;
       background: var(--moss);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s, box-shadow 0.45s;
     }
-    .vcard.span2 { grid-column: span 2; }
+    .vcard:hover {
+      transform: translateY(-8px) scale(1.015);
+      border-color: var(--coral2);
+      box-shadow: 0 28px 56px rgba(0,0,0,0.45), 0 0 0 1px var(--border2);
+      z-index: 3;
+    }
     .vcard-inner {
       display: block;
       width: 100%;
       position: relative;
-      aspect-ratio: 16/9;
+      aspect-ratio: 9/16;
+      background: linear-gradient(135deg, var(--moss) 0%, var(--forest) 100%);
     }
-    .vcard.span2 .vcard-inner { aspect-ratio: 21/9; }
+    .vcard[data-platform="re"] .vcard-inner,
+    .vcard[data-platform="ad"] .vcard-inner { aspect-ratio: 16/9; }
+
+    /* Static thumbnail image (shown by default) */
     .vthumb {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.6s ease;
+      position: absolute; inset: 0;
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+      z-index: 1;
     }
-    .vcard:hover .vthumb { transform: scale(1.05); }
+    .vcard:hover .vthumb { transform: scale(1.08); opacity: 0; }
 
-    /* Stylised placeholder (no real image) */
+    /* Loading skeleton shimmer, shown until thumbnail/embed is ready */
+    .vthumb-skeleton {
+      position: absolute; inset: 0;
+      background: linear-gradient(100deg, var(--moss) 30%, var(--sage) 50%, var(--moss) 70%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .vthumb-skeleton.hide { display: none; }
+
+    /* Stylised placeholder icon (no real thumbnail yet) */
     .vthumb-ph {
       width: 100%; height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute; inset: 0;
+      z-index: 1;
+      transition: opacity 0.4s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .vthumb-ph-icon { font-size: 2.5rem; opacity: 0.07; }
+    .vcard:hover .vthumb-ph { transform: scale(1.05); opacity: 0; }
+    .vthumb-ph-icon { font-size: 2.5rem; opacity: 0.1; }
+
+    /* Hover-preview iframe (YouTube/Vimeo) — lazy loaded only on hover */
+    .vpreview-frame {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .vcard.preview-active .vpreview-frame { opacity: 1; }
 
     /* Gradient overlays */
     .vcard-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(13,26,20,0.96) 0%, rgba(13,26,20,0.2) 50%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.35s;
+      background: linear-gradient(to top, rgba(13,26,20,0.97) 0%, rgba(13,26,20,0.35) 45%, transparent 100%);
+      opacity: 1;
+      transition: opacity 0.4s;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 1.5rem;
+      z-index: 4;
+      pointer-events: none;
     }
-    .vcard:hover .vcard-overlay { opacity: 1; }
+    .vcard:hover .vcard-overlay { opacity: 0.85; }
     .vcard-cat {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       font-family: 'Syne', sans-serif;
       font-size: 0.6rem;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--coral);
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
+    }
+    .vcard-cat::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
     }
     .vcard-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--ivory);
+      line-height: 1.25;
     }
-    .vcard-desc { font-size: 0.73rem; color: var(--muted); margin-top: 0.3rem; }
+    .vcard-desc { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.5; }
+
     .vplay {
       position: absolute;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 52px; height: 52px;
-      border: 1.5px solid rgba(232,96,74,0.6);
+      transform: translate(-50%, -50%) scale(0.85);
+      width: 58px; height: 58px;
+      border: 1.5px solid rgba(232,96,74,0.7);
       border-radius: 50%;
-      background: rgba(13,26,20,0.4);
+      background: rgba(13,26,20,0.5);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
+      transition: opacity 0.35s, transform 0.35s;
+      z-index: 5;
     }
     .vplay::after {
       content: '';
-      border-left: 16px solid var(--coral);
+      border-left: 17px solid var(--coral);
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
       margin-left: 4px;
     }
-    .vcard:hover .vplay { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    .vcard:hover .vplay { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .vcard.preview-active .vplay { opacity: 0; }
+
+    /* Platform badge top-left */
+    .vcard-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      z-index: 5;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      border-radius: 100px;
+      background: rgba(13,26,20,0.6);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(245,240,232,0.18);
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Coming soon card */
+    .vcard.vcard-soon {
+      pointer-events: none;
+      border-style: dashed;
+      border-color: var(--border);
+    }
+    .vcard-soon .vcard-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.6rem;
+      aspect-ratio: 9/16;
+      background: rgba(45,92,62,0.08);
+    }
+    .vcard-soon[data-platform="re"] .vcard-inner { aspect-ratio: 16/9; }
+    .vcard-soon-icon { font-size: 1.8rem; opacity: 0.18; }
+    .vcard-soon-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #3a5a48;
+    }
 
     /* ─ Color tints per category ─ */
     .tint-tiktok  { background: #0d1a1e; }
     .tint-ig      { background: #1a130d; }
     .tint-re      { background: #0d1218; }
     .tint-ad      { background: #16110a; }
+
+    @media (max-width: 900px) {
+      .vgrid { grid-template-columns: 1fr; padding: 0 1.5rem; gap: 1.2rem; }
+      .vcard:hover { transform: none; }
+    }
 
     /* ═══ VIDEO MODAL ═══ */
     .vmodal {
@@ -497,7 +606,7 @@
       flex-direction: column;
       padding: 2rem;
     }
-    .vmodal.open { display: flex; }
+    .vmodal.open { display: flex; animation: lbFadeIn 0.3s ease; }
     .vmodal-close {
       position: fixed;
       top: 1.5rem; right: 2rem;
@@ -517,6 +626,21 @@
       max-height: 80vh;
       border-radius: 4px;
       background: #000;
+    }
+    .vmodal-embed-wrap {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      animation: lbScaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .vmodal-embed-wrap.ratio-vertical { max-width: 420px; aspect-ratio: 9/16; }
+    .vmodal-embed-wrap.ratio-horizontal { max-width: 960px; aspect-ratio: 16/9; }
+    .vmodal-embed-wrap iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
     }
     .vmodal-caption {
       font-family: 'Syne', sans-serif;
@@ -565,7 +689,7 @@
     .mockup-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 20px;
     }
     .mitem {
       position: relative;
@@ -573,26 +697,56 @@
       background: var(--moss);
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: border-color 0.3s, transform 0.3s;
+      border-radius: 6px;
+      transition: border-color 0.4s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s;
     }
-    .mitem:hover { border-color: var(--coral); transform: translateY(-3px); }
-    .mitem.wide { grid-column: span 2; }
-    .mitem.tall { grid-row: span 2; }
+    .mitem:hover {
+      border-color: var(--coral);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35), 0 0 0 1px var(--border2);
+      z-index: 2;
+    }
     .mitem-wrap {
       width: 100%;
       overflow: hidden;
       position: relative;
+      aspect-ratio: 4/5;
+      background: var(--moss);
     }
-    .mitem-wrap { aspect-ratio: 4/3; }
-    .mitem.wide .mitem-wrap { aspect-ratio: 16/7; }
-    .mitem.tall .mitem-wrap { aspect-ratio: 3/5; height: 100%; }
     .mitem-img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.5s ease;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s;
     }
-    .mitem:hover .mitem-img { transform: scale(1.05); }
+    .mitem:hover .mitem-img { transform: scale(1.12); filter: brightness(1.05); }
+    .mitem-zoom-hint {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: rgba(13,26,20,0.55);
+      border: 1px solid rgba(245,240,232,0.25);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ivory);
+      font-size: 1rem;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .mitem:hover .mitem-zoom-hint { opacity: 1; transform: scale(1); }
+    .mitem-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,26,20,0.75) 0%, transparent 45%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .mitem:hover .mitem-img-overlay { opacity: 1; }
 
     /* Placeholder card when no real image is available */
     .mitem-ph {
@@ -643,7 +797,8 @@
       justify-content: center;
       padding: 2rem;
     }
-    .lightbox.open { display: flex; }
+    .lightbox.open { display: flex; animation: lbFadeIn 0.3s ease; }
+    @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
     .lb-close {
       position: fixed; top: 1.5rem; right: 2rem;
       font-size: 1.8rem; color: var(--muted);
@@ -655,6 +810,14 @@
       max-width: 90vw; max-height: 85vh;
       object-fit: contain; border-radius: 4px;
       box-shadow: 0 0 80px rgba(232,96,74,0.1);
+      cursor: zoom-in;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: lbScaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .lb-img.zoomed { cursor: zoom-out; transform: scale(1.6); }
+    @keyframes lbScaleIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
     }
     .lb-cap {
       position: fixed; bottom: 2rem; left: 50%;
@@ -1015,17 +1178,21 @@
       .hero-right { display: none; }
       .about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
       .works-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 0 1.5rem 2.5rem; }
-      .vgrid { grid-template-columns: 1fr 1fr; }
-      .vcard.span2 { grid-column: span 2; }
+      .tab-bar { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .vgrid { grid-template-columns: 1fr; padding: 0 1.5rem; }
+      .vcard-inner { aspect-ratio: 16/9 !important; }
+      .vcard[data-platform="re"] .vcard-inner,
+      .vcard[data-platform="ad"] .vcard-inner { aspect-ratio: 16/9 !important; }
       .gallery-section { padding: 5rem 1.5rem; }
       .gallery-header { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-      .mockup-grid { grid-template-columns: 1fr 1fr; }
-      .mitem.wide { grid-column: span 2; }
-      .mitem.tall { grid-row: auto; }
+      .mockup-grid { grid-template-columns: 1fr; }
       .code-section { padding: 5rem 1.5rem; }
       .code-grid { grid-template-columns: 1fr; }
       .contact { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
       footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .mockup-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1044,6 +1211,7 @@
   </div>
   <a href="#contact" class="nav-cta">Hire Me</a>
 </nav>
+
 
 
 <!-- ═══ HERO ═══ -->
@@ -1185,18 +1353,32 @@
     </div>
   </div>
 
-  <!-- ─ TAB: Social ─ -->
+  <!--
+    HOW TO ADD YOUR YOUTUBE / VIMEO VIDEOS:
+    1. Upload your video to YouTube (Unlisted is fine) or Vimeo.
+    2. Copy the video ID:
+         YouTube: youtube.com/watch?v=XXXXXXXXXXX  → ID is "XXXXXXXXXXX"
+         Vimeo:   vimeo.com/XXXXXXXXX               → ID is "XXXXXXXXX"
+    3. Set data-platform="youtube" or data-platform="vimeo"
+    4. Set data-id="XXXXXXXXXXX" to that ID
+    5. Set data-thumb to a thumbnail image path (or leave the emoji placeholder)
+       YouTube auto-thumbnails: https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg
+    6. data-orient="vertical" for 9:16 TikTok/Reels, "horizontal" for 16:9 real estate/ads
+  -->
+
+  <!-- ─ TAB: Social — TikTok & Instagram ─ -->
   <div class="tab-panel active" id="tab-social">
     <div class="vgrid">
 
-      <!-- TikTok Part 1 — FEATURED -->
-      <div class="vcard tint-tiktok span2" data-video="file:///C:/Users/Jevearth/Videos/Movavi%20Library/Tiktok%20part%201.mp4" data-title="TikTok Part 1" data-cat="TikTok" onclick="openVideo(this)">
+      <!-- TikTok Part 1 -->
+      <div class="vcard tint-tiktok" data-platform="youtube" data-id="dQw4w9WgXcQ" data-orient="vertical"
+           data-title="TikTok Part 1" data-cat="TikTok" data-desc="Short-form vertical content — fast cuts, trending audio">
         <div class="vcard-inner">
+          <div class="vthumb-skeleton"></div>
           <div class="vthumb-ph"><span class="vthumb-ph-icon">🎵</span></div>
-          <!-- 
-            TO ADD THUMBNAIL: replace the vthumb-ph div above with:
-            <img src="your-thumbnail.jpg" class="vthumb" alt="TikTok Part 1">
-          -->
+          <!-- Once uploaded, swap the line above for: -->
+          <!-- <img src="https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg" class="vthumb" alt="TikTok Part 1" loading="lazy"> -->
+          <div class="vcard-badge"><span>▶</span> YouTube</div>
           <div class="vplay"></div>
           <div class="vcard-overlay">
             <p class="vcard-cat">TikTok</p>
@@ -1207,9 +1389,12 @@
       </div>
 
       <!-- S-Fishing Short Reels -->
-      <div class="vcard tint-ig" data-video="file:///C:/Users/Jevearth/Downloads/S-Fishing%20Short%20Reels.mp4" data-title="S-Fishing Short Reels" data-cat="Instagram Reels" onclick="openVideo(this)">
+      <div class="vcard tint-ig" data-platform="youtube" data-id="dQw4w9WgXcQ" data-orient="vertical"
+           data-title="S-Fishing Short Reels" data-cat="Instagram Reels" data-desc="Dynamic lifestyle reel — fishing brand">
         <div class="vcard-inner">
+          <div class="vthumb-skeleton"></div>
           <div class="vthumb-ph"><span class="vthumb-ph-icon">🎣</span></div>
+          <div class="vcard-badge"><span>▶</span> YouTube</div>
           <div class="vplay"></div>
           <div class="vcard-overlay">
             <p class="vcard-cat">Instagram Reels</p>
@@ -1219,27 +1404,28 @@
         </div>
       </div>
 
-      <!-- Placeholder slot 3 — ready for more uploads -->
-      <div class="vcard tint-tiktok" style="opacity:0.45; pointer-events:none;">
+      <!-- Coming soon -->
+      <div class="vcard vcard-soon tint-tiktok" data-orient="vertical">
         <div class="vcard-inner">
-          <div class="vthumb-ph" style="flex-direction:column; gap:0.5rem;">
-            <span class="vthumb-ph-icon" style="font-size:1.8rem;">＋</span>
-            <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#3a5a48;">More coming soon</span>
-          </div>
+          <span class="vcard-soon-icon">＋</span>
+          <span class="vcard-soon-label">More coming soon</span>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ─ TAB: Real Estate ─ -->
+  <!-- ─ TAB: Real Estate & Advertisement ─ -->
   <div class="tab-panel" id="tab-realestate">
     <div class="vgrid">
 
-      <!-- 300 Adam St — FEATURED -->
-      <div class="vcard tint-re span2" data-video="file:///C:/Users/Jevearth/Videos/WORK/300%20adam%20street%20scott.mp4" data-title="300 Adam Street — Scott" data-cat="Real Estate" onclick="openVideo(this)">
+      <!-- 300 Adam Street -->
+      <div class="vcard tint-re" data-platform="vimeo" data-id="76979871" data-orient="horizontal"
+           data-title="300 Adam Street — Scott" data-cat="Real Estate" data-desc="Cinematic property walkthrough — residential listing">
         <div class="vcard-inner">
+          <div class="vthumb-skeleton"></div>
           <div class="vthumb-ph"><span class="vthumb-ph-icon">🏡</span></div>
+          <div class="vcard-badge"><span>▶</span> Vimeo</div>
           <div class="vplay"></div>
           <div class="vcard-overlay">
             <p class="vcard-cat">Real Estate</p>
@@ -1250,9 +1436,12 @@
       </div>
 
       <!-- HH Real Estate Presentation -->
-      <div class="vcard tint-ad" data-video="file:///C:/Users/Jevearth/Downloads/Real%20Esstate%20Presentation%20(HH).mp4" data-title="Real Estate Presentation (HH)" data-cat="Advertisement" onclick="openVideo(this)">
+      <div class="vcard tint-ad" data-platform="vimeo" data-id="76979871" data-orient="horizontal"
+           data-title="Real Estate Presentation — HH" data-cat="Advertisement" data-desc="Branded real estate promo film">
         <div class="vcard-inner">
+          <div class="vthumb-skeleton"></div>
           <div class="vthumb-ph"><span class="vthumb-ph-icon">🏢</span></div>
+          <div class="vcard-badge"><span>▶</span> Vimeo</div>
           <div class="vplay"></div>
           <div class="vcard-overlay">
             <p class="vcard-cat">Advertisement</p>
@@ -1262,13 +1451,11 @@
         </div>
       </div>
 
-      <!-- Placeholder slot -->
-      <div class="vcard tint-re" style="opacity:0.45; pointer-events:none;">
+      <!-- Coming soon -->
+      <div class="vcard vcard-soon tint-re" data-orient="horizontal">
         <div class="vcard-inner">
-          <div class="vthumb-ph" style="flex-direction:column; gap:0.5rem;">
-            <span class="vthumb-ph-icon" style="font-size:1.8rem;">＋</span>
-            <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#3a5a48;">More coming soon</span>
-          </div>
+          <span class="vcard-soon-icon">＋</span>
+          <span class="vcard-soon-label">More coming soon</span>
         </div>
       </div>
 
@@ -1280,7 +1467,9 @@
 <!-- ═══ VIDEO MODAL ═══ -->
 <div class="vmodal" id="vmodal" onclick="closeVideo(event)">
   <button class="vmodal-close" onclick="closeVideo()">&times;</button>
-  <video id="vmodal-player" controls playsinline></video>
+  <div class="vmodal-embed-wrap" id="vmodal-embed-wrap">
+    <iframe id="vmodal-iframe" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  </div>
   <p class="vmodal-caption" id="vmodal-caption"></p>
 </div>
 
@@ -1301,59 +1490,46 @@
 
   <div class="mockup-grid" id="mockup-grid">
 
-    <!-- MOCKUP 1 — wide featured -->
-    <!--
-      HOW TO USE YOUR LOCAL IMAGES:
-      Since browsers cannot load file:/// paths from a saved HTML file,
-      you have two options:
-        A) Copy your images into the same folder as this HTML file,
-           then change src="SAMPLE MOCKUP #1.png"  (use the actual filename).
-        B) Drag & drop the images onto the placeholder areas below in-browser
-           using the upload button that appears on hover.
-
-      Right now these are styled placeholder cards waiting for your images.
-      Replace the entire .mitem-ph div with:
-        <img src="SAMPLE MOCKUP #1.png" class="mitem-img" alt="Sample Mockup 1">
-    -->
-    <div class="mitem wide" data-category="mockup" onclick="openLb(this)">
-    <div class="mitem-wrap">
-        <img src="images/sample-mockup-1.png"
-             class="mitem-img"
-             alt="Sample Mockup 1">
-    </div>
-
-    <div class="mitem-info">
+    <!-- MOCKUP 1 -->
+    <div class="mitem" data-category="mockup" onclick="openLb(this)">
+      <div class="mitem-wrap">
+        <img src="images/sample-mockup-1.png" class="mitem-img" alt="Sample Mockup 1" loading="lazy">
+        <div class="mitem-img-overlay"></div>
+        <div class="mitem-zoom-hint">⤢</div>
+      </div>
+      <div class="mitem-info">
         <p class="mitem-cat">Mockup</p>
         <p class="mitem-title">Sample Mockup #1 — Brand Campaign</p>
+      </div>
     </div>
-</div>
 
-    <!-- MOCKUP 2 — tall -->
-   <div class="mitem tall" data-category="mockup" onclick="openLb(this)">
-  <div class="mitem-wrap">
-    <img src="images/sample-mockup-2.png"
-         class="mitem-img"
-         alt="Sample Mockup 2">
-  </div>
-  <div class="mitem-info">
-    <p class="mitem-cat">Mockup</p>
-    <p class="mitem-title">Sample Mockup #2 — Product Design</p>
-  </div>
-</div>
+    <!-- MOCKUP 2 -->
+    <div class="mitem" data-category="mockup" onclick="openLb(this)">
+      <div class="mitem-wrap">
+        <img src="images/sample-mockup-2.png" class="mitem-img" alt="Sample Mockup 2" loading="lazy">
+        <div class="mitem-img-overlay"></div>
+        <div class="mitem-zoom-hint">⤢</div>
+      </div>
+      <div class="mitem-info">
+        <p class="mitem-cat">Mockup</p>
+        <p class="mitem-title">Sample Mockup #2 — Product Design</p>
+      </div>
+    </div>
 
-    <!-- PHOTO MANIPULATION 1 — square -->
-   <div class="mitem" data-category="photo" onclick="openLb(this)">
-  <div class="mitem-wrap">
-  <img src="images/photo-manipulation-1.png"
-     class="mitem-img"
-     alt="Photo Manipulation 1">
+    <!-- PHOTO MANIPULATION 1 -->
+    <div class="mitem" data-category="photo" onclick="openLb(this)">
+      <div class="mitem-wrap">
+        <img src="images/photo-manipulation-1.png" class="mitem-img" alt="Photo Manipulation 1" loading="lazy">
+        <div class="mitem-img-overlay"></div>
+        <div class="mitem-zoom-hint">⤢</div>
+      </div>
+      <div class="mitem-info">
+        <p class="mitem-cat">Photo Edit</p>
+        <p class="mitem-title">Photo Manipulation #1</p>
+      </div>
+    </div>
+
   </div>
-  <div class="mitem-info">
-    <p class="mitem-cat">Photo Edit</p>
-    <p class="mitem-title">Photo Manipulation #1</p>
-  </div>
-</div>
- 
 </section>
 
 <!-- Lightbox -->
@@ -1517,26 +1693,94 @@
     });
   });
 
-  /* ── Video modal ── */
-  function openVideo(el) {
-    const src   = el.dataset.video;
-    const title = el.dataset.title;
-    const cat   = el.dataset.cat;
+  /* ── Video cards: build embed URLs ── */
+  function buildEmbedUrl(platform, id, opts) {
+    opts = opts || {};
+    if (platform === 'youtube') {
+      const params = new URLSearchParams({
+        autoplay: opts.autoplay ? '1' : '0',
+        mute: opts.muted ? '1' : '0',
+        controls: opts.controls === false ? '0' : '1',
+        loop: opts.loop ? '1' : '0',
+        playlist: opts.loop ? id : '',
+        modestbranding: '1',
+        rel: '0',
+        playsinline: '1'
+      });
+      return `https://www.youtube.com/embed/${id}?${params.toString()}`;
+    }
+    if (platform === 'vimeo') {
+      const params = new URLSearchParams({
+        autoplay: opts.autoplay ? '1' : '0',
+        muted: opts.muted ? '1' : '0',
+        controls: opts.controls === false ? '0' : '1',
+        loop: opts.loop ? '1' : '0',
+        background: opts.background ? '1' : '0'
+      });
+      return `https://player.vimeo.com/video/${id}?${params.toString()}`;
+    }
+    return '';
+  }
+
+  /* ── Hover-preview: lazy-load a muted looping embed only when hovered ── */
+  document.querySelectorAll('.vcard[data-platform]').forEach(card => {
+    let hoverTimer = null;
+    let previewLoaded = false;
+
+    card.addEventListener('mouseenter', () => {
+      hoverTimer = setTimeout(() => {
+        if (!previewLoaded) {
+          const platform = card.dataset.platform;
+          const id = card.dataset.id;
+          const url = buildEmbedUrl(platform, id, { autoplay: true, muted: true, loop: true, controls: false, background: true });
+          const iframe = document.createElement('iframe');
+          iframe.className = 'vpreview-frame';
+          iframe.src = url;
+          iframe.allow = 'autoplay; encrypted-media';
+          iframe.loading = 'lazy';
+          iframe.setAttribute('tabindex', '-1');
+          iframe.setAttribute('aria-hidden', 'true');
+          card.querySelector('.vcard-inner').appendChild(iframe);
+          previewLoaded = true;
+        }
+        card.classList.add('preview-active');
+      }, 350); // small delay avoids loading on accidental brush-by
+    });
+
+    card.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimer);
+      card.classList.remove('preview-active');
+    });
+
+    card.addEventListener('click', () => openVideoEmbed(card));
+  });
+
+  /* ── Video modal (full playback) ── */
+  function openVideoEmbed(card) {
+    const platform = card.dataset.platform;
+    const id = card.dataset.id;
+    const orient = card.dataset.orient || 'horizontal';
+    const title = card.dataset.title;
+    const cat = card.dataset.cat;
+
     const modal = document.getElementById('vmodal');
-    const player = document.getElementById('vmodal-player');
-    const cap   = document.getElementById('vmodal-caption');
-    player.src = src;
+    const wrap = document.getElementById('vmodal-embed-wrap');
+    const iframe = document.getElementById('vmodal-iframe');
+    const cap = document.getElementById('vmodal-caption');
+
+    wrap.classList.remove('ratio-vertical', 'ratio-horizontal');
+    wrap.classList.add(orient === 'vertical' ? 'ratio-vertical' : 'ratio-horizontal');
+
+    iframe.src = buildEmbedUrl(platform, id, { autoplay: true, muted: false, loop: false });
     cap.textContent = cat + ' — ' + title;
     modal.classList.add('open');
-    player.play().catch(() => {});
   }
 
   function closeVideo(e) {
-    if (!e || e.target === document.getElementById('vmodal') || e.type !== 'click' || e.target.closest('.vmodal-close')) {
+    if (!e || e.target === document.getElementById('vmodal') || e.target.closest('.vmodal-close')) {
       const modal = document.getElementById('vmodal');
-      const player = document.getElementById('vmodal-player');
-      player.pause();
-      player.src = '';
+      const iframe = document.getElementById('vmodal-iframe');
+      iframe.src = '';
       modal.classList.remove('open');
     }
   }
@@ -1564,7 +1808,9 @@
     const cat   = el.querySelector('.mitem-cat')?.textContent || '';
     if (!img) return; // no real image yet
     const lb = document.getElementById('lightbox');
-    document.getElementById('lb-img').src = img.src;
+    const lbImg = document.getElementById('lb-img');
+    lbImg.src = img.src;
+    lbImg.classList.remove('zoomed');
     document.getElementById('lb-cap').textContent = cat + ' — ' + title;
     lb.classList.add('open');
   }
@@ -1572,14 +1818,38 @@
   function closeLb(e) {
     if (!e || e.target === document.getElementById('lightbox') || e.target.closest('.lb-close')) {
       document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lb-img').classList.remove('zoomed');
     }
   }
+
+  document.getElementById('lb-img').addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.currentTarget.classList.toggle('zoomed');
+  });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeLb();
       closeVideo();
     }
+  });
+
+  /* ── Hide loading skeletons once thumbnails are ready ──
+     Currently using icon placeholders, so skeletons fade out shortly after load.
+     Once you add real <img class="vthumb"> thumbnails, this also hides the
+     skeleton automatically when that image's load event fires. */
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.vcard-inner').forEach(inner => {
+      const skeleton = inner.querySelector('.vthumb-skeleton');
+      const img = inner.querySelector('img.vthumb');
+      if (!skeleton) return;
+      if (img) {
+        if (img.complete) skeleton.classList.add('hide');
+        else img.addEventListener('load', () => skeleton.classList.add('hide'));
+      } else {
+        setTimeout(() => skeleton.classList.add('hide'), 400);
+      }
+    });
   });
 </script>
 
